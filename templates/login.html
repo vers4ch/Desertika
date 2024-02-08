@@ -81,7 +81,7 @@
                     </div>
                     <!-- Кнопка для отправки формы входа -->
                     <input class="zation-button" type="submit" value="Войти">
-					<a href="#" class="linkRP">Забыли пароль?</a>
+					<a href="{{ url_for('reset_password') }}" class="linkRP">Забыли пароль?</a>
                 </form>
                 <!-- Форма для регистрации -->
                 <form action="/register" method="post" class="login-form" id="registrationForm" style="display:none;">
