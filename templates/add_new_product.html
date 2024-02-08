@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Desertika ADMIN</title>
+</head>
+<body>
+	<h1>Добавить новый продукт</h1>
+	<form action="/new_product" method="post" class="form" enctype="multipart/form-data">
+		<input id="register-name" name="name" type="text" class="field-input-name" placeholder="Название товара" required>
+		<br>
+		<input id="register-surname" name="description" type="text" class="field-input-name" placeholder="Описание" required>
+		<br>
+		<input id="register-email" name="weight" type="text" class="field-input-name" placeholder="Вес" required>
+		<br>
+		<input id="register-tel" name="price" type="text" class="field-input-name" placeholder="Стоимость" required>
+		<br>
+		<input type="file" name="file" accept="image/*">
+		<br>
+		<input class="field-input-button" type="submit" value="Добавить">
+	</form>
+</body>
+</html>
