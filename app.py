@@ -17,7 +17,7 @@ db = SQLAlchemy(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    return render_template('login2.html')
 
 # Запуск приложения
 if __name__ == '__main__':
