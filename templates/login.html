@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Desertika</title>
-    <!-- Подключаем внешние таблицы стилей -->
+    
+	<!-- Подключаем внешние таблицы стилей -->
     <link rel="stylesheet" href="static/style/login.css">
     <!-- Подключаем шрифты семейства Roboto -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
@@ -12,7 +13,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Подключение библиотеки Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
-    <!-- JavaScript код для переключения вкладок -->
+    
+	<!-- JavaScript код для переключения вкладок -->
     <script>
         $(document).ready(function(){
             // Скрываем форму "Регистрация" при загрузке страницы
@@ -61,44 +63,51 @@
                     <!-- Контейнер для полей ввода и чекбокса -->
                     <div class="inputs">
                         <!-- Поле для имени пользователя -->
-                        <div class="input">
-                            <input name="email" placeholder="Email" type="text">
-                        </div>
-                        <!-- Поле для пароля -->
-                        <div class="input">
-                            <input name="password" placeholder="Пароль" type="password">
-                        </div>
+						<div class="input">
+							<i class="fas fa-envelope"></i>
+							<input name="email" placeholder="Email" type="text">
+						</div>
+						<!-- Поле для пароля -->
+						<div class="input">
+							<i class="fas fa-lock"></i>
+							<input name="password" id="passwordInputLogin" placeholder="Пароль" type="password">
+							<i class="fas fa-eye" id="togglePasswordLogin"></i> <!-- Иконка "глазика" -->
+						</div>
                         <!-- Чекбокс "Запомнить меня" -->
-
-                        <div class="input1">
+						<div class="input1">
                             <input type="checkbox">
                             <span>Запомнить меня</span>
                         </div>
-
                     </div>
                     <!-- Кнопка для отправки формы входа -->
                     <input class="zation-button" type="submit" value="Войти">
+					<a href="#" class="linkRP">Забыли пароль?</a>
                 </form>
                 <!-- Форма для регистрации -->
                 <form action="/register" method="post" class="login-form" id="registrationForm" style="display:none;">
                     <!-- Контейнер для полей ввода -->
                     <div class="inputs">
                         <!-- Поле для email -->
-                        <div class="input">
-                            <input name="email" placeholder="Email" type="text">
-                        </div>
-                        <!-- Поле для телефона -->
-                        <div class="input">
-                            <input name="tel" placeholder="Телефон" type="text">
-                        </div>
-                        <!-- Поле для имени пользователя -->
-                        <div class="input">
-                            <input name="name" placeholder="Имя пользователя" type="text">
-                        </div>
-                        <!-- Поле для пароля -->
-                        <div class="input">
-                            <input name="password" placeholder="Пароль" type="password">
-                        </div>
+						<div class="input">
+							<i class="fas fa-envelope"></i>
+							<input name="email" placeholder="Email" type="text">
+						</div>
+						<!-- Поле для телефона -->
+						<div class="input">
+							<i class="fas fa-phone"></i>
+							<input name="tel" placeholder="Телефон" type="text">
+						</div>
+						<!-- Поле для имени пользователя -->
+						<div class="input">
+							<i class="fas fa-user"></i>
+							<input name="name" placeholder="Имя пользователя" type="text">
+						</div>
+						<!-- Поле для пароля -->
+						<div class="input">
+							<i class="fas fa-lock"></i>
+							<input name="password" id="passwordInputRegister" placeholder="Пароль" type="password">
+							<i class="fas fa-eye" id="togglePasswordRegister"></i> <!-- Иконка "глазика" -->
+						</div>
                     </div>
                     <!-- Кнопка для отправки формы регистрации -->
                     <input class="zation-button" type="submit" value="Зарегистрироваться">
@@ -106,5 +115,33 @@
             </div> <!-- Закрытие контейнера для содержимого вкладок -->
         </div> <!-- Закрытие контейнера для всей формы -->
     </div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			// Получаем ссылки на элементы
+			const togglePasswordLogin = document.getElementById('togglePasswordLogin');
+			const togglePasswordRegister = document.getElementById('togglePasswordRegister');
+	
+			// Функция для переключения видимости пароля
+			function togglePasswordVisibility(passwordInput, eyeIcon) {
+				const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+				passwordInput.setAttribute('type', type);
+				// Изменяем класс иконки "глазика" в зависимости от типа поля ввода пароля
+				eyeIcon.classList.toggle('fa-eye-slash');
+			}
+	
+			// Добавляем обработчик события клика на иконку "глазика" для формы входа
+			togglePasswordLogin.addEventListener('click', function() {
+				const passwordInputLogin = document.getElementById('passwordInputLogin');
+				togglePasswordVisibility(passwordInputLogin, this);
+			});
+	
+			// Добавляем обработчик события клика на иконку "глазика" для формы регистрации
+			togglePasswordRegister.addEventListener('click', function() {
+				const passwordInputRegister = document.getElementById('passwordInputRegister');
+				togglePasswordVisibility(passwordInputRegister, this);
+			});
+		});
+	</script>
 </body>
 </html>
