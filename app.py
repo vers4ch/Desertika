@@ -18,14 +18,13 @@ class Users(db.Model):
     __tablename__ = 'users'
     uid = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text(collation='pg_catalog."default"'))
-    surname = db.Column(db.Text(collation='pg_catalog."default"'))
     phone_number = db.Column(db.Text(collation='pg_catalog."default"'))
     email = db.Column(db.Text(collation='pg_catalog."default"'))
     password = db.Column(db.Text(collation='pg_catalog."default"'))
     is_admin = db.Column(db.Boolean)
 
     def __repr__(self):
-        return f"Users('{self.name}', '{self.surname}', '{self.email}')"
+        return f"Users('{self.email}')"
     
 
 class Products(db.Model):
@@ -61,7 +60,6 @@ def login():
             session['uid'] = user.uid
             session['email'] = user.email
             session['name'] = user.name
-            session['surname'] = user.surname
             session['phone_number'] = user.phone_number
             session['is_admin'] = user.is_admin
             return redirect(url_for('main'))
@@ -75,12 +73,11 @@ def login():
 def register():
     if request.method == 'POST':
         name = request.form['name']
-        surname = request.form['surname']
         email = request.form['email']
         tel = request.form['tel']
         password = request.form['password']
     
-        new_user = Users(name=name, surname=surname, phone_number=tel, email=email, password=password, is_admin=False)
+        new_user = Users(name=name, phone_number=tel, email=email, password=password, is_admin=False)
         db.session.add(new_user)
         db.session.commit()
 
