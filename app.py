@@ -1,12 +1,16 @@
+import time, random, string, uuid, unicodedata, os
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash, send_file, make_response, abort
 from flask_sqlalchemy import SQLAlchemy
-import os
 from flask_mail import Mail, Message
-import random
-import string
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '314'
+
+UPLOAD_FOLDER = 'static/uploads/'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'heic', 'pdf'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 db_pass = '0705'
 db_adress = '77.34.177.157'
@@ -25,7 +29,6 @@ app.config['MAIL_USERNAME'] = 'degtyarev.dv@dvfu.ru'
 app.config['MAIL_PASSWORD'] = 'tzcjbcrqkimcmsod'
 app.config['MAIL_DEFAULT_SENDER'] = 'degtyarev.dv@dvfu.ru'
 mail = Mail(app)
-
 
 
 class Users(db.Model):
@@ -49,14 +52,14 @@ class Products(db.Model):
     weight = db.Column(db.Text(collation='pg_catalog."default"'))
     price = db.Column(db.Text(collation='pg_catalog."default"'))
     images = db.Column(db.LargeBinary)
+    path_to_photo = db.Column(db.Text(collation='pg_catalog."default"'))
 
     def __repr__(self):
-        return f"Users('{self.pid}', '{self.name}', '{self.description}')"
+        return f"Users('{self.pid}', '{self.name}', '{self.description}', '{self.weight}', '{self.price}', '{self.images}', '{self.path_to_photo}')"
 
 # Создание таблицы в базе данных
 with app.app_context():
     db.create_all()
-
 
 
 #Страница входа
@@ -104,29 +107,62 @@ def register():
 #Главная страница
 @app.route('/', methods=['GET', 'POST'])
 def main():
-    return render_template('main.html')
+    # all_products = Products.query.all()
+    all_products = db.session.query(Products).all()
+    print(all_products)
+    # Создаем словарь для хранения путей к изображениям для каждого товара
+    product_images = {}
+    for product in all_products:
+        # image_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], product.path_to_photo)
+        # product_images[product.path_to_photo] = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
+        image_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], product.path_to_photo)
+        image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
+        # Добавляем время в качестве параметра пути к изображениям
+        timestamp = int(time.time())
+        product_images[product.path_to_photo] = [f"{image}?t={timestamp}" for image in image_files]
+    
+    return render_template('main.html', products=all_products, product_images=product_images)
 
+
+def secure_filename_custom(filename):
+    filename = unicodedata.normalize('NFKD', filename).encode('ascii', 'ignore').decode('utf-8')
+    for sep in os.path.sep, os.path.altsep:
+        if sep:
+            filename = filename.replace(sep, ' ')
+    return filename
 
 
 @app.route('/new_product', methods=['GET', 'POST'])
 def new_product():
     if request.method == 'POST':
-          name = request.form['name']
-          description = request.form['description']
-          weight = request.form['weight']
-          price = request.form['price']
-          file = request.files['file']
-          data = file.read()
-        #   print(data)
-          new_product = Products(name = name, description = description, weight = weight, price = price, images = data)
-          db.session.add(new_product)
-          db.session.commit()
+        name = request.form['name']
+        description = request.form['description']
+        weight = request.form['weight']
+        price = request.form['price']
+        
+        files = request.files.getlist('files[]')
+        
+		# Создаем новую папку для загрузки изображений
+        folder_name = str(int(time.time()))  # Генерируем имя папки на основе текущего времени
+        folder_path = os.path.join(app.config['UPLOAD_FOLDER'], folder_name)
+        os.makedirs(folder_path, exist_ok=True)  # Создаем папку, если она не существует
+        
+        # Сохраняем каждое изображение в новой папке
+        for file in files:
+            if file and allowed_file(file.filename):
+                filename = str(uuid.uuid4())  # Генерируем случайное буквенное название
+                filename = str(uuid.uuid4()) + secure_filename_custom(file.filename)  # Генерируем случайное буквенное название
+                file.save(os.path.join(folder_path, filename))
+                #Сохранение информации о файле в базу данных
+            else:
+                flash('Данное расширение файлов не поддерживается!', 'error')
+                print('Error FORMAT FILE UPLOAD')
+                
+        new_product = Products(name=name, description=description, weight=weight, price=price, path_to_photo = folder_name)
+        db.session.add(new_product)
+        db.session.commit()
+        return redirect(url_for('new_product'))
     return render_template('add_new_product.html')
-
-
-
-
-
 
 
 #reset_password.html

@@ -10,15 +10,50 @@
 	<form action="/new_product" method="post" class="form" enctype="multipart/form-data">
 		<input id="register-name" name="name" type="text" class="field-input-name" placeholder="Название товара" required>
 		<br>
-		<input id="register-surname" name="description" type="text" class="field-input-name" placeholder="Описание" required>
+		<!-- <input id="register-surname" name="description" type="text" class="field-input-name" placeholder="Описание" required> -->
+		<textarea id="register-surname" name="description" placeholder="Описание" required style="height: 150px; width: 300px;"></textarea>
 		<br>
 		<input id="register-email" name="weight" type="text" class="field-input-name" placeholder="Вес" required>
 		<br>
 		<input id="register-tel" name="price" type="text" class="field-input-name" placeholder="Стоимость" required>
 		<br>
-		<input type="file" name="file" accept="image/*">
+		<input type="file" id="fileInput" name="files[]" accept="image/*" multiple onchange="previewImages()">
+		<br>
+		<div id="preview"></div>
 		<br>
 		<input class="field-input-button" type="submit" value="Добавить">
+		{% with messages = get_flashed_messages() %}
+            {% if messages %}
+                    {% for message in messages %}
+                        <p style="margin-top: 0; font-size: 20px; color: red;">{{ message }}</p>
+                    {% endfor %}
+            {% endif %}
+        {% endwith %}
 	</form>
+
+
+
+	<script>
+        function previewImages() {
+            var preview = document.getElementById("preview");
+            var files = document.getElementById('fileInput').files;
+            
+            preview.innerHTML = '';
+            if(files.length === 0) {
+                var para = document.createElement("p");
+                para.textContent = "No files selected for upload";
+                preview.appendChild(para);
+            } else {
+                for(var i = 0; i < files.length; i++) {
+                    var img = document.createElement("img");
+                    img.src = URL.createObjectURL(files[i]);
+                    img.style.width = "150px";
+                    img.style.height = "150px";
+                    img.style.margin = "5px";
+                    preview.appendChild(img);
+                }
+            }
+        }
+    </script>
 </body>
 </html>
