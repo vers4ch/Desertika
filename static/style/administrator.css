@@ -1,0 +1,37 @@
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400; /* Обычный вес шрифта */
+    src: local('Lato Regular'), local('Lato-Regular'), url(fonts/Lato-Regular.woff2) format('woff2');
+    /* Если используете CDN, то можете заменить "url(path/to/lato.woff2)" на ссылку на шрифт с CDN */
+  }
+  
+@font-face {
+font-family: 'Lato';
+font-style: normal;
+font-weight: 700; /* Полужирный вес шрифта */
+src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('woff2');
+/* Замените на ссылку на шрифт с CDN, если используете CDN */
+}
+body{
+    font-family: 'Lato';
+}
+
+.base{
+	display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header{
+	display: flex;
+}
+
+.btn-zone{
+	display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+}

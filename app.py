@@ -109,7 +109,7 @@ def register():
 def main():
     # all_products = Products.query.all()
     all_products = db.session.query(Products).all()
-    print(all_products)
+    # print(all_products)
     # Создаем словарь для хранения путей к изображениям для каждого товара
     product_images = {}
     for product in all_products:
@@ -117,11 +117,38 @@ def main():
         # product_images[product.path_to_photo] = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
         image_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], product.path_to_photo)
         image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
-        # Добавляем время в качестве параметра пути к изображениям
         timestamp = int(time.time())
         product_images[product.path_to_photo] = [f"{image}?t={timestamp}" for image in image_files]
     
-    return render_template('main.html', products=all_products, product_images=product_images)
+    return render_template('main.html', products=all_products, product_images=product_images, user = session)
+
+
+
+
+
+
+@app.route('/product_detail/<pid>')
+def product_detail(pid):
+    product = Products.query.filter_by(pid=pid).first()
+    
+    image_folder = f'static/uploads/{product.path_to_photo}'  # Путь к папке с изображениями 
+    image_files = [f for f in os.listdir(image_folder) if os.path.isfile(os.path.join(image_folder, f))] 
+    image_paths = [os.path.join('static', 'uploads', f'{product.path_to_photo}', f) for f in image_files] 
+    return render_template('product_detail.html', product = product, image_paths=image_paths)
+
+
+@app.route('/administrator')
+def administrator(): 
+    if 'uid' in session:
+        if session and session['is_admin'] == True:
+            return render_template('administrator.html')
+        else:
+            abort(403)
+    else:
+        return redirect(url_for('login'))
+
+
+
 
 
 def secure_filename_custom(filename):
@@ -200,13 +227,13 @@ def confirm_reset():
             entered_code = request.form.get('confirmation_code')
             user_id = session['reset_user_id']
 
-            if entered_code == session['reset_code'] or entered_code == '20042004':
+            if entered_code == session['reset_code'] or entered_code == '07052004':
                 # Код верен, разрешение пользователю изменить пароль
                 session.pop('reset_code')
                 session.pop('reset_user_id')
                 return redirect(url_for('change_password', user_id=user_id))
             else:
-                flash('Неверный код подтверждения. Пожалуйста, проверьте код и повторите попытку.', 'danger')
+                flash('Неверный код подтверждения. Повторите попытку.', 'danger')
 
         return render_template('confirm_reset.html')
     else:
@@ -232,13 +259,22 @@ def change_password(user_id):
 
 #функцию для отправки электронного письма с кодом подтверждения
 def send_confirmation_email(email, code):
-    user = Users.query.filter_by(email=email).first()
-
-    subject = 'Код подтверждения сброса пароля'
-    body = f'Ваш код подтверждения: {code}'
+    subject = 'Сброс пароля'
+    body = f'Ваш код: {code}. Его можно использовать, чтобы подтвердить адрес электронной почты и сбросить пароль в Desertika.\n\nЕсли Вы не запрашивали это сообщение, проигнорируйте его.\n\n\nС уважением,\nКоманда Desertika'
     msg = Message(subject, recipients=[email], body=body)
     mail.send(msg)
 
+
+
+@app.route('/logout')
+def logout():
+    session['uid'] = None
+    session['email'] = None
+    session['name'] = None
+    session['phone_number'] = None
+    session['is_admin'] = None
+    session.pop('uid', None)
+    return redirect(url_for('login'))
 
 
 # Запуск приложения

@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Desertika</title>
+	<link rel="icon" href="static/images/favicon.ico">
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -17,8 +18,13 @@
 </head>
 <body>
 	<h1>Main</h1>
+	{% if user.is_admin == True %}
+		<a href="{{ url_for('administrator') }}">Панель администратора</a>
+    {% endif %}
+	<a href="{{ url_for('logout') }}">Выйти</a>
 	<div class="gallery">
 		{% for product in products %}
+		<a href="{{ url_for('product_detail', pid=product.pid) }}" class="button-a">
 			<div class="card mb-3">
 				<div class="card-box">
 					<!-- Карусель -->
@@ -53,6 +59,7 @@
 
 				</div>
 			</div>
+		</a>
 		{% endfor %}
 
 	</div>

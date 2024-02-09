@@ -1,3 +1,4 @@
+
 .gallery{
     display: flex;
     flex-wrap: wrap;
@@ -12,5 +13,6 @@
 
 .mb-3 {
     width: 220px;
+    margin-inline: 20px;
 }
 

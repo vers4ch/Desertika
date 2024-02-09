@@ -1,0 +1,41 @@
+.head{
+	height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.base{
+	display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.img_box{
+	margin-inline: 30px;
+	width: 330px;
+}
+
+.desc_box{
+	margin-inline: 30px;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    /* justify-content: flex-start; */
+	justify-content: space-between;
+}
+
+.desc_box div{
+	display: inline-flex;
+}
+
+.desc_box b{
+	margin-right: 10px;
+}
+
+.registration-image{
+	width: 300px;
+}
