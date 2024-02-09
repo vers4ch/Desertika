@@ -4,33 +4,61 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" href="static/images/favicon.ico">
-    <title>Подтверждение сброса пароля</title>
+    <title>Проверка безопасности</title>
+
+	<!-- Установка иконки сайта для отображения во вкладке браузера -->
+	<link rel="icon" href="static/img/favicon.ico">
+	<!-- Подключаем внешние таблицы стилей -->
     <link rel="stylesheet" href="static/style/confirm_reset.css">
+	<!-- Подключаем внешние таблицы стилей -->
+    <link rel="stylesheet" href="static/style/login.css">
+    <!-- Подключаем шрифты семейства Roboto -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+    <!-- Подключение библиотеки jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Подключение библиотеки Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
 </head>
 <body>
-    <div class="head">
-        <h2>Подтверждение сброса пароля</h2>
-    </div>
-
-    <div class="form">
-        <div class="inputs">
-            <form class="forma" action="{{ url_for('confirm_reset') }}" method="post">
-			
-				<label for="confirmation_code">Введите код подтверждения:</label>
-				<div class="spacer"></div>
-				<input type="text" name="confirmation_code" placeholder="Код подтверждения" required size="20" style="font-size: 20px; text-align: center;">
-				<br>
-				<button class="Button" type="submit">Подтвердить</button>
-			</form>
-			{% with messages = get_flashed_messages() %}
-					{% if messages %}
-						{% for message in messages %}
-							<p>{{ message }}</p>
-						{% endfor %}
-					{% endif %}
-       			 {% endwith %}
-        </div>
+    <div class="main">
+    <img src="static\images\logo.jpg" alt="Image Description" class="registration-image">
+        <!-- Контейнер для всей формы -->
+        <div class="zation">
+			<!-- Заголовок Проверка безопасности -->
+			<div class="head">
+				<!-- Пустой блок для визуального выравнивания -->
+				<div></div>
+				<span class="title">Проверка безопасности</span>
+				<!-- Пустой блок для визуального выравнивания -->
+				<div></div>
+			</div>
+            <!-- Контейнер для содержимого вкладок -->
+            <div class="tabs">
+                <!-- Форма для входа -->
+				<form class="forma" method="post" action="{{ url_for('confirm_reset') }}">
+                    <!-- Контейнер для полей ввода и чекбокса -->
+                    <div class="inputs">
+                        <!-- Поле для кода -->
+						<div class="input">
+							<i class="fas fa-check-circle"></i>
+							<!-- <input name="email" placeholder="Email" type="text"> -->
+							<input class="input-field" type="text" name="confirmation_code" placeholder="Код подтверждения">
+						</div>
+                    </div>
+                    <!-- Кнопка для отправки кода -->
+					<input class="zation-button" type="submit" value="Отправить">
+					<!-- {% with messages = get_flashed_messages() %}
+						{% if messages %}
+							{% for message in messages %}
+							<div class="input1">
+								<p style="margin-top: 0; color: red;">{{ message }}</p>
+							</div>
+							{% endfor %}
+						{% endif %}
+				    {% endwith %} -->
+				</form>	
+            </div> <!-- Закрытие контейнера для содержимого вкладок -->
+        </div> <!-- Закрытие контейнера для всей формы -->
     </div>
 </body>
 </html>
