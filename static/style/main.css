@@ -16,7 +16,7 @@ src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('
 
 body {
     background-color: #efdbe0;
-    font-family: 'Lato';   
+    /* font-family: 'Lato';    */
 }
 
 .navbar {
@@ -114,10 +114,6 @@ a:hover {
     object-fit: cover;
 }
 
-.mb-3 {
-    width: 220px;
-    margin-inline: 20px;
-}
 
 .main {
 display: flex;
@@ -188,4 +184,14 @@ footer.bg-pink {
     width: 200px;
     height: auto;
     display: block;
+}
+
+.navbar-toggler {
+    color: rgb(115 77 77 / 67%);
+    /* border-color: rgba(0,0,0,.1); */
+}
+
+.mb-3 {
+    /* width: 220px; */
+    margin-inline: 10px;
 }

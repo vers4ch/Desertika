@@ -21,15 +21,16 @@
     </script>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-pink sticky-top">
+	<nav class="navbar navbar-expand-lg bg-pink sticky-top">
 		<div class="container">
 			<a class="navbar-brand" href="#">
 				<img src="static/images/logo_small.jpg" class="logo d-block" alt="Logo" oncontextmenu="return false;" onmouseover="this.title='';" style="max-height: 50px;">
 			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
+				<!-- <span class="navbar-toggler-icon"></span> -->
+				<i class="fa fa-bars" aria-hidden="true"></i>
 			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
+			<div class="collapse navbar-collapse navbar-light" id="navbarNav">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
 						<a class="nav-link" href="#">Каталог</a>
@@ -42,7 +43,7 @@
 					</li>
 				</ul>
 			</div>
-			<div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+			<div class="collapse navbar-collapse justify-content-end navbar-light" id="navbarNav">
 				<ul class="navbar-nav">
 					{% if user.is_admin == True %}
 						<li class="nav-item">
@@ -93,7 +94,7 @@
 		<div class="gallery">
 			{% for product in products %}
 			<a href="{{ url_for('product_detail', pid=product.pid) }}" class="button-a">
-				<div class="card mb-3">
+				<div class="card mb-3 col-md-3 col-sm-4 col-5">
 					<div class="card-box">
 						<!-- Карусель -->
 						<div id="carousel_{{ product.pid }}" class="carousel slide" data-ride="carousel">
@@ -123,7 +124,7 @@
 						<a href="{{ url_for('product_detail', pid=product.pid) }}">
 							<h5 class="card-name">{{product.name}}</h5>
 							<p class="card-text" style="margin: 0;">Вес: {{ product.weight }}</p>
-							<p class="card-text" style="margin: 0;">Цена: {{ product.price }}</p>
+							<p class="card-text" style="margin: 0;">Цена: {{ product.price }}{{product.price_text}}</p>
 						</a>
 						
 						{% if user.uid %}
