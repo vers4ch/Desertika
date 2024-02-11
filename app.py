@@ -53,7 +53,6 @@ class Products(db.Model):
     description = db.Column(db.Text(collation='pg_catalog."default"'))
     weight = db.Column(db.Text(collation='pg_catalog."default"'))
     price = db.Column(db.Text(collation='pg_catalog."default"'))
-    images = db.Column(db.LargeBinary)
     path_to_photo = db.Column(db.Text(collation='pg_catalog."default"'))
 
     def __repr__(self):
@@ -353,7 +352,6 @@ def basket():
                     'description': product.description,
                     'weight': product.weight,
                     'price': product.price,
-                    'images': product.images,
                     'path_to_photo': product.path_to_photo,
                     'count': count
                 }
