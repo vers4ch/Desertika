@@ -3,6 +3,8 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify, s
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from PIL import Image
+from datetime import datetime
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'c@t'
@@ -53,11 +55,29 @@ class Products(db.Model):
     description = db.Column(db.Text(collation='pg_catalog."default"'))
     weight = db.Column(db.Text(collation='pg_catalog."default"'))
     price = db.Column(db.Text(collation='pg_catalog."default"'))
-    images = db.Column(db.LargeBinary)
+    price_text = db.Column(db.Text(collation='pg_catalog."default"'))
     path_to_photo = db.Column(db.Text(collation='pg_catalog."default"'))
 
     def __repr__(self):
-        return f"Users('{self.pid}', '{self.name}', '{self.description}', '{self.weight}', '{self.price}', '{self.images}', '{self.path_to_photo}')"
+        return f"Products('{self.pid}', '{self.name}', '{self.description}', '{self.weight}', '{self.price}', '{self.images}', '{self.path_to_photo}')"
+
+
+class Order(db.Model): 
+    __tablename__ = 'orders' 
+    oid = db.Column(db.BigInteger, primary_key=True) 
+    uid = db.Column(db.Text) 
+    name = db.Column(db.Text) 
+    tel = db.Column(db.Text) 
+    email = db.Column(db.Text) 
+    date = db.Column(db.Text) 
+    coment = db.Column(db.Text) 
+    order = db.Column(db.Text) 
+    order_date = db.Column(db.Text) 
+    status = db.Column(db.Text)
+    
+    def __repr__(self):
+        return f"Order('{self.oid}', '{self.uid}', '{self.name}', '{self.tel}', '{self.email}', '{self.date}', '{self.coment}', '{self.order}', '{self.order_date}', '{self.status}')"
+
 
 # Создание таблицы в базе данных
 with app.app_context():
@@ -67,6 +87,7 @@ with app.app_context():
 #Страница входа
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    session.pop('_flashes', None)
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -103,22 +124,17 @@ def register():
         tel = request.form['tel']
         password = request.form['password']
     
-        new_user = Users(name=name, phone_number=tel, email=email, password=password, is_admin=False)
+        new_user = Users(name=name, phone_number=tel, email=email, password=password, is_admin=False, basket = '[]')
         db.session.add(new_user)
         db.session.commit()
-
-        flash('Вы успешно зарегистрированы!', 'success')
         return redirect(url_for('login'))
         
-    return render_template('register.html')
 
 
 #Главная страница
 @app.route('/', methods=['GET', 'POST'])
 def main():
-    # all_products = Products.query.all()
     all_products = db.session.query(Products).all()
-    # print(all_products)
     # Создаем словарь для хранения путей к изображениям для каждого товара
     product_images = {}
     for product in all_products:
@@ -211,6 +227,7 @@ def new_product():
         description = request.form['description']
         weight = request.form['weight']
         price = request.form['price']
+        price_text = request.form['price-text']
         
         mainImg = request.files.get('Mainfile')
         files = request.files.getlist('files[]')
@@ -240,11 +257,14 @@ def new_product():
             image = Image.open(mainImg_path)
             main_jpg_path = os.path.splitext(mainImg_path)[0] + ".jpg"
             image.convert("RGB").save(main_jpg_path, "JPEG")
-            os.remove(mainImg_path)  # Удаляем исходный файл
+            
+            file_extension = os.path.splitext(mainImg_path)[1]
+            if file_extension.lower() != ".jpg":
+                os.remove(mainImg_path)
         else:
             flash('Данное расширение файла main не поддерживается!', 'error')
                 
-        new_product = Products(name=name, description=description, weight=weight, price=price, path_to_photo = folder_name)
+        new_product = Products(name=name, description=description, weight=weight, price=price, path_to_photo = folder_name, price_text = price_text)
         db.session.add(new_product)
         db.session.commit()
         return redirect(url_for('new_product'))
@@ -328,6 +348,27 @@ def profile():
     return render_template('profile.html')
 
 
+@app.route('/order', methods=['GET', 'POST'])
+def order():
+    user = Users.query.filter_by(uid=session['uid']).first()
+    if request.method == 'POST':
+        name = request.form['name']
+        tel = request.form['tel']
+        date = request.form['date']
+        coment = request.form['coment']
+        
+        current_datetime = datetime.now()
+        current_datetime_string = current_datetime.strftime("%d.%m.%Y %H:%M:%S")
+
+        new_order = Order(uid=session['uid'], name = name, tel = tel, email = session['email'], date = date, coment = coment, order = user.basket, order_date = current_datetime_string, status = "Awaits")
+        db.session.add(new_order)
+        session['basket'] = []
+        user.basket = '[]'
+        db.session.commit()
+        return redirect(url_for('main'))
+    return render_template('order.html', user = user)
+
+
 
 @app.route('/basket')
 def basket():
@@ -353,7 +394,7 @@ def basket():
                     'description': product.description,
                     'weight': product.weight,
                     'price': product.price,
-                    'images': product.images,
+                    'price_text': product.price_text,
                     'path_to_photo': product.path_to_photo,
                     'count': count
                 }
@@ -374,14 +415,32 @@ def remove_from_basket():
         user.basket = user_basket_json
         db.session.commit()
     # print(session['basket'])
+        
     return redirect(url_for('basket'))
 
+
+@app.route('/update_quantity_in_basket2', methods=['POST'])
+def update_quantity_in_basket2():
+    pid = request.form['pid']    
+    count = int(request.form['count'])
+    total_price = 0  # Переменная для хранения общей суммы стоимости товаров в корзине
+    if 'basket' in session:
+        for item in session['basket']:            
+            if item.get('pid') == pid:
+                # Получаем стоимость товара из таблицы (замените это на ваш метод получения стоимости)                # Например:
+                # product = Product.query.filter_by(pid=pid).first()                # price = product.price
+                price = 100  # Пример стоимости товара
+                item['count'] = count                
+                total_price += price * count
+    session.modified = True
+    return jsonify({'total_price': total_price}), 200
 
 
 @app.route('/update_quantity_in_basket', methods=['POST'])
 def update_quantity_in_basket():
     pid = request.form['pid']
-    count = int(request.form['count'])
+    # count = int(request.form['count'])
+    count = request.form['count']
 
     if 'basket' in session:
         for item in session['basket']:
@@ -391,7 +450,10 @@ def update_quantity_in_basket():
 
     session.modified = True
     print(session['basket'])
-    return '', 204
+    user = Users.query.filter_by(uid=session['uid']).first()
+    user.basket = json.dumps(session['basket'])
+    db.session.commit()
+    return jsonify({'basket': session['basket']}), 200
 
 
 
@@ -405,7 +467,7 @@ def logout():
     session.pop('is_admin', None)
     session.pop('basket', None)
     session.pop('_flashes', None)
-    print(session)
+    # print(session)
     return redirect(url_for('login'))
 
 
