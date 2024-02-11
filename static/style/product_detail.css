@@ -1,8 +1,24 @@
+body {
+    background-color: #efdbe0;
+    /* font-family: 'Lato';    */
+}
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .head{
 	height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.registration-image {
+    width: 200px;
+    height: auto;
+    display: block;
+    margin-bottom: -50px;
 }
 
 .base{
@@ -36,6 +52,11 @@
 	margin-right: 10px;
 }
 
-.registration-image{
-	width: 300px;
+
+.buy-box{
+    margin-top: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }

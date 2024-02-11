@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desertika</title>
+    <link rel="icon" href="static/images/favicon.ico">
+    <title>DESERTIKA</title>
     
     <!-- Установка иконки сайта для отображения во вкладке браузера -->
     <link rel="icon" href="static/img/favicon.ico">
@@ -77,7 +78,7 @@
 						</div>
                         <!-- Чекбокс "Запомнить меня" -->
 						<div class="input1">
-                            <input type="checkbox">
+                            <input type="checkbox" name="remember">
                             <span>Запомнить меня</span>
                         </div>
                     </div>
@@ -114,6 +115,19 @@
                     <!-- Кнопка для отправки формы регистрации -->
                     <input class="zation-button" type="submit" value="Зарегистрироваться">
                 </form>
+
+
+
+                {% with logins = get_flashed_messages() %}
+					{% if logins %}
+						{% for login in logins %}
+                        <script>
+                            alert("Неверный логин или пароль.");
+                        </script>
+						{% endfor %}
+					{% endif %}
+				{% endwith %}
+
             </div> <!-- Закрытие контейнера для содержимого вкладок -->
         </div> <!-- Закрытие контейнера для всей формы -->
     </div>
