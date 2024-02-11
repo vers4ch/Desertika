@@ -1,18 +1,113 @@
-a{
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400; /* Обычный вес шрифта */
+    src: local('Lato Regular'), local('Lato-Regular'), url(fonts/Lato-Regular.woff2) format('woff2');
+    /* Если используете CDN, то можете заменить "url(path/to/lato.woff2)" на ссылку на шрифт с CDN */
+  }
+  
+@font-face {
+font-family: 'Lato';
+font-style: normal;
+font-weight: 700; /* Полужирный вес шрифта */
+src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('woff2');
+/* Замените на ссылку на шрифт с CDN, если используете CDN */
+}
+
+body {
+    background-color: #efdbe0;
+    font-family: 'Lato';   
+}
+
+.navbar {
+    padding-top: 0px; /* Уменьшаем верхний отступ */
+    padding-bottom: 0px; /* Уменьшаем нижний отступ */
+}
+
+.navbar.bg-pink {
+    background-color: #efdbe0; /* Замените на ваш выбранный цвет */
+    border-bottom: 1px solid #373737; /* только нижняя граница */
+}
+
+.navbar-nav .nav-link {
+    font-size: 18px; /* Увеличиваем размер шрифта ссылок */
+}
+
+.navbar.navbar-light .navbar-nav .nav-link {
+    color: #373737; /* Цвет текста */
+}
+
+.navbar.navbar-light .navbar-nav .nav-link:hover {
+    color: #000; /* Черный */
+}
+
+.navbar-toggler-icon {
+    height: 100%; /* Устанавливаем высоту иконки равной высоте шапки */
+}
+
+.navbar-brand {
+    padding-top: 4px;
+    margin-bottom: -10px;
+}
+
+.search-container {
+    margin-top: 20px; /* отступ сверху */
+    margin-bottom: 20px; /* отступ снизу */
+    margin-left: auto; /* отступ слева */
+    margin-right: auto; /* отступ справа */
+    max-width: 450px; /* максимальная ширина контейнера */
+}
+
+.input-group {
+    margin-bottom: 10px; /* отступ между элементами внутри группы */
+}
+
+.header {
+    background-color: #efdbe0;
+    padding: 10px 0;
+    color: #fff;
+    display: flex;
+    justify-content: space-between; /* Новое свойство для размещения элементов слева и справа */
+    align-items: center; /* Центрирование элементов по вертикали */
+}
+
+.logo {
+    max-width: 150px;
+    margin-bottom: 10px;
+}
+
+.header-links {
+    display: flex;
+    align-items: center;
+}
+
+.right-container {
+    margin-left: auto; /* Этот блок будет автоматически выравниваться вправо */
+}
+
+.header-links a {
+    color: #fff;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+a {
     color: black;
 }
-a:hover{
+
+a:hover {
     text-decoration: none;
     color: black;
 }
 
 
-.gallery{
+.gallery {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
 }
+
 .carousel-item img {
     /* height: 100%; */
     width: 50px;
@@ -22,10 +117,6 @@ a:hover{
 .mb-3 {
     width: 220px;
     margin-inline: 20px;
-}
-
-body {
-    background-color: #efdbe0;  
 }
 
 .main {
@@ -41,39 +132,39 @@ align-items: center;
     margin-bottom: -10px;
 }
 
-.h-link{
+.header-link {
     display: flex;
     width: 90%;
     flex-direction: row;
     justify-content: space-evenly;
 }
 
-.else-auth{
+.else-auth {
     margin-top: 10px;
     margin-bottom: 10px;
     text-align: center;
 }
 
-.else-auth p{
+.else-auth p {
     margin: 0;
 }
 
-.else-auth a{
+.else-auth a {
     padding: 5px;
     border-radius: 5px;
     background-color: #c4788b;
 }
-.else-auth a:hover{
+.else-auth a:hover {
     text-decoration: underline;
 }
 
-.buy-box{
+.buy-box {
     width: 100%;
     display: flex;
     justify-content: center;
 }
 
-.sendButton, .else-sendButton{
+.sendButton, .else-sendButton {
     color: white;
     display: inline-block;
     margin: 10px;
@@ -83,8 +174,18 @@ align-items: center;
     background-color: #c4788b;
 }
 
-.sendButton:hover, .else-sendButton:hover{
+.sendButton:hover, .else-sendButton:hover {
     cursor: pointer;
 }
 
+footer.bg-pink {
+    background-color: #efdbe0;
+    border-top: 1px solid #373737; /* только верхняя граница */
+    padding: 20px; /* добавим внутренний отступ для лучшего визуального эффекта */
+}
 
+.footer-image {
+    width: 200px;
+    height: auto;
+    display: block;
+}
