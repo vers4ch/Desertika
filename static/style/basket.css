@@ -1,0 +1,117 @@
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400; /* Обычный вес шрифта */
+    src: local('Lato Regular'), local('Lato-Regular'), url(fonts/Lato-Regular.woff2) format('woff2');
+    /* Если используете CDN, то можете заменить "url(path/to/lato.woff2)" на ссылку на шрифт с CDN */
+  }
+  
+@font-face {
+font-family: 'Lato';
+font-style: normal;
+font-weight: 700; /* Полужирный вес шрифта */
+src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('woff2');
+/* Замените на ссылку на шрифт с CDN, если используете CDN */
+}
+
+body {
+    background-color: #efdbe0;
+    font-family: 'Lato';   
+}
+
+.main {
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+    
+.registration-image {
+  margin-block: -20px;
+    width: 200px;
+    height: auto;
+    display: block;
+}
+
+.base{
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: center;
+}
+.product{
+  margin-inline: 20px;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+}
+.right-box{
+  margin-right: 20px;
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+}
+.product-box{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 90%;
+    margin-block: 20px;
+}
+.product-box h3, p{
+  margin: 0;
+}
+
+.img-box{
+  margin-inline: 10px;
+  /* width: 150px; */
+  width: 20%;
+}
+
+.image{
+  width: 100%;
+  border-radius: 10px;
+  height: auto;
+  display: block;
+}
+
+.des-box{
+  /* width: 350px; */
+  width: 60%;
+}
+
+.price-box{
+  font-size: 20px;
+  width: 15%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.sendButton{
+  text-decoration: none;
+  color: white;
+  display: inline-block;
+  margin: 10px;
+  border-radius: 5px;
+  padding: 5px;
+  padding-inline: 30px;
+  background-color: #c4788b;
+}
+
+.order-box{
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

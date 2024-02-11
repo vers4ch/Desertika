@@ -3,12 +3,14 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Desertika</title>
+	<title>DESERTIKA</title>
 	<link rel="icon" href="static/images/favicon.ico">
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="static/style/main.css">
 	<script>
         window.onload = function() {
@@ -17,51 +19,94 @@
     </script>
 </head>
 <body>
-	<h1>Main</h1>
-	{% if user.is_admin == True %}
-		<a href="{{ url_for('administrator') }}">Панель администратора</a>
-    {% endif %}
-	<a href="{{ url_for('logout') }}">Выйти</a>
-	<div class="gallery">
-		{% for product in products %}
-		<a href="{{ url_for('product_detail', pid=product.pid) }}" class="button-a">
-			<div class="card mb-3">
-				<div class="card-box">
-					<!-- Карусель -->
-					<div id="carousel_{{ product.pid }}" class="carousel slide" data-ride="carousel">
-						<ol class="carousel-indicators">
-							{% for image in product_images[product.path_to_photo] %}
-								<li data-target="#carousel_{{ product.pid }}" data-slide-to="{{ loop.index0 }}" {% if loop.index0 == 0 %}class="active"{% endif %}></li>
-							{% endfor %}
-						</ol>
-						<div class="carousel-inner">
-							{% for image in product_images[product.path_to_photo] %}
-								<div class="carousel-item {% if loop.index0 == 0 %}active{% endif %}">
-									<img class="d-block w-100" src="{{ image }}?v={{ random_string }}" alt="Slide {{ loop.index }}">
-
-								</div>
-							{% endfor %}
-						</div>
-						<a class="carousel-control-prev" href="#carousel_{{ product.pid }}" role="button" data-slide="prev">
-							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-							<span class="sr-only">Previous</span>
-						</a>
-						<a class="carousel-control-next" href="#carousel_{{ product.pid }}" role="button" data-slide="next">
-							<span class="carousel-control-next-icon" aria-hidden="true"></span>
-							<span class="sr-only">Next</span>
-						</a>
-					</div>
-					<!-- /Карусель -->
-
-					<h5 class="card-name">{{product.name}}</h5>
-					<p class="card-text" style="margin: 0;">Вес: {{ product.weight }}</p>
-					<p class="card-text" style="margin: 0;">Цена: {{ product.price }}</p>
-
-				</div>
-			</div>
+	<div class="main">
+    	<a href="{{ url_for('main') }}">
+		<img src="static\images\logo.jpg" class="registration-image" oncontextmenu="return false;" onmouseover="this.title='';">
 		</a>
-		{% endfor %}
+		<div class="h-link">
+			{% if user.is_admin == True %}
+				<a href="{{ url_for('administrator') }}">Панель администратора</a>
+			{% endif %}
+			<div>
+				<a href="{{ url_for('basket') }}"><i class="fa fa-shopping-basket" aria-hidden="true"></i></a>
+			</div>
+			<div class="right-container">
+				<a class="profileLink" href="{{ url_for('profile') }}"><i class="fa fa-user"></i>{{user.name}}</a>
+			</div>
+			<a href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+		</div>
+		<div class="gallery">
+			{% for product in products %}
+			<a href="{{ url_for('product_detail', pid=product.pid) }}" class="button-a">
+				<div class="card mb-3">
+					<div class="card-box">
+						<!-- Карусель -->
+						<div id="carousel_{{ product.pid }}" class="carousel slide" data-ride="carousel">
+							<ol class="carousel-indicators">
+								{% for image in product_images[product.path_to_photo] %}
+									<li data-target="#carousel_{{ product.pid }}" data-slide-to="{{ loop.index0 }}" {% if loop.index0 == 0 %}class="active"{% endif %}></li>
+								{% endfor %}
+							</ol>
+							<div class="carousel-inner">
+								{% for image in product_images[product.path_to_photo] %}
+									<div class="carousel-item {% if loop.index0 == 0 %}active{% endif %}">
+										<img class="d-block w-100" src="{{ image }}?v={{ random_string }}" alt="Slide {{ loop.index }}">
 
-	</div>
+									</div>
+								{% endfor %}
+							</div>
+							<a class="carousel-control-prev" href="#carousel_{{ product.pid }}" role="button" data-slide="prev">
+								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+								<span class="sr-only">Previous</span>
+							</a>
+							<a class="carousel-control-next" href="#carousel_{{ product.pid }}" role="button" data-slide="next">
+								<span class="carousel-control-next-icon" aria-hidden="true"></span>
+								<span class="sr-only">Next</span>
+							</a>
+						</div>
+						<!-- /Карусель -->
+						<a href="{{ url_for('product_detail', pid=product.pid) }}">
+							<h5 class="card-name">{{product.name}}</h5>
+							<p class="card-text" style="margin: 0;">Вес: {{ product.weight }}</p>
+							<p class="card-text" style="margin: 0;">Цена: {{ product.price }}</p>
+						</a>
+						
+						{% if user.uid %}
+							<input type="hidden" class="hiddenValue" value="{{ product.pid }}">
+							<button class="sendButton"><i class="fa fa-shopping-basket" aria-hidden="true"></i></button>
+						<!-- <div class="buy-box">
+							<a class="sendButton"><i class="fa fa-shopping-basket" aria-hidden="true"></i></a>
+						</div> -->
+						{% else %}
+						<div class="buy-box">
+							<a class="else-sendButton" href="{{ url_for('login') }}"><i class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i></a>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</a>
+			{% endfor %}
+		</div>
+    </div>
+	<script>
+		$(document).ready(function() {
+			$('.sendButton').click(function() {
+				var valueToSend = $(this).prev('.hiddenValue').val();
+				console.log(valueToSend);
+				$.ajax({
+					type: 'POST',
+					url: '/add_to_basket',
+					contentType: 'application/json',
+					data: JSON.stringify({value: valueToSend}),
+					success: function(response) {
+						alert('Товар добавлен в корзину');
+					},
+					error: function(error) {
+						console.error('Произошла ошибка при отправке значения на сервер:', error);
+					}
+				});
+			});
+		});
+	</script>
 </body>
 </html>

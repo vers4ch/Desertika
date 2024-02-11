@@ -1,10 +1,11 @@
-import time, random, string, uuid, unicodedata, os
+import time, random, string, uuid, unicodedata, os, json
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash, send_file, make_response, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
+from PIL import Image
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '314'
+app.config['SECRET_KEY'] = 'c@t'
 
 UPLOAD_FOLDER = 'static/uploads/'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'heic', 'pdf'}
@@ -39,9 +40,10 @@ class Users(db.Model):
     email = db.Column(db.Text(collation='pg_catalog."default"'))
     password = db.Column(db.Text(collation='pg_catalog."default"'))
     is_admin = db.Column(db.Boolean)
+    basket = db.Column(db.Text(collation='pg_catalog."default"'))
 
     def __repr__(self):
-        return f"Users('{self.uid}', '{self.name}', '{self.phone_number}', '{self.email}', '{self.password}', '{self.is_admin}')"
+        return f"Users('{self.uid}', '{self.name}', '{self.phone_number}', '{self.email}', '{self.password}', '{self.is_admin}', '{self.basket}')"
     
 
 class Products(db.Model):
@@ -68,17 +70,24 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+        remember = request.form.get('remember')
         user = Users.query.filter_by(email=email).first()
         print(user)
         if user == None:
             flash('Пользователь не найден', 'danger')
             return redirect(url_for('login'))
         if user.email == email and user.password == password:
+            # Если пользователь хочет, чтобы его запомнили
+            if remember:
+                session.permanent = True
+            else:
+                session.permanent = False
             session['uid'] = user.uid
             session['email'] = user.email
             session['name'] = user.name
             session['phone_number'] = user.phone_number
             session['is_admin'] = user.is_admin
+            session['basket'] = json.loads(user.basket)
             return redirect(url_for('main'))
         else:
             flash('Неверный пароль', 'danger')
@@ -124,6 +133,38 @@ def main():
 
 
 
+@app.route('/add_to_basket', methods=['POST'])
+def add_to_basket():
+    user = Users.query.filter_by(uid=session['uid']).first()
+    # print(user)
+    data = request.get_json()
+    pid = data.get('value')
+    # print(pid)
+    
+    db_basket = user.basket
+    
+    if db_basket is None: 
+        db_basket = '[]'
+        user_basket = json.loads(db_basket)
+    else:
+        user_basket = json.loads(db_basket)
+        
+    # Проверяем, есть ли pid в корзине
+    for item in user_basket:
+        if item['pid'] == pid:
+            item['count'] = str(int(item['count']) + 1)  # Увеличиваем счетчик
+            break
+    else:
+        user_basket.append({'pid': pid, 'count': '1'})  # Если нет, добавляем новый элемент
+        
+    session['basket'] = user_basket
+    user_basket_json = json.dumps(user_basket)
+    user.basket = user_basket_json
+    db.session.commit()
+    # Вернем ответ об успешном выполнении операции
+    return jsonify({'success': True})
+
+
 
 
 
@@ -134,7 +175,7 @@ def product_detail(pid):
     image_folder = f'static/uploads/{product.path_to_photo}'  # Путь к папке с изображениями 
     image_files = [f for f in os.listdir(image_folder) if os.path.isfile(os.path.join(image_folder, f))] 
     image_paths = [os.path.join('static', 'uploads', f'{product.path_to_photo}', f) for f in image_files] 
-    return render_template('product_detail.html', product = product, image_paths=image_paths)
+    return render_template('product_detail.html', product = product, image_paths=image_paths, user = session)
 
 
 @app.route('/administrator')
@@ -151,12 +192,16 @@ def administrator():
 
 
 
+def get_file_extension(filename):
+    return os.path.splitext(filename)[1]
+
 def secure_filename_custom(filename):
-    filename = unicodedata.normalize('NFKD', filename).encode('ascii', 'ignore').decode('utf-8')
+    filename = filename.encode('utf-8')  # Преобразование строки в байтовую строку в кодировке UTF-8
+    filename = filename.decode('utf-8', 'ignore')  # Декодирование байтовой строки обратно в Unicode, игнорируя ошибки
     for sep in os.path.sep, os.path.altsep:
         if sep:
             filename = filename.replace(sep, ' ')
-    return filename
+    return get_file_extension(filename)
 
 
 @app.route('/new_product', methods=['GET', 'POST'])
@@ -167,6 +212,7 @@ def new_product():
         weight = request.form['weight']
         price = request.form['price']
         
+        mainImg = request.files.get('Mainfile')
         files = request.files.getlist('files[]')
         
 		# Создаем новую папку для загрузки изображений
@@ -179,11 +225,24 @@ def new_product():
             if file and allowed_file(file.filename):
                 filename = str(uuid.uuid4())  # Генерируем случайное буквенное название
                 filename = str(uuid.uuid4()) + secure_filename_custom(file.filename)  # Генерируем случайное буквенное название
+                # print(filename)
                 file.save(os.path.join(folder_path, filename))
                 #Сохранение информации о файле в базу данных
             else:
                 flash('Данное расширение файлов не поддерживается!', 'error')
-                print('Error FORMAT FILE UPLOAD')
+                # print('Error FORMAT FILE UPLOAD')
+                
+        if mainImg and allowed_file(mainImg.filename):
+            main_filename = 'main' + secure_filename_custom(mainImg.filename)  # Переименовываем файл в main
+            mainImg_path = os.path.join(folder_path, main_filename)
+            mainImg.save(mainImg_path)
+            # Конвертируем файл в JPG
+            image = Image.open(mainImg_path)
+            main_jpg_path = os.path.splitext(mainImg_path)[0] + ".jpg"
+            image.convert("RGB").save(main_jpg_path, "JPEG")
+            os.remove(mainImg_path)  # Удаляем исходный файл
+        else:
+            flash('Данное расширение файла main не поддерживается!', 'error')
                 
         new_product = Products(name=name, description=description, weight=weight, price=price, path_to_photo = folder_name)
         db.session.add(new_product)
@@ -200,7 +259,6 @@ def reset_password():
 
         #существует ли пользователь с таким email в базе данных
         user = Users.query.filter_by(email=email).first()
-        print(user)
 
         if user:
             # Генерация случайного 4-значного кода подтверждения
@@ -210,11 +268,10 @@ def reset_password():
             # Сохранение кода в сессии для проверки
             session['reset_code'] = confirmation_code
             session['reset_user_id'] = user.uid
-
-            flash('Инструкции по сбросу пароля и логин отправлены на вашу почту.', 'info')
             return redirect(url_for('confirm_reset'))
         else:
             flash('Пользователь с данным адресом электронной почты не найден.', 'danger')
+            return redirect(url_for('reset_password'))
 
     return render_template('reset_password.html')
 
@@ -266,14 +323,89 @@ def send_confirmation_email(email, code):
 
 
 
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
+
+
+@app.route('/basket')
+def basket():
+    user = Users.query.filter_by(uid=session['uid']).first()
+    
+    db_basket = user.basket
+    if db_basket is None: 
+        db_basket = '[]'
+        
+    data = json.loads(db_basket)
+    session['basket'] = data
+    
+    result = {}
+
+    for item in data:
+        pid = item['pid']
+        count = int(item['count'])
+        if pid:
+            product = db.session.get(Products, pid)
+            if product:
+                result[pid] = {
+                    'name': product.name,
+                    'description': product.description,
+                    'weight': product.weight,
+                    'price': product.price,
+                    'images': product.images,
+                    'path_to_photo': product.path_to_photo,
+                    'count': count
+                }
+
+    return render_template('basket.html', products = result, user = session)
+
+@app.route('/remove_from_basket', methods=['POST'])
+def remove_from_basket():
+    user = Users.query.filter_by(uid=session['uid']).first()
+    # print(session['basket'])
+    pid_to_delete = request.form['item_id']
+    # print(pid_to_delete)
+    if 'basket' in session:
+        # Создаем новый список без объекта, у которого значение pid равно pid_to_delete
+        filtered_data = [item for item in session['basket'] if item.get('pid') != pid_to_delete]
+        session['basket'] = filtered_data
+        user_basket_json = json.dumps(filtered_data)
+        user.basket = user_basket_json
+        db.session.commit()
+    # print(session['basket'])
+    return redirect(url_for('basket'))
+
+
+
+@app.route('/update_quantity_in_basket', methods=['POST'])
+def update_quantity_in_basket():
+    pid = request.form['pid']
+    count = int(request.form['count'])
+
+    if 'basket' in session:
+        for item in session['basket']:
+            if item.get('pid') == pid:
+                item['count'] = count
+                break
+
+    session.modified = True
+    print(session['basket'])
+    return '', 204
+
+
+
+
 @app.route('/logout')
 def logout():
-    session['uid'] = None
-    session['email'] = None
-    session['name'] = None
-    session['phone_number'] = None
-    session['is_admin'] = None
     session.pop('uid', None)
+    session.pop('email', None)
+    session.pop('name', None)
+    session.pop('phone_number', None)
+    session.pop('is_admin', None)
+    session.pop('basket', None)
+    session.pop('_flashes', None)
+    print(session)
     return redirect(url_for('login'))
 
 

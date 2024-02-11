@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="static/images/favicon.ico">
+    <title>DESERTIKA</title>
+    <link rel="icon" href="static/img/favicon.ico">
+    <link rel="stylesheet" href="static/style/basket.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+<body>
+    <div class="main">
+    	<a href="{{ url_for('main') }}">
+			<img src="static\images\logo.jpg" class="registration-image" oncontextmenu="return false;" onmouseover="this.title='';">
+		</a>
+
+        <div class="base">
+            <div class="product">
+                <div style="text-align: left; width: 80%;"><h1><i class="fa fa-shopping-basket" aria-hidden="true"></i> Корзина</h1></div>
+                <hr color="#ccc" size="1" width="90%">
+                {% for pid, product in products.items() %}
+                <div class="product-box">
+                    <div class="img-box">
+                        <img src="static\uploads\{{ product.path_to_photo }}\main.jpg" class="image">
+                    </div>
+                    <div class="des-box">
+                        <h3>{{ product.name }}</h3>
+                        <p style="margin-top: 20px;">{{ product.description }}</p>
+                        <p style="margin-top: 20px;"><i class="fa fa-shopping-bag" aria-hidden="true"></i>  Вес продукта: {{ product.weight }}</p>
+                    </div>
+                    <div class="price-box">
+                        <b>{{ product.price }}</b>
+
+                        <div class="quantity">
+                            <button class="decrease-quantity" data-pid="{{ pid }}">-</button>
+                            <span class="count">{{ product.count }}</span>
+                            <button class="increase-quantity" data-pid="{{ pid }}">+</button>
+                        </div>
+
+                        <form action="/remove_from_basket" method="post">
+                            <input type="hidden" name="item_id" value="{{ pid }}">
+                            <input type="submit" value="Удалить">
+                        </form>
+                    </div>
+                </div>
+                <hr color="#ccc" size="1" width="90%">
+                {% endfor %}
+            </div>
+            <div class="right-box">
+                <div class="order-box">
+                    <h2>Детали заказа</h2>
+                    <div class="total">
+                        Общая сумма: <span id="total-amount"></span>
+                    </div>
+                    
+                    <p>Имя:</p>
+                    <input name="name" placeholder="Имя" type="text" value="{{user.name}}">
+                    <p>Номер телефона:</p>
+                    <input name="tel" placeholder="Телефон" type="text" value="{{user.phone_number}}">
+                    <p>Почта:</p>
+                    <input name="email" placeholder="Email" type="text" value="{{user.email}}">
+                    <p>Дата подачи:</p>
+                    <input name="data" type="date">
+                    <p>Примечание:</p>
+                    <textarea name="description" placeholder="Примечание" required style="height: 100px; width: 200px;"></textarea>
+                    <a class="sendButton" href="#">Заказать</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.increase-quantity').on('click', function(e) {
+                e.preventDefault();
+                var pid = $(this).data('pid');
+                var $countElement = $(this).siblings('.count');
+                var count = parseInt($countElement.text());
+                count++;
+                $countElement.text(count);
+
+                updateQuantityInSession(pid, count);
+            });
+
+            $('.decrease-quantity').on('click', function(e) {
+                e.preventDefault();
+                var pid = $(this).data('pid');
+                var $countElement = $(this).siblings('.count');
+                var count = parseInt($countElement.text());
+                if (count > 1) {
+                    count--;
+                    $countElement.text(count);
+                    updateQuantityInSession(pid, count);
+                }
+            });
+
+            function updateQuantityInSession(pid, count) {
+            $.ajax({
+                type: 'POST',
+                url: '/update_quantity_in_basket',
+                data: {'pid': pid, 'count': count},
+                success: function(response) {
+                    // Обработайте успешный ответ от сервера (если необходимо)
+                }
+            });
+            }   
+        });
+
+        $(document).ready(function() {
+            updateTotalAmount();
+
+            $('.increase-quantity, .decrease-quantity').on('click', function() {
+                updateTotalAmount();
+            });
+
+            function updateTotalAmount() {
+                var totalAmount = 0;
+                $('.product-box').each(function() {
+                    var priceText = $(this).find('.price').text();
+                    console.log(priceText)
+                    var price = parseFloat(priceText.replace(/[^\d.]/g, '')); // Извлекаем только числовую часть из строки
+                    console.log(price)
+                    var quantity = parseInt($(this).find('.count').text());
+                    console.log(quantity);
+                    totalAmount += price * quantity;
+                    console.log(totalAmount);
+                });
+                $('#total-amount').text(totalAmount.toFixed(2));
+            }
+        });
+    </script>
+</body>
+</html>

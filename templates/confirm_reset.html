@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Проверка безопасности</title>
+    <title>DESERTIKA Проверка безопасности</title>
 
 	<!-- Установка иконки сайта для отображения во вкладке браузера -->
 	<link rel="icon" href="static/img/favicon.ico">
@@ -47,15 +47,18 @@
                     </div>
                     <!-- Кнопка для отправки кода -->
 					<input class="zation-button" type="submit" value="Отправить">
-					<!-- {% with messages = get_flashed_messages() %}
+					{% with messages = get_flashed_messages() %}
 						{% if messages %}
 							{% for message in messages %}
-							<div class="input1">
+							<!-- <div class="input1">
 								<p style="margin-top: 0; color: red;">{{ message }}</p>
-							</div>
+							</div> -->
+							<script>
+								alert("Код неверный");
+							</script>
 							{% endfor %}
 						{% endif %}
-				    {% endwith %} -->
+				    {% endwith %}
 				</form>	
             </div> <!-- Закрытие контейнера для содержимого вкладок -->
         </div> <!-- Закрытие контейнера для всей формы -->
