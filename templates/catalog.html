@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>DESERTIKA</title>
+	<link rel="icon" href="static/images/favicon.ico">
+	
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="static/js/add_to_basket.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="static/style/catalog.css">
+</head>
+<body>
+	<a href="{{ url_for('main') }}"><h1>Каталог</h1></a>
+
+	
+	<div class="envelopexas">
+		<i id="left" class="fa-solid fa-angle-left"></i>
+		<ul class="roundabout">
+			{% for item in new_product %}
+			<li class="arson">
+				<a href="{{ url_for('product_detail', pid=item.pid) }}">
+					<div class="img"><img src="static\uploads\{{ item.path_to_photo }}\main.jpg" draggable="false"></div>
+					<h5>{{item.name}}</h5>
+					<p class="card-text" style="margin: 0;">Вес: {{ item.weight }}</p>
+					<p class="card-text" style="margin: 0;">Цена: {{ item.price }}{{item.price_text}}</p>
+				</a>
+				{% if user.uid %}
+					<input type="hidden" class="hiddenValue" value="{{ item.pid }}">
+					<button class="sendButton">В корзину</button>
+				{% else %}
+				<div class="buy-box">
+					<a class="else-sendButton" href="{{ url_for('login') }}">В корзину</a>
+				</div>
+				{% endif %}
+			</li>
+			{% endfor %}
+		</ul>
+		<i id="right" class="fa-solid fa-angle-right"></i>
+		</div>
+
+
+	{% for category, products in grouped_product.items() %}
+		<div class="service-block">
+			<h2>{{ category }}</h2>
+			<div class="gallery">
+				{% for product in products %}
+					<a href="{{ url_for('product_detail', pid=product.pid) }}" class="button-a">
+						<div class="card mb-3 col-md-2 col-sm-4 col-5">
+							<div class="card-box">
+								<!-- Карусель -->
+								<div id="carousel_{{ product.pid }}" class="carousel slide" data-ride="carousel">
+									<ol class="carousel-indicators">
+										{% for image in product_images[product.path_to_photo] %}
+											<li data-target="#carousel_{{ product.pid }}" data-slide-to="{{ loop.index0 }}" {% if loop.index0 == 0 %}class="active"{% endif %}></li>
+										{% endfor %}
+									</ol>
+									<div class="carousel-inner">
+										{% for image in product_images[product.path_to_photo] %}
+											<div class="carousel-item {% if loop.index0 == 0 %}active{% endif %}">
+												<img class="d-block w-100" src="{{ image }}?v={{ random_string }}" alt="Slide {{ loop.index }}">
+		
+											</div>
+										{% endfor %}
+									</div>
+									<a class="carousel-control-prev" href="#carousel_{{ product.pid }}" role="button" data-slide="prev">
+										<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+										<span class="sr-only">Previous</span>
+									</a>
+									<a class="carousel-control-next" href="#carousel_{{ product.pid }}" role="button" data-slide="next">
+										<span class="carousel-control-next-icon" aria-hidden="true"></span>
+										<span class="sr-only">Next</span>
+									</a>
+								</div>
+								<!-- /Карусель -->
+								<a href="{{ url_for('product_detail', pid=product.pid) }}">
+									<h5 class="card-name">{{product.name}}</h5>
+									<p class="card-text" style="margin: 0;">Вес: {{ product.weight }}</p>
+									<p class="card-text" style="margin: 0;">Цена: {{ product.price }}{{product.price_text}}</p>
+								</a>
+								
+								{% if user.uid %}
+									<input type="hidden" class="hiddenValue" value="{{ product.pid }}">
+									<button class="sendButton"><i class="fa fa-shopping-basket" aria-hidden="true"></i></button>
+								{% else %}
+								<div class="buy-box">
+									<a class="else-sendButton" href="{{ url_for('login') }}"><i class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i></a>
+								</div>
+								{% endif %}
+							</div>
+						</div>
+					</a>
+				{% endfor %}
+			</div>
+		</div>
+    {% endfor %}
+
+<script src="static/js/catalog.js"></script>
+</body>
+</html>

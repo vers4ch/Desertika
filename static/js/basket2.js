@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    var totalAmount = 0;
     // Вызываем функцию для обновления общей суммы при загрузке страницы
     updateTotalAmount();
 
@@ -14,7 +15,7 @@ $(document).ready(function() {
         count++;
         $countElement.text(count);
 
-        updateQuantityInSession(pid, count, price);
+        updateQuantityInSession(pid, count);
         updateTotalAmount();
     });
 
@@ -28,28 +29,30 @@ $(document).ready(function() {
         if (count > 1) {
             count--;
             $countElement.text(count);
-            updateQuantityInSession(pid, count, price);
+            updateQuantityInSession(pid, count);
             updateTotalAmount();
         }
     });
 
     // Функция для обновления общей суммы
     function updateTotalAmount() {
-        var totalAmount = 0;
+        totalAmount = 0;
         $('.product-box').each(function() {
             var price = parseFloat($(this).find('.increase-quantity').data('price'));
             var count = parseInt($(this).find('.count').text());
             totalAmount += price * count;
         });
         $('#total-amount').text(totalAmount.toFixed(2));
+        updateSummInSession();
     }
 
     // Функция для обновления количества в сессии
-    function updateQuantityInSession(pid, count, price) {
+    function updateQuantityInSession(pid, count) {
+        updateTotalAmount();
         $.ajax({
             type: 'POST',
             url: '/update_quantity_in_basket',
-            data: {'pid': pid, 'count': count, 'price': price},
+            data: {'pid': pid, 'count': count},
             success: function(response) {
                 var basketData = response.basket;
                 console.log(basketData);
@@ -58,7 +61,15 @@ $(document).ready(function() {
     }
 
     // Функция для удаления всех нецифровых символов из строки
-    function clearString(str) {    
-        return str.replace(/\D/g, '');
+    function updateSummInSession(sum) {    
+        $.ajax({
+            type: 'POST',
+            url: '/update_sum',
+            data: {'totalAmount': totalAmount},
+            success: function(response) {
+                // var basketData = response.basket;
+                // console.log(basketData);
+            }
+        });
     }
 });

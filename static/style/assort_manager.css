@@ -1,0 +1,30 @@
+.base{
+	display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.card-product{
+	display: flex;
+    background-color: gray;
+    flex-direction: column;
+    align-items: center;
+	margin-block: 20px;
+}
+
+img{
+	width: 150px;
+}
+
+.form-product{
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+	text-align: center;
+}
+
+.check_new{
+	display: flex;
+    justify-content: center;
+}

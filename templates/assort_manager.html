@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>DESERTIKA</title>
+	<link rel="icon" href="static/images/favicon.ico">
+	<link rel="stylesheet" href="static/style/assort_manager.css">
+</head>
+<body>
+	<div class="base">
+		<h3>Управление ассортиментом</h3>
+		<a href="{{ url_for('main') }}">Главное меню</a>
+		<a href="{{ url_for('administrator') }}">Назад</a>
+		{% for product in products %} 
+			<div class="card-product">
+				<div class="img-product">
+					<img src="static\uploads\{{ product.path_to_photo }}\main.jpg">
+				</div>
+				<div class="form-product">
+					<form action="/change_product" method="post" class="form" enctype="multipart/form-data">
+						<input type="hidden" name="pid" value="{{ product.pid }}"> 
+						<input id="name" name="name" type="text" class="field-input-name" placeholder="Название товара" value="{{product.name}}" >
+						<br>
+						<input id="category" name="category" type="text" class="field-input-name" placeholder="Категория" value="{{product.category}}" >
+						<br>
+						<textarea id="description" name="description" placeholder="Описание" required style="height: 150px; width: 300px;">{{product.description}}</textarea>
+						<br>
+						<input id="weight" name="weight" type="text" class="field-input-name" placeholder="Вес" value="{{product.weight}}" >
+						<br>
+						<input id="price" name="price" type="number" class="field-input-name" placeholder="Стоимость" value="{{product.price}}" >
+						<br>
+						<input id="price-text" name="price_text" type="text" class="field-input-name" placeholder="Единицы" value="{{product.price_text}}" >
+						<br>
+						<div class="check_new">
+							<p>Новинка: </p>
+							<input id="is_new" name="is_new" type="checkbox" class="field-input-name" {% if product.new == True %} checked {% endif %}>
+						</div>
+
+						<p>Главная картинка</p>
+						<input type="file" id="Main-file-Input" name="Mainfile" accept="image/*" onchange="MainpreviewImages()">
+						<br>
+						<div id="main-preview"></div>
+						<!-- <br> -->
+				
+						<p>Дополнительные изображния</p>
+						<input type="file" id="fileInput" name="files[]" accept="image/*" multiple onchange="previewImages()">
+						<br>
+						<div id="preview"></div>
+						<br>
+						<input class="field-input-button" type="submit" value="Сохранить">
+					</form>
+				</div>
+				<form action="/remove_product" method="post"> 
+					<input type="hidden" name="item_id" value="{{ product.pid }}"> 
+					<input type="submit" value="Удалить" class="btn"> 
+				</form>
+			</div>
+		{% endfor %} 
+	</div>
+</body>
+</html>
