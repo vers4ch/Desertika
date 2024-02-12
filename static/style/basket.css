@@ -19,6 +19,94 @@ body {
     /* font-family: 'Lato';    */
 }
 
+.navbar {
+  padding-top: 0px; /* Уменьшаем верхний отступ */
+  padding-bottom: 0px; /* Уменьшаем нижний отступ */
+}
+
+.navbar.bg-pink {
+  background-color: #efdbe0; /* Замените на ваш выбранный цвет */
+  /* border-bottom: 1px solid #373737; только нижняя граница */
+}
+
+.navbar-nav .nav-link {
+  font-size: 18px; /* Увеличиваем размер шрифта ссылок */
+}
+
+.navbar.navbar-light .navbar-nav .nav-link {
+  color: #373737; /* Цвет текста */
+}
+
+.navbar.navbar-light .navbar-nav .nav-link:hover {
+  color: #000; /* Черный */
+}
+
+.navbar-toggler-icon {
+  height: 100%; /* Устанавливаем высоту иконки равной высоте шапки */
+}
+
+.navbar-brand {
+  padding-top: 4px;
+  margin-bottom: -10px;
+}
+
+.search-container {
+  margin-top: 20px; /* отступ сверху */
+  margin-bottom: 20px; /* отступ снизу */
+  margin-left: auto; /* отступ слева */
+  margin-right: auto; /* отступ справа */
+  max-width: 450px; /* максимальная ширина контейнера */
+}
+
+.input-group {
+  margin-bottom: 10px; /* отступ между элементами внутри группы */
+}
+
+.header {
+  background-color: #efdbe0;
+  padding: 10px 0;
+  color: #fff;
+  display: flex;
+  justify-content: space-between; /* Новое свойство для размещения элементов слева и справа */
+  align-items: center; /* Центрирование элементов по вертикали */
+}
+
+.logo {
+  max-width: 150px;
+  margin-bottom: 10px;
+}
+
+.header-links {
+  display: flex;
+  align-items: center;
+}
+
+.right-container {
+  margin-left: auto; /* Этот блок будет автоматически выравниваться вправо */
+}
+
+.header-links a {
+  color: #fff;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+a {
+  color: black;
+}
+
+a:hover {
+  text-decoration: none;
+  color: black;
+}
+
+.mb-3 {
+  /* width: 220px; */
+  margin-inline: 10px;
+  border: 1px solid #373737;
+  border-radius: 10px;
+}
+
 .main2 {
 display: flex;
 flex-direction: column;
@@ -32,7 +120,7 @@ align-items: center;
   display: block;
 }
 
-.base{
+.base {
   display: flex;
   width: 100%;
   flex-wrap: nowrap;
@@ -41,10 +129,10 @@ align-items: center;
   align-items: center;
 }
 
-.product h1{
+.product h1 {
   margin-top: 1rem;
 }
-.product{
+.product {
   margin-inline: 20px;
   margin-bottom: 100px;
   width: 90%;
@@ -66,7 +154,7 @@ align-items: center;
   background-color: white;
   border-radius: 10px;
 } */
-.product-box{
+.product-box {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -74,24 +162,25 @@ align-items: center;
   width: 98%;
   margin-block: 10px;
 }
+
 .product-box h3, p{
   margin: 0;
 }
 
-.img-box{
+.img-box {
   margin-inline: 10px;
   /* width: 150px; */
   width: 20%;
 }
 
-.image{
+.image {
   width: 100%;
   border-radius: 10px;
   height: auto;
   display: block;
 }
 
-.des-box{
+.des-box {
   /* width: 350px; */
   width: 60%;
 }
@@ -105,7 +194,7 @@ align-items: center;
   flex-direction: column;
 } */
 
-.sendButton{
+.sendButton {
   text-decoration: none;
   color: white;
   display: inline-block;
@@ -116,7 +205,7 @@ align-items: center;
   background-color: #c4788b;
 }
 
-.order-box{
+.order-box {
   height: 50px;
   width: 90%;
   /* background-color: white; */
@@ -127,11 +216,11 @@ align-items: center;
   justify-content: space-evenly;
 }
 
-.shop-btn{
+.shop-btn {
   text-align: center;
 }
 
-.shop-btn a{
+.shop-btn a {
   text-decoration: none;
   background-color: #d93d64;
   color: white;
@@ -140,27 +229,29 @@ align-items: center;
   border-radius: 20px;
 }
 
-.shop-btn a:hover{
+.shop-btn a:hover {
   background-color: #d2617d;
 }
 
-.bottom-bar{
+.bottom-bar {
   background-color: whitesmoke;
   display: flex;
   justify-content: center;
 }
 
-h4{
+h4 {
   margin: 0;
 }
-.product-price{
+
+.product-price {
   margin-top: 10px;
 }
 
-.quantity{
+.quantity {
   margin-block: 10px;
 }
-.quantity button{
+
+.quantity button {
   background-color: #d93d64;
   border-radius: 5px;
   border: 0;
@@ -168,17 +259,42 @@ h4{
   padding: 10px;
 }
 
-
-.count{
+.count {
   margin-inline: 7px;
 }
 
-.btn{
+.btn {
   color: white;
   background-color: #d93d64;
 }
-.price-box{
+
+.price-box {
   display: flex;
   justify-content: center;
   flex-direction: column;
+}
+
+footer.bg-pink {
+  background-color: #efdbe0;
+  /* border-top: 1px solid #373737; только верхняя граница */
+  padding: 20px; /* добавим внутренний отступ для лучшего визуального эффекта */
+}
+
+.footer-image {
+  width: 200px;
+  height: auto;
+  display: block;
+}
+
+.navbar-toggler {
+  color: rgb(115 77 77 / 67%);
+  /* border-color: rgba(0,0,0,.1); */
+}
+
+.collapse a:hover {
+  color: rgb(69, 69, 69);
+}
+
+.row a:hover {
+  color: rgb(69, 69, 69);
 }
