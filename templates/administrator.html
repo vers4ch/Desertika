@@ -3,8 +3,16 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>DESERTIKA</title>
+	<title>DESERTIKA Administrator</title>
+
 	<link rel="icon" href="static/images/favicon.ico">
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="static/style/administrator.css">
 	<script>
         window.onload = function() {
@@ -13,16 +21,117 @@
     </script>
 </head>
 <body>
-	<div class="base">
-		<div class="header">
-			<h2>Administrator</h2>
+	<nav class="navbar navbar-expand-lg bg-pink sticky-top">
+		<div class="container">
+			<a class="navbar-brand" href="{{ url_for('main') }}">
+				<img src="static/images/logo_small.jpg" class="logo d-block" alt="Logo" oncontextmenu="return false;" onmouseover="this.title='';" style="max-height: 50px;">
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<!-- <span class="navbar-toggler-icon"></span> -->
+				<i class="fa fa-bars" aria-hidden="true"></i>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="#">Каталог</a>
+					</li>
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					<!-- Добавляем элемент навигации для телефонного номера -->
+					<li class="nav-item">
+						<a class="nav-link" href="tel:+79143336761">+7 (914) 333-67-61</a>
+					</li>
+				</ul>
+			</div>
+			<div class="collapse navbar-collapse justify-content-end " id="navbarNav">
+				<ul class="navbar-nav">
+				
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url_for('administrator') }}"><i class="fas fa-lock" aria-hidden="true"></i> Admin</a>
+						</li>
+				
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('basket') }}"><i class="fa fa-shopping-basket" aria-hidden="true"></i> Корзина</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('profile') }}"><i class="fa fa-user"></i> uSER</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Выйти</a>
+					</li>
+				</ul>
+			</div>
 		</div>
-		<div class="btn-zone">
-			<a href="#">Управление заказами</a>
-			<a href="{{ url_for('new_product') }}">Управление ассортиментом</a>
-			<a href="#">Управление персоналом</a>
-			<a href="{{ url_for('main') }}">Главное меню</a>
+	</nav>
+
+	<div class="main2">
+		<!-- <img src="static\images\logo.jpg" alt="Image Description" class="registration-image"> -->
+		<a href="{{ url_for('main') }}"> 
+            <img src="static\images\logo.jpg" class="registration-image" oncontextmenu="return false;" onmouseover="this.title='';"> 
+        </a>
+			<!-- Контейнер для всей формы -->
+			<div class="zation">
+				<!-- Заголовок Администратор -->
+				<div class="head">
+					<!-- Пустой блок для визуального выравнивания -->
+					<div></div>
+					<span class="title">Администратор</span>
+					<!-- Пустой блок для визуального выравнивания -->
+					<div></div>
+				</div>
+				<!-- Контейнер для содержимого вкладок -->
+				<div class="tabs">
+					<!-- Форма для входа -->
+					<form class="forma" method="post" action="{{ url_for('reset_password') }}">
+						<!-- Кнопки -->
+						<a href="#" class="zation-button">Управление заказами</a>
+						<a href="{{ url_for('new_product') }}" class="zation-button">Управление ассортиментом</a>
+						<a href="#" class="zation-button">Управление персоналом</a>
+						<a href="{{ url_for('main') }}" class="zation-button">Главное меню</a>
+					</form>
+				</div> <!-- Закрытие контейнера для содержимого вкладок -->
+			</div> <!-- Закрытие контейнера для всей формы -->
 		</div>
-	</div>
+	
+	<footer class="bg-pink">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+					<!-- Поместили изображение внутрь первой колонки сетки -->
+					<img src="static\images\logo.jpg" alt="Image Description" class="footer-image">
+				</div>
+				<div class="col-md-3">
+					<h5>Каталог</h5>
+					<ul class="list-unstyled">
+						<li><a href="#">Торты</a></li>
+						<li><a href="#">Пирожные</a></li>
+						<li><a href="#">Букеты</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3">
+					<h5>Информация</h5>
+					<ul class="list-unstyled">
+						<li><a href="#">О нас</a></li>
+						<li><a href="#">Условия использования</a></li>
+						<li><a href="#">Политика конфиденциальности</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3">
+					<h5>Контакты</h5>
+					<address>
+						Адрес:<br>
+						Владивосток, ул. Елецкая, 1а<br>
+						Телефон: <a href="tel:+79143336761">+7 (914) 333-67-61</a><br>
+						Email: <a href="mailto:desertika@mail.ru">desertika@mail.ru</a>
+					</address>
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col">
+					<p>2024 © Powered by Turbokotiki</p>
+				</div>
+			</div>
+		</div>
+	</footer>
 </body>
 </html>

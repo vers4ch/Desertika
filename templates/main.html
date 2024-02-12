@@ -23,7 +23,7 @@
 <body>
 	<nav class="navbar navbar-expand-lg bg-pink sticky-top">
 		<div class="container">
-			<a class="navbar-brand" href="#">
+			<a class="navbar-brand" href="{{ url_for('main') }}">
 				<img src="static/images/logo_small.jpg" class="logo d-block" alt="Logo" oncontextmenu="return false;" onmouseover="this.title='';" style="max-height: 50px;">
 			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,13 +122,13 @@
 						<!-- /Карусель -->
 						<a href="{{ url_for('product_detail', pid=product.pid) }}">
 							<h5 class="card-name">{{product.name}}</h5>
-							<p class="card-text" style="margin: 0;">Вес: {{ product.weight }}</p>
-							<p class="card-text" style="margin: 0;">Цена: {{ product.price }}{{product.price_text}}</p>
+							<p class="card-text" style="margin: 0; font-size: 20px;">Вес: {{ product.weight }}</p>
+							<p class="card-text" style="margin: 0; font-size: 20px;">Цена: {{ product.price }}{{product.price_text}}</p>
 						</a>
 						
 						{% if user.uid %}
 							<input type="hidden" class="hiddenValue" value="{{ product.pid }}">
-							<button class="sendButton"><i class="fa fa-shopping-basket" aria-hidden="true"></i></button>
+							<button class="sendButton" style="display: block; margin: 20px auto;"><i class="fa fa-shopping-basket" aria-hidden="true"></i></button>
 						<!-- <div class="buy-box">
 							<a class="sendButton"><i class="fa fa-shopping-basket" aria-hidden="true"></i></a>
 						</div> -->
