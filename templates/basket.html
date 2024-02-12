@@ -15,7 +15,7 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-pink sticky-top">
 		<div class="container">
-			<a class="navbar-brand" href="#">
+			<a class="navbar-brand" href="{{ url_for('main') }}">
 				<img src="static/images/logo_small.jpg" class="logo d-block" alt="Logo" oncontextmenu="return false;" onmouseover="this.title='';" style="max-height: 50px;">
 			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,85 +62,65 @@
         </a> 
  
         <div class="base"> 
+            <div class="blocks">
             <div class="product"> 
                 <div style="text-align: left; width: 80%;"><h1><i class="fa fa-shopping-basket" aria-hidden="true"></i> Корзина</h1></div> 
-                <hr color="#ccc" size="1" width="90%"> 
+                <!-- <hr color="#373737" size="1" width="90%">  -->
 
                 {% if user.basket == [] %}
+                    <hr color="#373737" size="1" width="90%"> 
                     <h1 style="margin-top: 180px; color: grey;">Корзина пуста</h1>
                 {% endif %}
 
                 {% for pid, product in products.items() %} 
 
-                <!-- <div class="product-box"> 
-                    <div class="img-box"> 
-                        <img src="static\uploads\{{ product.path_to_photo }}\main.jpg" class="image"> 
-                    </div> 
-                    <div class="des-box"> 
-                        <h3>{{ product.name }}</h3> 
-                        <p style="margin-top: 20px;">{{ product.description }}</p> 
-                        <p style="margin-top: 20px;"><i class="fa fa-shopping-bag" aria-hidden="true"></i>  Вес продукта: {{ product.weight }}</p> 
-                    </div> 
-                    <div class="price-box"> 
-                        <b>{{ product.price }}{{ product.price_text }}</b> 
- 
-                        <div class="quantity"> 
-                            <button class="decrease-quantity" data-pid="{{ pid }}" data-price="{{ product.price }}">-</button> 
-                            <span class="count">{{ product.count }}</span> 
-                            <button class="increase-quantity" data-pid="{{ pid }}" data-price="{{ product.price }}">+</button> 
-                        </div> 
- 
-                        <form action="/remove_from_basket" method="post"> 
-                            <input type="hidden" name="item_id" value="{{ pid }}"> 
-                            <input type="submit" value="Удалить"> 
-                        </form> 
-                    </div> 
-                </div>  -->
-
+                <hr color="#373737" size="1" width="90%"> 
 
                 <div class="product-box"> 
-                    <!-- <div class="row">  -->
-                        <div class="col-md-2 col-sm-4 col-6"> 
-                            <img src="static\uploads\{{ product.path_to_photo }}\main.jpg" class="img-fluid rounded" alt="Product Image"> 
+                    <div class="col-md-2 col-sm-4 col-6"> 
+                        <img src="static\uploads\{{ product.path_to_photo }}\main.jpg" class="img-fluid rounded" alt="Product Image"> 
+                    </div> 
+                    <div class="col-md-8 col-sm-6 col-5 price-box"> 
+                        <div class="product-details"> 
+                            <h4>{{ product.name }}</h4> 
+                            <!-- <p>{{ product.description }}</p>  -->
+                            <p style="margin-top: 10px;"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Вес: {{ product.weight }}</p> 
                         </div> 
-                        <div class="col-md-8 col-sm-6 col-5 price-box"> 
-                            <div class="product-details"> 
-                                <h4>{{ product.name }}</h4> 
-                                <!-- <p>{{ product.description }}</p>  -->
-                                <p style="margin-top: 10px;"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Вес: {{ product.weight }}</p> 
+                        <div class="product-price"> 
+                            <h4>Цена: {{ product.price }}{{ product.price_text }}</h4> 
+                            <div class="quantity"> 
+                                <button class="decrease-quantity" data-pid="{{ pid }}" data-price="{{ product.price }}">-</button> 
+                                <span class="count">{{ product.count }}</span> 
+                                <!-- <input type="number" class="count-input" value="{{ product.count }}" min="1"> Добавляем поле для ввода -->
+                                <button class="increase-quantity" data-pid="{{ pid }}" data-price="{{ product.price }}">+</button> 
                             </div> 
-                            <div class="product-price"> 
-                                <h4>Цена: {{ product.price }}{{ product.price_text }}</h4> 
-                                <div class="quantity"> 
-                                    <button class="decrease-quantity" data-pid="{{ pid }}" data-price="{{ product.price }}">-</button> 
-                                    <span class="count">{{ product.count }}</span> 
-                                    <!-- <input type="number" class="count-input" value="{{ product.count }}" min="1"> Добавляем поле для ввода -->
-                                    <button class="increase-quantity" data-pid="{{ pid }}" data-price="{{ product.price }}">+</button> 
-                                </div> 
-                                <form action="/remove_from_basket" method="post"> 
-                                    <input type="hidden" name="item_id" value="{{ pid }}"> 
-                                    <input type="submit" value="Удалить" class="btn"> 
-                                </form> 
-                            </div> 
+                            <form action="/remove_from_basket" method="post"> 
+                                <input type="hidden" name="item_id" value="{{ pid }}"> 
+                                <input type="submit" value="Удалить" class="btn"> 
+                            </form> 
                         </div> 
-                    <!-- </div>  -->
+                    </div> 
                 </div>
-
-
-                <hr color="#ccc" size="1" width="90%"> 
+                <!-- <hr color="#373737" size="1" width="90%">  -->
                 {% endfor %} 
             </div> 
 
-            <!-- <div class="right-box">
+            <div class="right-box">
                 <div class="order-box">
-                    <div class="total">
+                    <!-- <div class="total">
                         <b>К оплате: <span id="total-amount"></span></b>
-                    </div>
-                    <div class="shop-btn">
-                        <a href="#">Купить</a>
-                    </div>
+                    </div> -->
+                    <div class="total"> 
+                        <i class="fa fa-money" aria-hidden="true" style="color: black;"></i>
+                        <b>К оплате: <span id="total-amount"></span>₽</b> 
+                    </div> 
                 </div>
-            </div> -->
+                <div class="shop-btn">
+                    <!-- <a href="#">Купить</a> -->
+                    <a href="{{ url_for('order')}}" class="btn btn-primary">Купить</a>
+                </div>
+            </div>
+            </div>
 
 
             <div class="bottom-bar fixed-bottom p-3" style="z-index: 9999;"> <!-- Добавляем классы Bootstrap и устанавливаем z-index --> 

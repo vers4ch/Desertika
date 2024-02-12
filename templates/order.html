@@ -18,12 +18,59 @@
         </a> 
  
 		<div class="zation">
-			<div class="head">
+			<!-- <div class="head">
                 <div></div>
                 <h4>Оформление заказа</h4>
                 <div></div>
-            </div>
-			<div class="tabs">
+            </div> -->
+			<!-- Заголовок Оформление заказа -->
+			<div class="head">
+				<!-- Пустой блок для визуального выравнивания -->
+				<div></div>
+				<span class="title">Оформление заказа</span>
+				<!-- Пустой блок для визуального выравнивания -->
+				<div></div>
+			</div>
+			<!-- Контейнер для содержимого вкладок -->
+            <div class="tabs">
+                <!-- Форма для входа -->
+				<!-- <form class="forma" method="post" action="{{ url_for('reset_password') }}"> -->
+				<form action="/order" method="post" class="login-form" id="registrationForm" >
+                    <!-- Контейнер для полей ввода и чекбокса -->
+                    <div class="inputs">
+                        <div class="input">
+							<i class="fa fa-user" aria-hidden="true"></i>
+							<input name="name" placeholder="Имя" type="text" value="{{user.name}}">
+						</div>
+						<div class="input">
+							<i class="fas fa-phone"></i>
+							<input name="tel" placeholder="Телефон" type="tel" value="{{user.phone_number}}">
+						</div>
+						<div class="input1">
+							<span>Укажите дату доставки</span>
+						</div>
+						<div class="input">
+							<i class="fa fa-calendar" aria-hidden="true"></i>
+							<input name="date" placeholder="Дата к которой приготовить" type="date">
+						</div>
+						<div class="input">
+							<textarea name="coment" placeholder="Комментарий к заказу" type="text"></textarea>
+						</div>
+                    </div>
+                    <!-- Кнопка для отправки письма -->
+					<input class="zation-button" type="submit" value="Оплатить">
+				</form>
+                {% with errors = get_flashed_messages() %}
+					{% if errors %}
+						{% for error in errors %}
+                        <script>
+                            alert("Пользователь с данным адресом электронной почты не найден.");
+                        </script>
+						{% endfor %}
+					{% endif %}
+				{% endwith %}
+            </div> <!-- Закрытие контейнера для содержимого вкладок -->
+			<!-- <div class="tabs">
 				<form action="/order" method="post" class="login-form" id="registrationForm" >
 					<div class="inputs">
 						<div class="input">
@@ -45,7 +92,7 @@
 					</div>
 					<input class="zation-button" type="submit" value="Оплатить">
 				</form>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </body> 
