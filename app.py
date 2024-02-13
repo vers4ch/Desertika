@@ -443,7 +443,7 @@ def assort_manager():
             if item.category not in grouped_product:
                 grouped_product[item.category] = []
             grouped_product[item.category].append(item)
-        return render_template('assort_manager.html', products = products)
+        return render_template('assort_manager.html', products = products, user = session)
     abort(403)
 
 @app.route('/order', methods=['GET', 'POST'])

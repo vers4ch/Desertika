@@ -146,7 +146,7 @@ align-items: center;
     /* margin-top: -20px; */
     height: 100%;
     /* max-height: 446px; */
-    width: 380px;
+    width: 390px;
     background: #cda1ac;
     border: 1px solid #373737;
     border-radius: 10px;
@@ -166,7 +166,7 @@ align-items: center;
     display: flex;
     height: 72px;
     border-bottom: 1px solid #373737;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .head .title {
@@ -293,7 +293,7 @@ form {
     /* margin-top: 20px; */
     margin-bottom: 30px;
     border: 1px solid #373737;
-    width: 213px;
+    width: 300px;
     text-align: center;
 }
 
@@ -513,4 +513,9 @@ img {
 
 .input1 input {
     transform: scale(1.5);
+}
+
+
+.new-button{
+    width: 213px;
 }
