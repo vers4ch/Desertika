@@ -55,6 +55,7 @@
 							<a class="nav-link" href="{{ url_for('administrator') }}"><i class="fas fa-lock" aria-hidden="true"></i> Admin</a>
 						</li>
 					{% endif %}
+					{% if user.uid %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('basket') }}"><i class="fa fa-shopping-basket" aria-hidden="true"></i> Корзина</a>
 					</li>
@@ -64,6 +65,12 @@
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Выйти</a>
 					</li>
+					{% else %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Войти</a>
+					</li>
+					{% endif %}
+
 				</ul>
 			</div>
 		</div>
@@ -81,19 +88,18 @@
 	</div>
 
 	<div class="main">
-    	<!-- <a href="{{ url_for('main') }}"> -->
-
+		<!-- Карусель новинок -->
 			<div class="envelopexas">
 				<i id="left" class="fa-solid fa-angle-left"></i>
 				<ul class="roundabout">
-					{% for item in products %}
+					{% for item in new_products %}
 					<li class="arson">
 						<div class="img"><img src="static\uploads\{{ item.path_to_photo }}\main.jpg" draggable="false"></div>
-						<div>
-							<h5>{{item.name}}</h5>
-							<p class="card-text" style="margin: 0;">Вес: {{ item.weight }}</p>
-							<p class="card-text" style="margin: 0;">Цена: {{ item.price }}{{item.price_text}}</p>
-					
+						<div class="card-text">
+							<a href="#"><h5>{{item.name}}</h5>
+							<p class="card-text">Вес: {{ item.weight }}</p>
+							<p class="card-text">Цена: {{ item.price }}{{item.price_text}}</p>
+							</a>
 							{% if user.uid %}
 								<input type="hidden" class="hiddenValue" value="{{ item.pid }}">
 								<button class="sendButton">В корзину</button>
@@ -108,57 +114,64 @@
 				</ul>
 				<i id="right" class="fa-solid fa-angle-right"></i>
 			</div>
+		<!-- /Карусель новинок -->
 
+			<div class="catalog">
 
-
-		<!-- <div class="gallery">
-			{% for product in products %}
-			<a href="{{ url_for('product_detail', pid=product.pid) }}" class="button-a">
-				<div class="card mb-3 col-md-3 col-sm-4 col-5">
-					<div class="card-box">
-
-						<div id="carousel_{{ product.pid }}" class="carousel slide" data-ride="carousel">
-							<ol class="carousel-indicators">
-								{% for image in product_images[product.path_to_photo] %}
-									<li data-target="#carousel_{{ product.pid }}" data-slide-to="{{ loop.index0 }}" {% if loop.index0 == 0 %}class="active"{% endif %}></li>
-								{% endfor %}
-							</ol>
-							<div class="carousel-inner">
-								{% for image in product_images[product.path_to_photo] %}
-									<div class="carousel-item {% if loop.index0 == 0 %}active{% endif %}">
-										<img class="d-block w-100" src="{{ image }}?v={{ random_string }}" alt="Slide {{ loop.index }}">
+				{% for category, products in grouped_product.items() %}
+					<div class="category-block">
+						<div class="head_category"><h2>{{ category }}</h2></div>
+						<div class="gallery">
+							{% for product in products %}
+									<div class="card mb-3">
+										<div class="card-box">
+											<!-- Карусель -->
+											<div id="carousel_{{ product.pid }}" class="carousel slide" data-ride="carousel">
+												<ol class="carousel-indicators">
+													{% for image in product_images[product.path_to_photo] %}
+														<li data-target="#carousel_{{ product.pid }}" data-slide-to="{{ loop.index0 }}" {% if loop.index0 == 0 %}class="active"{% endif %}></li>
+													{% endfor %}
+												</ol>
+												<div class="carousel-inner">
+													{% for image in product_images[product.path_to_photo] %}
+														<div class="carousel-item {% if loop.index0 == 0 %}active{% endif %}">
+															<img class="d-block w-100" src="{{ image }}?v={{ random_string }}" alt="Slide {{ loop.index }}">
+														</div>
+													{% endfor %}
+												</div>
+												<a class="carousel-control-prev" href="#carousel_{{ product.pid }}" role="button" data-slide="prev">
+													<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+													<span class="sr-only">Previous</span>
+												</a>
+												<a class="carousel-control-next" href="#carousel_{{ product.pid }}" role="button" data-slide="next">
+													<span class="carousel-control-next-icon" aria-hidden="true"></span>
+													<span class="sr-only">Next</span>
+												</a>
+											</div>
+											<!-- /Карусель -->
+											<div class="text-card-box">
+											<a href="{{ url_for('product_detail', pid=product.pid) }}">
+												<h5 class="card-name">{{product.name}}</h5>
+												<p class="card-text" style="margin: 0;">Вес: {{ product.weight }}</p>
+												<p class="card-text" style="margin: 0;">Цена: {{ product.price }}{{product.price_text}}</p>
+											</a>
+											{% if user.uid %}
+												<input type="hidden" class="hiddenValue" value="{{ product.pid }}">
+												<button class="sendButton"><i class="fa fa-shopping-basket" aria-hidden="true"></i></button>
+											{% else %}
+											<div class="buy-box">
+												<a class="else-sendButton" href="{{ url_for('login') }}"><i class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i></a>
+											</div>
+											{% endif %}
+											</div>
+										</div>
 									</div>
-								{% endfor %}
-							</div>
-							<a class="carousel-control-prev" href="#carousel_{{ product.pid }}" role="button" data-slide="prev">
-								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-								<span class="sr-only">Previous</span>
-							</a>
-							<a class="carousel-control-next" href="#carousel_{{ product.pid }}" role="button" data-slide="next">
-								<span class="carousel-control-next-icon" aria-hidden="true"></span>
-								<span class="sr-only">Next</span>
-							</a>
+							{% endfor %}
 						</div>
-
-						<a href="{{ url_for('product_detail', pid=product.pid) }}">
-							<h5 class="card-name">{{product.name}}</h5>
-							<p class="card-text" style="margin: 0; font-size: 20px;">Вес: {{ product.weight }}</p>
-							<p class="card-text" style="margin: 0; font-size: 20px;">Цена: {{ product.price }}{{product.price_text}}</p>
-						</a>
-						
-						{% if user.uid %}
-							<input type="hidden" class="hiddenValue" value="{{ product.pid }}">
-							<button class="sendButton" style="display: block; margin: 20px auto;"><i class="fa fa-shopping-basket" aria-hidden="true"></i></button>
-						{% else %}
-						<div class="buy-box">
-							<a class="else-sendButton" href="{{ url_for('login') }}"><i class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i></a>
-						</div>
-						{% endif %}
 					</div>
-				</div>
-			</a>
-			{% endfor %}
-		</div> -->
+				{% endfor %}
+			</div>
+
     </div>
 
 	<footer class="bg-pink">

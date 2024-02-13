@@ -145,18 +145,24 @@ def main():
         if prod.new:
             new_product.append(prod)
     # print(new_product)
+            
+
+    # Группируем данные по category
+    grouped_product = {}
+    for product in all_products:
+        if product.category not in grouped_product:
+            grouped_product[product.category] = []
+        grouped_product[product.category].append(product)
 
     # Создаем словарь для хранения путей к изображениям для каждого товара
     product_images = {}
     for product in all_products:
-        # image_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], product.path_to_photo)
-        # product_images[product.path_to_photo] = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
         image_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], product.path_to_photo)
         image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
         timestamp = int(time.time())
         product_images[product.path_to_photo] = [f"{image}?t={timestamp}" for image in image_files]
     
-    return render_template('main.html', products=new_product, product_images=product_images, user = session)
+    return render_template('main.html', new_products=new_product, grouped_product = grouped_product, product_images=product_images, user = session)
 
 
 
