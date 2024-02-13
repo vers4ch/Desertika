@@ -16,7 +16,7 @@ src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('
 
 body {
     background-color: #efdbe0;
-    /* font-family: 'Lato';    */
+    font-family: 'Lato';   
 }
 
 .navbar {

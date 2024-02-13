@@ -3,61 +3,197 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>DESERTIKA</title>
+	<title>DESERTIKA Управление ассортиментом</title>
+
 	<link rel="icon" href="static/images/favicon.ico">
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+
+	
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
 	<link rel="stylesheet" href="static/style/assort_manager.css">
+	<script>
+        window.onload = function() {
+            localStorage.removeItem('productPath');
+        };
+    </script>
 </head>
 <body>
-	<div class="base">
-		<h3>Управление ассортиментом</h3>
-		<a href="{{ url_for('new_product') }}">Добавить новый продукт</a>
-		<a href="{{ url_for('main') }}">Главное меню</a>
-		<a href="{{ url_for('administrator') }}">Назад</a>
-		{% for product in products %} 
-			<div class="card-product">
-				<div class="img-product">
-					<img src="static\uploads\{{ product.path_to_photo }}\main.jpg">
-				</div>
-				<div class="form-product">
-					<form action="/change_product" method="post" class="form" enctype="multipart/form-data">
-						<input type="hidden" name="pid" value="{{ product.pid }}"> 
-						<input id="name" name="name" type="text" class="field-input-name" placeholder="Название товара" value="{{product.name}}" >
-						<br>
-						<input id="category" name="category" type="text" class="field-input-name" placeholder="Категория" value="{{product.category}}" >
-						<br>
-						<textarea id="description" name="description" placeholder="Описание" required style="height: 150px; width: 300px;">{{product.description}}</textarea>
-						<br>
-						<input id="weight" name="weight" type="text" class="field-input-name" placeholder="Вес" value="{{product.weight}}" >
-						<br>
-						<input id="price" name="price" type="number" class="field-input-name" placeholder="Стоимость" value="{{product.price}}" >
-						<br>
-						<input id="price-text" name="price_text" type="text" class="field-input-name" placeholder="Единицы" value="{{product.price_text}}" >
-						<br>
-						<div class="check_new">
-							<p>Новинка: </p>
-							<input id="is_new" name="is_new" type="checkbox" class="field-input-name" {% if product.new == True %} checked {% endif %}>
-						</div>
-
-						<p>Главная картинка</p>
-						<input type="file" id="Main-file-Input" name="Mainfile" accept="image/*" onchange="MainpreviewImages()">
-						<br>
-						<div id="main-preview"></div>
-						<!-- <br> -->
-				
-						<p>Дополнительные изображния</p>
-						<input type="file" id="fileInput" name="files[]" accept="image/*" multiple onchange="previewImages()">
-						<br>
-						<div id="preview"></div>
-						<br>
-						<input class="field-input-button" type="submit" value="Сохранить">
-					</form>
-				</div>
-				<form action="/remove_product" method="post"> 
-					<input type="hidden" name="item_id" value="{{ product.pid }}"> 
-					<input type="submit" value="Удалить" class="btn"> 
-				</form>
+	<nav class="navbar navbar-expand-lg bg-pink sticky-top">
+		<div class="container">
+			<a class="navbar-brand" href="{{ url_for('main') }}">
+				<img src="static/images/logo_small.jpg" class="logo d-block" alt="Logo" oncontextmenu="return false;" onmouseover="this.title='';" style="max-height: 50px;">
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<!-- <span class="navbar-toggler-icon"></span> -->
+				<i class="fa fa-bars" aria-hidden="true"></i>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('catalog') }}">Каталог</a>
+					</li>
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					<!-- Добавляем элемент навигации для телефонного номера -->
+					<li class="nav-item">
+						<a class="nav-link" href="tel:+79143336761">+7 (914) 333-67-61</a>
+					</li>
+				</ul>
 			</div>
-		{% endfor %} 
+			<div class="collapse navbar-collapse justify-content-end " id="navbarNav">
+				<ul class="navbar-nav">
+					
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url_for('administrator') }}"><i class="fas fa-lock" aria-hidden="true"></i> Admin</a>
+						</li>
+					
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('basket') }}"><i class="fa fa-shopping-basket" aria-hidden="true"></i> Корзина</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('profile') }}"><i class="fa fa-user"></i> uSER</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Выйти</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="main2">
+	<!-- <img src="static\images\logo.jpg" alt="Image Description" class="registration-image"> -->
+	<a href="{{ url_for('main') }}"> 
+		<img src="static\images\logo.jpg" class="registration-image" oncontextmenu="return false;" onmouseover="this.title='';"> 
+	</a>
+		<!-- Контейнер для всей формы -->
+		<div class="zation">
+			<!-- Заголовок Управление ассортиментом -->
+			<div class="head">
+				<!-- Пустой блок для визуального выравнивания -->
+				<div></div>
+				<span class="title">Управление ассортиментом</span>
+				<!-- Пустой блок для визуального выравнивания -->
+				<div></div>
+			</div>
+			<!-- Контейнер для содержимого вкладок -->
+			<div class="tabs">
+				<!-- Форма для входа -->
+				<form class="forma" method="post" action="{{ url_for('reset_password') }}">
+					<!-- Кнопки -->
+					<a href="{{ url_for('new_product') }}"  class="zation-button">Добавить новый продукт</a>
+					<a href="{{ url_for('main') }}"  class="zation-button">Главное меню</a>
+					<a href="{{ url_for('administrator') }}"  class="zation-button">Назад</a>
+				</form>
+			</div> <!-- Закрытие контейнера для содержимого вкладок -->
+		</div> <!-- Закрытие контейнера для всей формы -->
 	</div>
+
+	<div class="spacer"></div>
+
+	<div class="main3">
+		{% for product in products %} 
+		<!-- Контейнер для всей формы -->
+		<div class="zation">
+			
+			<!-- Контейнер для содержимого вкладок -->
+			<div class="img-product">
+				<img src="static\uploads\{{ product.path_to_photo }}\main.jpg">
+			</div>
+			<div class="tabs">
+				<!-- Форма для входа -->
+				<form action="/change_product" method="post" class="form" enctype="multipart/form-data">
+					<div class="inputs">
+						<input type="hidden" name="pid" value="{{ product.pid }}"> 
+                        <div class="input">
+                            <i class="fas fa-birthday-cake"></i>
+                            <input id="name" name="name" type="text" class="field-input-name" placeholder="Название товара" value="{{product.name}}">
+						</div>
+						<div class="input">
+                            <i class="fas fa-candy-cane"></i>
+                            <input id="category" name="category" type="text" class="field-input-name" placeholder="Категория" value="{{product.category}}">
+						</div>
+                        <div class="input">
+                            <textarea id="description" name="description" placeholder="Описание" required style="height: 150px; width: 300px;">{{product.description}}</textarea>
+						</div>
+                        <div class="input">
+                            <i class="fas fa-balance-scale"></i>
+                            <input id="weight" name="weight" type="text" class="field-input-name" placeholder="Вес" value="{{product.weight}}">
+						</div>
+                        <div class="input">
+                            <i class="fa fa-money"></i>
+                            <input id="price" name="price" type="number" class="field-input-name" placeholder="Стоимость" value="{{product.price}}">
+						</div>
+                        <div class="input">
+                            <i class="fas fa-utensils"></i>
+                            <input id="price-text" name="price_text" type="text" class="field-input-name" placeholder="Единицы" value="{{product.price_text}}" >
+						</div>
+                        <div class="input1">
+							<p>Новинка: </p>
+			 				<input id="is_new" name="is_new" type="checkbox" class="field-input-name" {% if product.new == True %} checked {% endif %}>
+                        </div>
+                        
+                        <div class="spacer"></div>
+                    </div>
+					<!-- Кнопка для сохранения -->
+					<input class="zation-button" type="submit" value="Сохранить">
+				</form>
+			</div> <!-- Закрытие контейнера для содержимого вкладок -->
+			<form action="/remove_product" method="post" class="delete-form"> 
+				<input type="hidden" name="item_id" value="{{ product.pid }}"> 
+				<input type="submit" value="Удалить" class="delete-button"> 
+			</form>
+		</div> <!-- Закрытие контейнера для всей формы -->
+		<div class="spacer"></div>
+		{% endfor %}
+	</div>
+
+	<footer class="bg-pink">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+					<!-- Поместили изображение внутрь первой колонки сетки -->
+					<img src="static\images\logo.jpg" alt="Image Description" class="footer-image">
+				</div>
+				<div class="col-md-3">
+					<h5>Каталог</h5>
+					<ul class="list-unstyled">
+						<li><a href="#">Торты</a></li>
+						<li><a href="#">Пирожные</a></li>
+						<li><a href="#">Букеты</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3">
+					<h5>Информация</h5>
+					<ul class="list-unstyled">
+						<li><a href="#">О нас</a></li>
+						<li><a href="#">Условия использования</a></li>
+						<li><a href="#">Политика конфиденциальности</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3">
+					<h5>Контакты</h5>
+					<address>
+						Адрес:<br>
+						Владивосток, ул. Елецкая, 1а<br>
+						Телефон: <a href="tel:+79143336761">+7 (914) 333-67-61</a><br>
+						Email: <a href="mailto:desertika@mail.ru">desertika@mail.ru</a>
+					</address>
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col">
+					<p>2024 © Powered by Turbokotiki</p>
+				</div>
+			</div>
+		</div>
+	</footer>
 </body>
 </html>
