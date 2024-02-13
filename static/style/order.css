@@ -16,7 +16,95 @@ src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('
 
 body {
     background-color: #efdbe0;
-    font-family: 'Lato';   
+    /* font-family: 'Lato';    */
+}
+
+.navbar {
+    padding-top: 0px; /* Уменьшаем верхний отступ */
+    padding-bottom: 0px; /* Уменьшаем нижний отступ */
+}
+
+.navbar.bg-pink {
+    background-color: #efdbe0; /* Замените на ваш выбранный цвет */
+    /* border-bottom: 1px solid #373737; только нижняя граница */
+}
+
+.navbar-nav .nav-link {
+    font-size: 18px; /* Увеличиваем размер шрифта ссылок */
+}
+
+.navbar.navbar-light .navbar-nav .nav-link {
+    color: #373737; /* Цвет текста */
+}
+
+.navbar.navbar-light .navbar-nav .nav-link:hover {
+    color: #000; /* Черный */
+}
+
+.navbar-toggler-icon {
+    height: 100%; /* Устанавливаем высоту иконки равной высоте шапки */
+}
+
+.navbar-brand {
+    padding-top: 4px;
+    margin-bottom: -10px;
+}
+
+.input-group {
+    margin-bottom: 10px; /* отступ между элементами внутри группы */
+}
+
+.header {
+    background-color: #efdbe0;
+    padding: 10px 0;
+    color: #fff;
+    display: flex;
+    justify-content: space-between; /* Новое свойство для размещения элементов слева и справа */
+    align-items: center; /* Центрирование элементов по вертикали */
+}
+
+.logo {
+    max-width: 150px;
+    margin-bottom: 10px;
+}
+
+.header-links {
+    display: flex;
+    align-items: center;
+}
+
+.right-container {
+    margin-left: auto; /* Этот блок будет автоматически выравниваться вправо */
+}
+
+.header-links a {
+    color: #fff;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.mb-3 {
+    /* width: 220px; */
+    margin-inline: 10px;
+    border: 1px solid #373737;
+    border-radius: 10px;
 }
 
 .main2 {
@@ -46,7 +134,7 @@ align-items: center;
 }
 
 .zation {
-    margin-top: -30px;
+    margin-top: -20px;
     height: 100%;
     /* max-height: 446px; */
     width: 396px;
@@ -55,6 +143,7 @@ align-items: center;
     border-radius: 10px;
     overflow: hidden;
     transition: max-height 0.2s;
+    margin-bottom: 20px;
 }
 
 .extend {
@@ -194,12 +283,13 @@ form {
     margin-top: 20px;
     margin-bottom: 30px;
 }
-    
+
 .registration-image {
     width: 200px;
     height: auto;
     display: block;
-  }
+    margin-bottom: -10px;
+}
 
 .fas {
     color: #373737;
@@ -207,6 +297,10 @@ form {
 
 .input1 {
     color: #ffffff;
+}
+
+.input1 span {
+    font-size: 18px; /* Увеличьте значение размера шрифта по вашему усмотрению */
 }
 
 .input i {
@@ -227,4 +321,30 @@ textarea[name="coment"] {
     background: #ffffff;
     border-radius: 8px;
     color: #373737;
+}
+
+
+footer.bg-pink {
+    background-color: #efdbe0;
+    /* border-top: 1px solid #373737; только верхняя граница */
+    padding: 20px; /* добавим внутренний отступ для лучшего визуального эффекта */
+}
+
+.footer-image {
+    width: 200px;
+    height: auto;
+    display: block;
+}
+
+.navbar-toggler {
+    color: rgb(115 77 77 / 67%);
+    /* border-color: rgba(0,0,0,.1); */
+}
+
+.collapse a:hover {
+    color: rgb(69, 69, 69);
+}
+
+.row a:hover {
+    color: rgb(69, 69, 69);
 }
