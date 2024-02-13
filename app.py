@@ -207,7 +207,7 @@ def product_detail(pid):
 def administrator(): 
     if 'uid' in session:
         if session and session['is_admin'] == True:
-            return render_template('administrator.html')
+            return render_template('administrator.html', user = session)
         else:
             abort(403)
     else:

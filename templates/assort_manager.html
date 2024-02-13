@@ -10,6 +10,7 @@
 <body>
 	<div class="base">
 		<h3>Управление ассортиментом</h3>
+		<a href="{{ url_for('new_product') }}">Добавить новый продукт</a>
 		<a href="{{ url_for('main') }}">Главное меню</a>
 		<a href="{{ url_for('administrator') }}">Назад</a>
 		{% for product in products %} 

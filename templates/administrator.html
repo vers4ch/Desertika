@@ -45,16 +45,16 @@
 			</div>
 			<div class="collapse navbar-collapse justify-content-end " id="navbarNav">
 				<ul class="navbar-nav">
-				
+					{% if user.is_admin == True %}
 						<li class="nav-item">
 							<a class="nav-link" href="{{ url_for('administrator') }}"><i class="fas fa-lock" aria-hidden="true"></i> Admin</a>
 						</li>
-				
+					{% endif %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('basket') }}"><i class="fa fa-shopping-basket" aria-hidden="true"></i> Корзина</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ url_for('profile') }}"><i class="fa fa-user"></i> uSER</a>
+						<a class="nav-link" href="{{ url_for('profile') }}"><i class="fa fa-user"></i> {{user.name}}</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Выйти</a>
@@ -85,7 +85,7 @@
 					<form class="forma" method="post" action="{{ url_for('reset_password') }}">
 						<!-- Кнопки -->
 						<a href="#" class="zation-button">Управление заказами</a>
-						<a href="{{ url_for('new_product') }}" class="zation-button">Управление ассортиментом</a>
+						<a href="{{ url_for('assort_manager') }}" class="zation-button">Управление ассортиментом</a>
 						<a href="#" class="zation-button">Управление персоналом</a>
 						<a href="{{ url_for('main') }}" class="zation-button">Главное меню</a>
 					</form>

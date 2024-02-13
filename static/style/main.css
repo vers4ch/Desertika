@@ -27,7 +27,6 @@ body {
 .navbar.bg-pink {
     background-color: #efdbe0; /* Замените на ваш выбранный цвет */
     /* border-bottom: 1px solid #373737; только нижняя граница */
-    /* border-bottom: 1px solid #373737; только нижняя граница */
 }
 
 .navbar-nav .nav-link {
@@ -117,8 +116,8 @@ a:hover {
 }
 
 .carousel-item img {
-    height: 450px;
-    width: 50px;
+    /* height: 450px; */
+    /* width: 50px; */
     object-fit: cover;
     margin-top: 17px;
     margin-bottom: 17px;
@@ -186,7 +185,6 @@ align-items: center;
 footer.bg-pink {
     background-color: #efdbe0;
     /* border-top: 1px solid #373737; только верхняя граница */
-    /* border-top: 1px solid #373737; только верхняя граница */
     padding: 20px; /* добавим внутренний отступ для лучшего визуального эффекта */
 }
 
@@ -201,15 +199,10 @@ footer.bg-pink {
     /* border-color: rgba(0,0,0,.1); */
 }
 
-.mb-3 {
-    /* width: 220px; */
-    margin-inline: 10px;
-}
-
-.collapse a:hover{
+.collapse a:hover {
     color: rgb(69, 69, 69);
 }
 
-.row a:hover{
+.row a:hover {
     color: rgb(69, 69, 69);
 }
