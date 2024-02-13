@@ -1,10 +1,10 @@
 import time, random, string, uuid, unicodedata, os, json
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash, send_file, make_response, abort
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_
 from flask_mail import Mail, Message
 from PIL import Image
 from datetime import datetime
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'c@t'
@@ -21,7 +21,6 @@ db_adress = '77.34.177.157'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://postgres:{db_pass}@{db_adress}:5432/desertika'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
 
 # Настройте Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.yandex.ru'
@@ -81,11 +80,9 @@ class Order(db.Model):
     def __repr__(self):
         return f"Order('{self.oid}', '{self.uid}', '{self.name}', '{self.tel}', '{self.email}', '{self.date}', '{self.coment}', '{self.order}', '{self.order_date}', '{self.status}')"
 
-
 # Создание таблицы в базе данных
 with app.app_context():
     db.create_all()
-
 
 #Страница входа
 @app.route('/login', methods=['GET', 'POST'])
@@ -133,7 +130,6 @@ def register():
         return redirect(url_for('login'))
         
 
-
 #Главная страница
 @app.route('/', methods=['GET', 'POST'])
 def main():
@@ -163,7 +159,6 @@ def main():
         product_images[product.path_to_photo] = [f"{image}?t={timestamp}" for image in image_files]
     
     return render_template('main.html', new_products=new_product, grouped_product = grouped_product, product_images=product_images, user = session)
-
 
 
 @app.route('/add_to_basket', methods=['POST'])
@@ -196,24 +191,36 @@ def add_to_basket():
     return jsonify({'success': True})
 
 
-
-
-
 @app.route('/product_detail/<pid>')
 def product_detail(pid):
     product = Products.query.filter_by(pid=pid).first()
     
+    products = db.session.query(Products).all()
+    # Группируем данные по category
+    grouped_product = {}
+    for item in products:
+        if item.category not in grouped_product:
+            grouped_product[item.category] = []
+        grouped_product[item.category].append(item)
+    
     image_folder = f'static/uploads/{product.path_to_photo}'  # Путь к папке с изображениями 
     image_files = [f for f in os.listdir(image_folder) if os.path.isfile(os.path.join(image_folder, f))] 
     image_paths = [os.path.join('static', 'uploads', f'{product.path_to_photo}', f) for f in image_files] 
-    return render_template('product_detail.html', product = product, image_paths=image_paths, user = session)
+    return render_template('product_detail.html', product = product, image_paths=image_paths, user = session, grouped_product = grouped_product)
 
 
 @app.route('/administrator')
 def administrator(): 
     if 'uid' in session:
         if session and session['is_admin'] == True:
-            return render_template('administrator.html', user = session)
+            products = db.session.query(Products).all()
+            # Группируем данные по category
+            grouped_product = {}
+            for item in products:
+                if item.category not in grouped_product:
+                    grouped_product[item.category] = []
+                grouped_product[item.category].append(item)
+            return render_template('administrator.html', user = session, grouped_product = grouped_product)
         else:
             abort(403)
     else:
@@ -318,7 +325,6 @@ def new_product():
         return redirect(url_for('new_product'))
     return render_template('add_new_product.html')
 
-
 #reset_password.html
 @app.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
@@ -389,19 +395,17 @@ def send_confirmation_email(email, code):
     msg = Message(subject, recipients=[email], body=body)
     mail.send(msg)
 
-
-
 @app.route('/profile')
 def profile():
-    return render_template('profile.html')
+    products = db.session.query(Products).all()
+    # Группируем данные по category
+    grouped_product = {}
+    for item in products:
+        if item.category not in grouped_product:
+            grouped_product[item.category] = []
+        grouped_product[item.category].append(item)
 
-
-
-
-
-
-
-
+    return render_template('profile.html', grouped_product = grouped_product)
 
 @app.route('/catalog')
 def catalog():
@@ -412,7 +416,6 @@ def catalog():
     for prod in catalog:
         if prod.new:
             new_product.append(prod)
-    print(new_product)
 
     # Группируем данные по category
     grouped_product = {}
@@ -420,13 +423,9 @@ def catalog():
         if product.category not in grouped_product:
             grouped_product[product.category] = []
         grouped_product[product.category].append(product)
-        # print(grouped_product)
-    # print(grouped_product)
 
     product_images = {}
     for product in catalog:
-        # image_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], product.path_to_photo)
-        # product_images[product.path_to_photo] = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
         image_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], product.path_to_photo)
         image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
         timestamp = int(time.time())
@@ -434,15 +433,18 @@ def catalog():
 
     return render_template('catalog.html', grouped_product = grouped_product, product_images = product_images, new_product = new_product, user = session)
 
-
-
 @app.route('/assort_manager', methods=['GET', 'POST'])
 def assort_manager():
     if session['is_admin']:
-        product = db.session.query(Products).all()
-        return render_template('assort_manager.html', products = product)
+        products = db.session.query(Products).all()
+        # Группируем данные по category
+        grouped_product = {}
+        for item in products:
+            if item.category not in grouped_product:
+                grouped_product[item.category] = []
+            grouped_product[item.category].append(item)
+        return render_template('assort_manager.html', products = products)
     abort(403)
-
 
 @app.route('/order', methods=['GET', 'POST'])
 def order():
@@ -462,9 +464,15 @@ def order():
         user.basket = '[]'
         db.session.commit()
         return redirect(url_for('main'))
-    return render_template('order.html', user = user)
-
-
+    
+    products = db.session.query(Products).all()
+    # Группируем данные по category
+    grouped_product = {}
+    for item in products:
+        if item.category not in grouped_product:
+            grouped_product[item.category] = []
+        grouped_product[item.category].append(item)
+    return render_template('order.html', user = user, grouped_product = grouped_product)
 
 @app.route('/basket')
 def basket():
@@ -478,6 +486,15 @@ def basket():
     session['basket'] = data
     
     result = {}
+
+    products = db.session.query(Products).all()
+    # Группируем данные по category
+    grouped_product = {}
+    for item in products:
+        if item.category not in grouped_product:
+            grouped_product[item.category] = []
+        grouped_product[item.category].append(item)
+
 
     for item in data:
         pid = item['pid']
@@ -495,7 +512,7 @@ def basket():
                     'count': count
                 }
 
-    return render_template('basket.html', products = result, user = session)
+    return render_template('basket.html', grouped_product = grouped_product, products = result, user = session)
 
 @app.route('/remove_from_basket', methods=['POST'])
 def remove_from_basket():
@@ -514,9 +531,6 @@ def remove_from_basket():
         
     return redirect(url_for('basket'))
 
-
-
-
 @app.route('/update_quantity_in_basket', methods=['POST'])
 def update_quantity_in_basket():
     pid = request.form['pid']
@@ -530,8 +544,6 @@ def update_quantity_in_basket():
                 break
 
     session.modified = True
-    # print(session['basket'])
-    # print(sum)
     user = Users.query.filter_by(uid=session['uid']).first()
     user.basket = json.dumps(session['basket'])
     db.session.commit()
@@ -546,6 +558,44 @@ def update_sum():
     return jsonify(), 200
 
 
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    if request.method == 'POST':
+        query = request.form['search_query']
+        print(query)
+        # Выполните поиск в базе данных
+        results = Products.query.filter(
+            or_(
+                Products.name.ilike(f'%{query}%'),
+                Products.category.ilike(f'%{query}%')
+            )
+        ).all()
+        # Группируем данные по category
+        grouped_product = {}
+        for product in results:
+            if product.category not in grouped_product:
+                grouped_product[product.category] = []
+            grouped_product[product.category].append(product)
+
+
+        products = db.session.query(Products).all()
+        # Группируем данные по category
+        grouped_product2 = {}
+        for product in products:
+            if product.category not in grouped_product2:
+                grouped_product2[product.category] = []
+            grouped_product2[product.category].append(product)
+
+        # Создаем словарь для хранения путей к изображениям для каждого товара
+        product_images = {}
+        for product in results:
+            image_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], product.path_to_photo)
+            image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
+            timestamp = int(time.time())
+            product_images[product.path_to_photo] = [f"{image}?t={timestamp}" for image in image_files]
+        
+        return render_template('search_results.html', grouped_product2 = grouped_product2, grouped_product = grouped_product, product_images = product_images, results=results, user = session)
+    return 200
 
 
 @app.route('/logout')
@@ -557,9 +607,7 @@ def logout():
     session.pop('is_admin', None)
     session.pop('basket', None)
     session.pop('_flashes', None)
-    # print(session)
     return redirect(url_for('login'))
-
 
 # Запуск приложения
 if __name__ == '__main__':

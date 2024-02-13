@@ -43,6 +43,7 @@ $(document).ready(function() {
             totalAmount += price * count;
         });
         $('#total-amount').text(totalAmount.toFixed(2));
+        $('#total-amount2').text(totalAmount.toFixed(2));
         updateSummInSession();
     }
 

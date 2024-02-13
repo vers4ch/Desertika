@@ -3,9 +3,9 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>DESERTIKA Administrator</title>
-	<link rel="icon" href="static/images/favicon.ico">
+	<title>DESERTIKA</title>
 
+	<link rel="icon" href="static/images/favicon.ico">
 
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -13,10 +13,12 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+
+	
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
-
-	<link rel="stylesheet" href="static/style/administrator.css">
+	<link rel="stylesheet" href="static/style/main.css">
+	<link rel="stylesheet" href="static/style/new_carousel.css">
 	<script>
         window.onload = function() {
             localStorage.removeItem('productPath');
@@ -53,49 +55,87 @@
 							<a class="nav-link" href="{{ url_for('administrator') }}"><i class="fas fa-lock" aria-hidden="true"></i> Admin</a>
 						</li>
 					{% endif %}
+					{% if user.uid %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('basket') }}"><i class="fa fa-shopping-basket" aria-hidden="true"></i> Корзина</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ url_for('profile') }}"><i class="fa fa-user"></i> {{user.name}}</a>
+						<a class="nav-link" href="{{ url_for('profile') }}"><i class="fa fa-user"></i> {{ user.name }}</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Выйти</a>
 					</li>
+					{% else %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Войти</a>
+					</li>
+					{% endif %}
+
 				</ul>
 			</div>
 		</div>
 	</nav>
 
-	<div class="main2">
-		<!-- <img src="static\images\logo.jpg" alt="Image Description" class="registration-image"> -->
-		<a href="{{ url_for('main') }}"> 
-            <img src="static\images\logo.jpg" class="registration-image" oncontextmenu="return false;" onmouseover="this.title='';"> 
-        </a>
-			<!-- Контейнер для всей формы -->
-			<div class="zation">
-				<!-- Заголовок Администратор -->
-				<div class="head">
-					<!-- Пустой блок для визуального выравнивания -->
-					<div></div>
-					<span class="title">Администратор</span>
-					<!-- Пустой блок для визуального выравнивания -->
-					<div></div>
-				</div>
-				<!-- Контейнер для содержимого вкладок -->
-				<div class="tabs">
-					<!-- Форма для входа -->
-					<form class="forma" method="post" action="{{ url_for('reset_password') }}">
-						<!-- Кнопки -->
-						<a href="#" class="zation-button">Управление заказами</a>
-						<a href="{{ url_for('assort_manager') }}" class="zation-button">Управление ассортиментом</a>
-						<a href="#" class="zation-button">Управление персоналом</a>
-						<a href="{{ url_for('main') }}" class="zation-button">Главное меню</a>
-					</form>
-				</div> <!-- Закрытие контейнера для содержимого вкладок -->
-			</div> <!-- Закрытие контейнера для всей формы -->
-		</div>
-	
+	<div class="main">
+		<h1>Результаты поиска</h1>
+
+			<div class="catalog" style="min-height: 500px;">
+				{% for category, products in grouped_product.items() %}
+					<div class="category-block">
+						<div class="head_category"><h2>{{ category }}</h2></div>
+						<div class="gallery">
+							{% for product in products %}
+									<div class="card mb-3">
+										<div class="card-box">
+											<!-- Карусель -->
+											<div id="carousel_{{ product.pid }}" class="carousel slide" data-ride="carousel">
+												<ol class="carousel-indicators">
+													{% for image in product_images[product.path_to_photo] %}
+														<li data-target="#carousel_{{ product.pid }}" data-slide-to="{{ loop.index0 }}" {% if loop.index0 == 0 %}class="active"{% endif %}></li>
+													{% endfor %}
+												</ol>
+												<div class="carousel-inner">
+													{% for image in product_images[product.path_to_photo] %}
+														<div class="carousel-item {% if loop.index0 == 0 %}active{% endif %}">
+															<img class="d-block w-100" src="{{ image }}?v={{ random_string }}" alt="Slide {{ loop.index }}">
+														</div>
+													{% endfor %}
+												</div>
+												<a class="carousel-control-prev" href="#carousel_{{ product.pid }}" role="button" data-slide="prev">
+													<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+													<span class="sr-only">Previous</span>
+												</a>
+												<a class="carousel-control-next" href="#carousel_{{ product.pid }}" role="button" data-slide="next">
+													<span class="carousel-control-next-icon" aria-hidden="true"></span>
+													<span class="sr-only">Next</span>
+												</a>
+											</div>
+											<!-- /Карусель -->
+											<div class="text-card-box">
+											<a href="{{ url_for('product_detail', pid=product.pid) }}">
+												<h5 class="card-name">{{product.name}}</h5>
+												<p class="card-text" style="margin: 0;">Вес: {{ product.weight }}</p>
+												<p class="card-text" style="margin: 0;">Цена: {{ product.price }}{{product.price_text}}</p>
+											</a>
+											{% if user.uid %}
+												<input type="hidden" class="hiddenValue" value="{{ product.pid }}">
+												<button class="sendButton"><i class="fa fa-shopping-basket fa-lg" aria-hidden="true"></i></button>
+											{% else %}
+											<div class="buy-box">
+												<a class="else-sendButton" href="{{ url_for('login') }}"><i class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i></a>
+											</div>
+											{% endif %}
+											</div>
+										</div>
+									</div>
+							{% endfor %}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+
+    </div>
+
 	<footer class="bg-pink">
 		<div class="container">
 			<div class="row">
@@ -106,7 +146,8 @@
 				<div class="col-md-3">
 					<h5>Каталог</h5>
 					<ul class="list-unstyled">
-						{% for category, products in grouped_product.items() %}
+
+						{% for category, products in grouped_product2.items() %}
 							<li><a href="#">{{category}}</a></li>
 						{% endfor %}
 					</ul>
@@ -136,5 +177,27 @@
 			</div>
 		</div>
 	</footer>
+
+	<script>
+		$(document).ready(function() {
+			$('.sendButton').click(function() {
+				var valueToSend = $(this).prev('.hiddenValue').val();
+				console.log(valueToSend);
+				$.ajax({
+					type: 'POST',
+					url: '/add_to_basket',
+					contentType: 'application/json',
+					data: JSON.stringify({value: valueToSend}),
+					success: function(response) {
+						alert('Товар добавлен в корзину');
+					},
+					error: function(error) {
+						console.error('Произошла ошибка при отправке значения на сервер:', error);
+					}
+				});
+			});
+		});
+	</script>
+	<script src="static/js/catalog.js"></script>
 </body>
 </html>

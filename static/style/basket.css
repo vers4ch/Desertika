@@ -135,29 +135,17 @@ align-items: center;
 
 .blocks {
   display: flex;
-  justify-content: space-between; /* Добавляем это свойство, чтобы разместить блоки на противоположных концах контейнера */
-  flex-wrap: wrap; /* Разрешаем перенос элементов на новую строку */
-  margin: auto; /* Выравниваем по центру */
-}
-
-@media (max-width: 800px) {
-  .blocks {
-    flex-direction: column;
-    align-items: center; /* Добавляем выравнивание по центру для вертикального расположения */
-  }
-
-  .product, .right-box {
-    width: 100%; /* При переходе на вертикальный режим, устанавливаем ширину блоков на 100% */
-  }
+  width: 100%;
+  justify-content: center;
+  margin: auto;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .product {
-  margin-inline: 20px;
-  margin-top: 10px;
+  margin-inline: 10px;
   margin-bottom: 10px;
-  /* width: 80%; */
-  width: calc(75% - 20px); /* Вычисляем ширину блока .product с учетом отступов */
-  min-width: 200px; /* Устанавливаем минимальную ширину блока */
+  width: 65%;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -166,33 +154,28 @@ align-items: center;
   border-radius: 10px;
   min-height: 540px;
   border: 1px solid #373737;
-  border-radius: 10px;
 }
 
 .right-box {
-  margin-top: 10px;
   margin-bottom: 10px;
-  /* width: 20%; */
-  width: calc(25% - 20px); /* Вычисляем ширину блока .right-box с учетом отступов */
-  min-width: 100px; /* Устанавливаем минимальную ширину блока */
+  width: 30%;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
   background-color: white;
-  border-radius: 10px;
-  min-height: 100px;
+  min-height: 200px;
   border: 1px solid #373737;
   border-radius: 10px;
 }
 
 .product-box {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 98%;
-  margin-block: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 98%;
+    margin-block: 10px;
 }
 
 .product-box h3, p{
@@ -217,15 +200,6 @@ align-items: center;
   width: 60%;
 }
 
-/* .price-box{
-  font-size: 20px;
-  width: 15%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-} */
-
 .sendButton {
   text-decoration: none;
   color: white;
@@ -240,7 +214,6 @@ align-items: center;
 .order-box {
   height: 50px;
   width: 90%;
-  /* background-color: white; */
   text-align: left;
   display: flex;
   flex-direction: row;
@@ -254,15 +227,15 @@ align-items: center;
 
 .shop-btn a {
   text-decoration: none;
-  background-color: #d93d64;
+  background-color: #c4788b;
   color: white;
   padding-block: 10px;
   padding-inline: 20px;
-  border-radius: 20px;
+  border-radius: 5px;
 }
 
 .shop-btn a:hover {
-  background-color: #d2617d;
+  background-color: #da9fae;
 }
 
 .bottom-bar {
@@ -284,7 +257,7 @@ h4 {
 }
 
 .quantity button {
-  background-color: #d93d64;
+  background-color: #c4788b;
   border-radius: 5px;
   border: 0;
   color: white;
@@ -297,7 +270,7 @@ h4 {
 
 .btn {
   color: white;
-  background-color: #d93d64;
+  background-color: #c4788b;
 }
 
 .price-box {
@@ -308,7 +281,6 @@ h4 {
 
 footer.bg-pink {
   background-color: #efdbe0;
-  /* border-top: 1px solid #373737; только верхняя граница */
   padding: 20px; /* добавим внутренний отступ для лучшего визуального эффекта */
 }
 
@@ -320,7 +292,6 @@ footer.bg-pink {
 
 .navbar-toggler {
   color: rgb(115 77 77 / 67%);
-  /* border-color: rgba(0,0,0,.1); */
 }
 
 .collapse a:hover {
@@ -330,3 +301,66 @@ footer.bg-pink {
 .row a:hover {
   color: rgb(69, 69, 69);
 }
+
+.bottom-bar{
+  display: none;
+}
+
+.product-img img{
+  height: 200px;
+}
+
+
+
+@media (max-width: 1050px) {
+  .product{
+    width: 60%;
+  }
+
+  .right-box {
+    width: 35%;
+  }
+}
+
+
+@media (max-width: 800px) {
+  .blocks {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .product{
+    width: 95%;
+    margin-inline: 0px;
+  }
+
+  .right-box {
+    /* width: 95%;
+    margin-inline: 0px; */
+    display: none;
+  }
+
+  .bottom-bar{
+    display: flex;
+  }
+}
+
+
+/* 
+@media screen and (max-width: 1400px) {
+	.envelopexas .roundabout {
+		grid-auto-columns: calc((100% / 3));
+	}
+}
+
+@media screen and (max-width: 1015px) {
+	.envelopexas .roundabout {
+		grid-auto-columns: calc((100% / 2) + 20px);
+	}
+}
+
+@media screen and (max-width: 750px) {
+	.envelopexas .roundabout {
+		grid-auto-columns: calc((100% / 1) + 40px);
+	}
+} */

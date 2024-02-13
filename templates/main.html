@@ -38,7 +38,7 @@
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
-						<a class="nav-link" href="{{ url_for('catalog') }}">Каталог</a>
+						<a class="nav-link" href="#">Каталог</a>
 					</li>
 				</ul>
 				<ul class="navbar-nav ml-auto">
@@ -77,9 +77,9 @@
 	</nav>
 
 	<div class="search-container">
-		<form action="/search" method="GET">
+		<form action="/search" method="post">
 			<div class="input-group">
-				<input type="text" class="form-control" placeholder="Поиск..." name="search">
+				<input type="text" class="form-control" placeholder="Поиск..." name="search_query">
 				<div class="input-group-append">
 					<button class="btn btn-outline-secondary" type="submit"><i class="fa fa-search"></i></button>
 				</div>
@@ -102,7 +102,7 @@
 							</a>
 							{% if user.uid %}
 								<input type="hidden" class="hiddenValue" value="{{ item.pid }}">
-								<button class="sendButton">В корзину</button>
+								<button class="sendButton"><i class="fa fa-shopping-basket fa-lg ind" aria-hidden="true"></i></button>
 							{% else %}
 							<div class="buy-box">
 								<a class="else-sendButton" href="{{ url_for('login') }}">В корзину</a>
@@ -117,7 +117,6 @@
 		<!-- /Карусель новинок -->
 
 			<div class="catalog">
-
 				{% for category, products in grouped_product.items() %}
 					<div class="category-block">
 						<div class="head_category"><h2>{{ category }}</h2></div>
@@ -157,7 +156,7 @@
 											</a>
 											{% if user.uid %}
 												<input type="hidden" class="hiddenValue" value="{{ product.pid }}">
-												<button class="sendButton"><i class="fa fa-shopping-basket" aria-hidden="true"></i></button>
+												<button class="sendButton"><i class="fa fa-shopping-basket fa-lg" aria-hidden="true"></i></button>
 											{% else %}
 											<div class="buy-box">
 												<a class="else-sendButton" href="{{ url_for('login') }}"><i class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i></a>
@@ -184,9 +183,10 @@
 				<div class="col-md-3">
 					<h5>Каталог</h5>
 					<ul class="list-unstyled">
-						<li><a href="#">Торты</a></li>
-						<li><a href="#">Пирожные</a></li>
-						<li><a href="#">Букеты</a></li>
+
+						{% for category, products in grouped_product.items() %}
+							<li><a href="#">{{category}}</a></li>
+						{% endfor %}
 					</ul>
 				</div>
 				<div class="col-md-3">

@@ -142,7 +142,7 @@ a:hover {
     text-align: center;
 }
 .text-card-box button{
-    margin-inline: 0;
+    margin-inline: 81px;
 }
 .else-sendButton{
     text-align: center;
@@ -196,9 +196,10 @@ a:hover {
 }
 
 .sendButton, .else-sendButton {
+    /* height: 50px; */
     color: white;
     display: inline-block;
-    /* margin: 10px; */
+    margin: 81px;
     margin-block: 10px;
     border-radius: 5px;
     padding: 5px;
