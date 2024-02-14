@@ -1,20 +1,205 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="static/images/favicon.ico">
-    <title>DESERTIKA</title>
-    <link rel="icon" href="static/img/favicon.ico">
-    <link rel="stylesheet" href="static/style/login.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>DESERTIKA Профиль</title>
+
+	<link rel="icon" href="static/images/favicon.ico">
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+	<link rel="stylesheet" href="static/style/profile.css">
+
+    <!-- JavaScript код для переключения вкладок -->
+    <script>
+        $(document).ready(function(){
+            // Скрываем форму "Заказы" и "История" при загрузке страницы
+            $("#ordersForm").hide();
+            $("#historyForm").hide();
+    
+            // Обработчик клика по ссылке "Мои данные"
+            $("#usines").click(function(){
+                $("#profileForm").show();
+                $("#ordersForm").hide();
+                $("#historyForm").hide();
+                $(this).addClass("selected");
+                $("#version").removeClass("selected");
+                $("#version2").removeClass("selected"); // Убираем класс "selected" с других ссылок
+                return false; // предотвращаем действие по умолчанию для ссылки
+            });
+    
+            // Обработчик клика по ссылке "Заказы"
+            $("#version").click(function(){
+                $("#profileForm").hide();
+                $("#ordersForm").show();
+                $("#historyForm").hide();
+                $(this).addClass("selected");
+                $("#usines").removeClass("selected");
+                $("#version2").removeClass("selected"); // Убираем класс "selected" с других ссылок
+                return false; // предотвращаем действие по умолчанию для ссылки
+            });
+    
+            // Обработчик клика по ссылке "История"
+            $("#version2").click(function(){
+                $("#profileForm").hide();
+                $("#ordersForm").hide();
+                $("#historyForm").show();
+                $(this).addClass("selected");
+                $("#usines").removeClass("selected");
+                $("#version").removeClass("selected"); // Убираем класс "selected" с других ссылок
+                return false; // предотвращаем действие по умолчанию для ссылки
+            });
+        });
+    </script>
 </head>
 <body>
+	<nav class="navbar navbar-expand-lg bg-pink sticky-top">
+		<div class="container">
+			<a class="navbar-brand" href="{{ url_for('main') }}">
+				<img src="static/images/logo_small.jpg" class="logo d-block" alt="Logo" oncontextmenu="return false;" onmouseover="this.title='';" style="max-height: 50px;">
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<!-- <span class="navbar-toggler-icon"></span> -->
+				<i class="fa fa-bars" aria-hidden="true"></i>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="#">Каталог</a>
+					</li>
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					<!-- Добавляем элемент навигации для телефонного номера -->
+					<li class="nav-item">
+						<a class="nav-link" href="tel:+79143336761">+7 (914) 333-67-61</a>
+					</li>
+				</ul>
+			</div>
+			<div class="collapse navbar-collapse justify-content-end " id="navbarNav">
+				<ul class="navbar-nav">
+					
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url_for('administrator') }}"><i class="fas fa-lock" aria-hidden="true"></i> Admin</a>
+						</li>
+					
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('basket') }}"><i class="fa fa-shopping-basket" aria-hidden="true"></i> Корзина</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('profile') }}"><i class="fa fa-user"></i> uSER</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Выйти</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
     <div class="main">
-    	<a href="{{ url_for('main') }}">
-			<img src="static\images\logo.jpg" alt="Image Description" class="registration-image">
-		</a>
+        <img src="static\images\logo.jpg" alt="Image Description" class="registration-image">
+            <!-- Контейнер для всей формы -->
+            <div class="zation">
+                <!-- Заголовок с вкладками Логин и Регистрация -->
+                <div class="head">
+                    <!-- Пустой блок для визуального выравнивания -->
+                    <div></div>
+                    <!-- Ссылка на вкладку Логин -->
+                    <a id="usines" class="selected" href="#">Мои данные</a>
+                    <!-- Ссылка на вкладку Регистрация -->
+                    <a id="version" href="#">Мои заказы</a>
+                    <!-- Пустой блок для визуального выравнивания -->
+                    <a id="version2" href="#">История заказов</a>
+                    <!-- Пустой блок для визуального выравнивания -->
+                    <div></div>
+                </div>
+                <!-- Контейнер для содержимого вкладок -->
+                <div class="tabs">
+                    <!-- Форма для профиля -->
+                    <form action="/profile" method="post" class="profile-form" id="profileForm">
+                        <!-- Контейнер для полей ввода и чекбокса -->
+                        <div class="inputs">
+                            <div class="input">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                <input name="name" placeholder="Имя" type="text" value="uSER">
+                            </div>
+                            <div class="input">
+                                <i class="fas fa-phone"></i>
+                                <input name="tel" placeholder="Телефон" type="tel" value="tEL">
+                            </div>
+                            <div class="input">
+                                <i class="fas fa-envelope"></i>
+                                <input name="email" placeholder="Email" type="email" value="eMAIL">
+                            </div>
+                        </div>
+                        <input class="zation-button" type="submit" value="Сохранить">
+                    </form>
+                    <!-- Форма для заказов -->
+                    <form action="/orders" method="post" class="orders-form" id="ordersForm" style="display:none;">
+                        <!-- Контейнер для полей ввода -->
+                        <div class="inputs">
+                            
+                        </div>
+                    </form>
+                    <!-- Форма для истории заказов -->
+                    <form action="/history" method="post" class="history-form" id="historyForm" style="display:none;">
+                        <!-- Контейнер для полей ввода -->
+                        <div class="inputs">
+                            
+                        </div>
+                    </form>
+                </div> <!-- Закрытие контейнера для содержимого вкладок -->
+            </div> <!-- Закрытие контейнера для всей формы -->
     </div>
+
+	<footer class="bg-pink">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+					<!-- Поместили изображение внутрь первой колонки сетки -->
+					<img src="static\images\logo.jpg" alt="Image Description" class="footer-image">
+				</div>
+				<div class="col-md-3">
+					<h5>Каталог</h5>
+					<ul class="list-unstyled">
+
+						{% for category, products in grouped_product.items() %}
+							<li><a href="#">{{category}}</a></li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="col-md-3">
+					<h5>Информация</h5>
+					<ul class="list-unstyled">
+						<li><a href="#">О нас</a></li>
+						<li><a href="#">Условия использования</a></li>
+						<li><a href="#">Политика конфиденциальности</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3">
+					<h5>Контакты</h5>
+					<address>
+						Адрес:<br>
+						Владивосток, ул. Елецкая, 1а<br>
+						Телефон: <a href="tel:+79143336761">+7 (914) 333-67-61</a><br>
+						Email: <a href="mailto:desertika@mail.ru">desertika@mail.ru</a>
+					</address>
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col">
+					<p>2024 © Powered by Turbokotiki</p>
+				</div>
+			</div>
+		</div>
+	</footer>
 </body>
 </html>
