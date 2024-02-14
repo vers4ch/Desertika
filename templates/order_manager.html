@@ -16,12 +16,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
 
-	<link rel="stylesheet" href="static/style/administrator.css">
-	<script>
-        window.onload = function() {
-            localStorage.removeItem('productPath');
-        };
-    </script>
+	<link rel="stylesheet" href="static/style/order_manager.css">
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg bg-pink sticky-top">
@@ -67,33 +62,32 @@
 		</div>
 	</nav>
 
-	<div class="main2">
-	<!-- <img src="static\images\logo.jpg" alt="Image Description" class="registration-image"> -->
-	<a href="{{ url_for('main') }}"> 
-		<img src="static\images\logo.jpg" class="registration-image" oncontextmenu="return false;" onmouseover="this.title='';"> 
-	</a>
-		<!-- Контейнер для всей формы -->
-		<div class="zation">
-			<!-- Заголовок Администратор -->
-			<div class="head">
-				<!-- Пустой блок для визуального выравнивания -->
-				<div></div>
-				<span class="title">Администратор</span>
-				<!-- Пустой блок для визуального выравнивания -->
-				<div></div>
+
+	<div class="base">
+		<div class="main-base">
+			<h1>Управление заказами</h1>
+			<div class="order-boxes">
+				{% if orders == [] %}
+						<h1 style="margin-top: 180px; color: grey;">Заказов нет</h1>
+				{% endif %}
+
+				{% for order in orders %} 
+					<a href="#"><div class="order-box">
+						{% for product in order.products %}
+						<div class="info-line"><p>Номер: {{order.oid}}</p></div>
+						<div class="info-line"><p>Статус: {{order.status}}</p></div>
+						<div class="info-line"><p>Заказчик: {{order.name}}</p></div>
+						<div class="info-line"><p>Тел.: {{order.tel}}</p></div>
+						<div class="info-line"><p>{{order.order_date}}</p></div>
+						<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
+						{% endfor %}
+					</div></a>
+				{% endfor %}
 			</div>
-			<!-- Контейнер для содержимого вкладок -->
-			<div class="tabs">
-				<!-- Форма для входа -->
-				<form class="forma" method="post" action="{{ url_for('reset_password') }}">
-					<!-- Кнопки -->
-					<a href="{{ url_for('order_manager') }}" class="zation-button">Управление заказами</a>
-					<a href="{{ url_for('assort_manager') }}" class="zation-button">Управление ассортиментом</a>
-					<a href="{{ url_for('main') }}" class="zation-button">Главное меню</a>
-				</form>
-			</div> <!-- Закрытие контейнера для содержимого вкладок -->
-		</div> <!-- Закрытие контейнера для всей формы -->
+		</div>
 	</div>
+
+
 	
 	<footer class="bg-pink">
 		<div class="container">

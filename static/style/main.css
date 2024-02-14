@@ -165,7 +165,15 @@ h1{
     margin-inline: 0;
 }
 
-.main {
+.main2 {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main{
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -294,5 +302,21 @@ footer.bg-pink {
 @media screen and (max-width: 750px) {
 	.searcher{
         width: 312px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+	.mb-3{
+        margin-inline: 0;
+    }
+
+    .category-block{
+        margin-inline: 0;
+    }
+}
+
+@media screen and (max-width: 315px) {
+	.mb-3{
+        width: 270px;
     }
 }

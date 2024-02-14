@@ -1,0 +1,161 @@
+
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400; /* Обычный вес шрифта */
+    src: local('Lato Regular'), local('Lato-Regular'), url(fonts/Lato-Regular.woff2) format('woff2');
+    /* Если используете CDN, то можете заменить "url(path/to/lato.woff2)" на ссылку на шрифт с CDN */
+  }
+  
+@font-face {
+font-family: 'Lato';
+font-style: normal;
+font-weight: 700; /* Полужирный вес шрифта */
+src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('woff2');
+/* Замените на ссылку на шрифт с CDN, если используете CDN */
+}
+
+body {
+    background-color: #efdbe0;
+    font-family: 'Lato';   
+}
+
+.navbar {
+    padding-top: 0px; /* Уменьшаем верхний отступ */
+    padding-bottom: 0px; /* Уменьшаем нижний отступ */
+}
+
+.navbar.bg-pink {
+    background-color: #efdbe0; /* Замените на ваш выбранный цвет */
+    /* border-bottom: 1px solid #373737; только нижняя граница */
+}
+
+.navbar-nav .nav-link {
+    font-size: 18px; /* Увеличиваем размер шрифта ссылок */
+}
+
+.navbar.navbar-light .navbar-nav .nav-link {
+    color: #373737; /* Цвет текста */
+}
+
+.navbar.navbar-light .navbar-nav .nav-link:hover {
+    color: #000; /* Черный */
+}
+
+.navbar-toggler-icon {
+    height: 100%; /* Устанавливаем высоту иконки равной высоте шапки */
+}
+
+.navbar-brand {
+    padding-top: 4px;
+    margin-bottom: -10px;
+}
+
+.logo {
+    max-width: 150px;
+    margin-bottom: 10px;
+}
+
+
+
+.header-links a {
+    color: #fff;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+
+footer.bg-pink {
+    background-color: #efdbe0;
+    /* border-top: 1px solid #373737; только верхняя граница */
+    padding: 20px; /* добавим внутренний отступ для лучшего визуального эффекта */
+}
+
+.footer-image {
+    width: 200px;
+    height: auto;
+    display: block;
+}
+
+.navbar-toggler {
+    color: rgb(115 77 77 / 67%);
+    /* border-color: rgba(0,0,0,.1); */
+}
+
+.collapse a:hover {
+    color: rgb(69, 69, 69);
+}
+
+.row a:hover {
+    color: rgb(69, 69, 69);
+}
+
+
+
+
+
+.base{
+	display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.main-base{
+	display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+	text-align: center;
+	width: 90%;
+	/* background-color: white; */
+	border-radius: 10px;
+	min-height: 600px;
+}
+
+.order-boxes{
+	display: flex;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.order-box{
+	display: flex;
+    width: 200px;
+    background-color: white;
+    flex-direction: column;
+    align-items: center;
+	margin-inline: 10px;
+	border-radius: 10px;
+	border: 1px solid #373737;
+}
+
+.info-line{
+	display: flex;
+    flex-direction: row;
+}
+
+
+
+
+@media screen and (max-width: 750px) {
+	.zation {
+		width: 350px;
+	}
+
+    .zation-button{
+        width: 290px;
+        padding: 14px 5px;
+    }
+}
