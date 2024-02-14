@@ -63,7 +63,7 @@
 }
 .roundabout .arson {
 	scroll-snap-align: start;
-	height: 425px;
+	height: 450px;
 	list-style: none;
 	background: #fff;
 	cursor: pointer;

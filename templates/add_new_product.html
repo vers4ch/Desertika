@@ -50,7 +50,7 @@
 						<a class="nav-link" href="{{ url_for('basket') }}"><i class="fa fa-shopping-basket" aria-hidden="true"></i> Корзина</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ url_for('profile') }}"><i class="fa fa-user"></i> uSER</a>
+						<a class="nav-link" href="{{ url_for('profile') }}"><i class="fa fa-user"></i> {{user.name}}</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Выйти</a>

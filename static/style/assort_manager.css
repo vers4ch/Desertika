@@ -519,3 +519,13 @@ img {
 .new-button{
     width: 213px;
 }
+
+@media screen and (max-width: 750px) {
+	.zation {
+		width: 370px;
+	}
+
+    .head .title{
+        font-size: 24px;
+    }
+}

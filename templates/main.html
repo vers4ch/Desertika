@@ -88,6 +88,7 @@
 	</div>
 
 	<div class="main">
+		<h1>Новинки</h1>
 		<!-- Карусель новинок -->
 			<div class="envelopexas">
 				<i id="left" class="fa-solid fa-angle-left"></i>
@@ -105,7 +106,7 @@
 								<button class="sendButton"><i class="fa fa-shopping-basket fa-lg ind" aria-hidden="true"></i></button>
 							{% else %}
 							<div class="buy-box">
-								<a class="else-sendButton" href="{{ url_for('login') }}"><i class="fa fa-shopping-basket fa-lg ind" aria-hidden="true"></i></a>
+								<a class="sendButton else" href="{{ url_for('login') }}"><i class="fa fa-shopping-basket fa-lg ind" aria-hidden="true"></i></a>
 							</div>
 							{% endif %}
 						</div>
@@ -119,7 +120,7 @@
 			<div class="catalog">
 				{% for category, products in grouped_product.items() %}
 					<div class="category-block">
-						<div class="head_category"><h2>{{ category }}</h2></div>
+						<div class="head_category"><h1>{{ category }}</h1></div>
 						<div class="gallery">
 							{% for product in products %}
 									<div class="card mb-3">
@@ -159,7 +160,7 @@
 												<button class="sendButton"><i class="fa fa-shopping-basket fa-lg" aria-hidden="true"></i></button>
 											{% else %}
 											<div class="buy-box">
-												<a class="else-sendButton" href="{{ url_for('login') }}"><i class="fa fa-shopping-basket fa-lg ind" aria-hidden="true"></i></a>
+												<a class="sendButton else" href="{{ url_for('login') }}"><i class="fa fa-shopping-basket fa-lg ind" aria-hidden="true"></i></a>
 											</div>
 											{% endif %}
 											</div>

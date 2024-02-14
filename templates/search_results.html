@@ -78,11 +78,10 @@
 
 	<div class="main">
 		<h1>Результаты поиска</h1>
-
 			<div class="catalog" style="min-height: 500px;">
 				{% for category, products in grouped_product.items() %}
 					<div class="category-block">
-						<div class="head_category"><h2>{{ category }}</h2></div>
+						<div class="head_category"><h1>{{ category }}</h1></div>
 						<div class="gallery">
 							{% for product in products %}
 									<div class="card mb-3">

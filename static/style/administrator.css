@@ -354,3 +354,10 @@ footer.bg-pink {
 .row a:hover {
     color: rgb(69, 69, 69);
 }
+
+
+@media screen and (max-width: 750px) {
+	.zation {
+		width: 375px;
+	}
+}
