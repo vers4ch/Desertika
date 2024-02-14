@@ -116,13 +116,13 @@
 
 @media screen and (max-width: 1400px) {
 	.envelopexas .roundabout {
-		grid-auto-columns: calc((100% / 3));
+		grid-auto-columns: calc(((100% + 14px) / 3));
 	}
 }
 
 @media screen and (max-width: 1015px) {
 	.envelopexas .roundabout {
-		grid-auto-columns: calc((100% / 2) + 20px);
+		grid-auto-columns: calc(((100% - 15px) / 2) + 20px);
 	}
 }
 

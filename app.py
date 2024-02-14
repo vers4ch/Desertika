@@ -323,7 +323,7 @@ def new_product():
         db.session.add(new_product)
         db.session.commit()
         return redirect(url_for('new_product'))
-    return render_template('add_new_product.html')
+    return render_template('add_new_product.html', user = session)
 
 #reset_password.html
 @app.route('/reset_password', methods=['GET', 'POST'])

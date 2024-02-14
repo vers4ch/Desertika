@@ -105,7 +105,7 @@
 								<button class="sendButton"><i class="fa fa-shopping-basket fa-lg ind" aria-hidden="true"></i></button>
 							{% else %}
 							<div class="buy-box">
-								<a class="else-sendButton" href="{{ url_for('login') }}">В корзину</a>
+								<a class="else-sendButton" href="{{ url_for('login') }}"><i class="fa fa-shopping-basket fa-lg ind" aria-hidden="true"></i></a>
 							</div>
 							{% endif %}
 						</div>
@@ -159,7 +159,7 @@
 												<button class="sendButton"><i class="fa fa-shopping-basket fa-lg" aria-hidden="true"></i></button>
 											{% else %}
 											<div class="buy-box">
-												<a class="else-sendButton" href="{{ url_for('login') }}"><i class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i></a>
+												<a class="else-sendButton" href="{{ url_for('login') }}"><i class="fa fa-shopping-basket fa-lg ind" aria-hidden="true"></i></a>
 											</div>
 											{% endif %}
 											</div>
