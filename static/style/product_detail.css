@@ -1,62 +1,384 @@
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400; /* Обычный вес шрифта */
+    src: local('Lato Regular'), local('Lato-Regular'), url(fonts/Lato-Regular.woff2) format('woff2');
+    /* Если используете CDN, то можете заменить "url(path/to/lato.woff2)" на ссылку на шрифт с CDN */
+  }
+  
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 700; /* Полужирный вес шрифта */
+    src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('woff2');
+    /* Замените на ссылку на шрифт с CDN, если используете CDN */
+}
+
 body {
     background-color: #efdbe0;
-    /* font-family: 'Lato';    */
+    font-family: 'Lato';   
 }
+
+.navbar {
+    padding-top: 0px; /* Уменьшаем верхний отступ */
+    padding-bottom: 0px; /* Уменьшаем нижний отступ */
+}
+
+.navbar.bg-pink {
+    background-color: #efdbe0; /* Замените на ваш выбранный цвет */
+    /* border-bottom: 1px solid #373737; только нижняя граница */
+}
+
+.navbar-nav .nav-link {
+    font-size: 18px; /* Увеличиваем размер шрифта ссылок */
+}
+
+.navbar.navbar-light .navbar-nav .nav-link {
+    color: #373737; /* Цвет текста */
+}
+
+.navbar.navbar-light .navbar-nav .nav-link:hover {
+    color: #000; /* Черный */
+}
+
+.navbar-toggler-icon {
+    height: 100%; /* Устанавливаем высоту иконки равной высоте шапки */
+}
+
+.navbar-brand {
+    padding-top: 4px;
+    margin-bottom: -10px;
+}
+
+.input-group {
+    margin-bottom: 10px; /* отступ между элементами внутри группы */
+}
+
+.header {
+    background-color: #efdbe0;
+    padding: 10px 0;
+    color: #fff;
+    display: flex;
+    justify-content: space-between; /* Новое свойство для размещения элементов слева и справа */
+    align-items: center; /* Центрирование элементов по вертикали */
+}
+
+.logo {
+    max-width: 150px;
+    margin-bottom: 10px;
+}
+
+.header-links {
+    display: flex;
+    align-items: center;
+}
+
+.right-container {
+    margin-left: auto; /* Этот блок будет автоматически выравниваться вправо */
+}
+
+.header-links a {
+    color: #fff;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+
+.gallery {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.mb-3 {
+    width: 310px;
+    height: 450px;
+    margin-inline: 10px;
+    border: 1px solid #373737;
+    border-radius: 10px;
+}
+
+.carousel-item img {
+    height: 250px;
+    object-fit: cover;
+    margin-top: 17px;
+    margin-bottom: 17px;
+}
+
+.carousel{
+    width: 200px;
+}
+.card-box{
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.text-card-box{
+    display: flex;
+    width: 250px;
+    flex-direction: column;
+    align-items: stretch;
+}
+.text-card-box h5{
+    width: 100%;
+    text-align: center;
+}
+.text-card-box button{
+    margin-inline: 81px;
+}
+.else-sendButton{
+    text-align: center;
+    width: 100%;
+    margin-inline: 0;
+}
+
 .main {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.head{
-	height: 100px;
+    
+.main2 {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-}
+    }
 
 .registration-image {
     width: 200px;
     height: auto;
     display: block;
-    /* margin-bottom: -10px; */
+    /* margin-bottom: -40px; */
 }
 
-.base{
-	display: flex;
+.header-link {
+    display: flex;
+    width: 90%;
     flex-direction: row;
-    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.else-auth {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.else-auth p {
+    margin: 0;
+}
+
+.else-auth a {
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #c4788b;
+}
+.else-auth a:hover {
+    text-decoration: underline;
+}
+
+.buy-box {
+    width: 100%;
+    display: flex;
     justify-content: center;
 }
 
-.img_box{
-	margin-inline: 30px;
-	width: 330px;
-}
 
-.desc_box{
-	margin-inline: 30px;
-    width: 350px;
+.base {
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .product h1 {
+    margin-top: 1rem;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .blocks {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .product {
+    margin-inline: 10px;
+    margin-bottom: 10px;
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    min-height: 540px;
+    border: 1px solid #373737;
+    justify-content: center;
+}
+  
+  .right-box {
+    margin-bottom: 10px;
+    width: 30%;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    align-items: flex-start;
-    /* justify-content: flex-start; */
-	justify-content: space-between;
-}
-
-.desc_box div{
-	display: inline-flex;
-}
-
-.desc_box b{
-	margin-right: 10px;
-}
-
-
-.buy-box{
-    margin-top: 20px;
-    text-align: center;
+    align-items: center;
+    background-color: white;
+    min-height: 200px;
+    border: 1px solid #373737;
+    border-radius: 10px;
+  }
+  
+  .product-box {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 98%;
+    margin-block: 10px;
+  }
+  
+  .product-box h3, p{
+    margin: 0;
+  }
+  
+  .img-box {
+    margin-inline: 10px;
+    /* width: 150px; */
+    width: 20%;
+  }
+  
+  .image {
+    width: 100%;
+    border-radius: 10px;
+    height: auto;
+    display: block;
+  }
+  
+  .des-box {
+    /* width: 350px; */
+    width: 60%;
+  }
+
+
+
+.sendButton, .else-sendButton {
+    /* height: 50px; */
+    color: white;
+    display: inline-block;
+    margin: 81px;
+    margin-block: 10px;
+    border-radius: 5px;
+    padding: 5px;
+    padding-inline: 30px;
+    /* border: 2px solid #373737; */
+    background-color: #c4788b;
 }
+
+.sendButton:hover, .else-sendButton:hover {
+    cursor: pointer;
+}
+
+footer.bg-pink {
+    background-color: #efdbe0;
+    /* border-top: 1px solid #373737; только верхняя граница */
+    padding: 20px; /* добавим внутренний отступ для лучшего визуального эффекта */
+}
+
+.footer-image {
+    width: 200px;
+    height: auto;
+    display: block;
+}
+
+.navbar-toggler {
+    color: rgb(115 77 77 / 67%);
+    /* border-color: rgba(0,0,0,.1); */
+}
+
+.collapse a:hover {
+    color: rgb(69, 69, 69);
+}
+
+.row a:hover {
+    color: rgb(69, 69, 69);
+}
+
+.catalog{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.category-block{
+    width: 100%;
+    margin-inline: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+}
+
+.else{
+    border: 2px solid #373737;
+}
+
+.else:hover{
+    /* border: 2px solid #373737; */
+    color: white;
+}
+
+
+.desc_box{
+    margin-inline: 30px;
+       width: 350px;
+       display: flex;
+       flex-direction: column;
+       flex-wrap: nowrap;
+       align-items: flex-start;
+       /* justify-content: flex-start; */
+    justify-content: space-between;
+   }
+   
+   .desc_box div{
+    display: inline-flex;
+   }
+   
+   .desc_box b{
+    margin-right: 10px;
+   }
+   
+   
+   .buy-box{
+       margin-top: 20px;
+       text-align: center;
+       display: flex;
+       flex-direction: row;
+       justify-content: center;
+   }
+
+   element.style {
+    text-align: center;
+    width: 80%;
+   }
