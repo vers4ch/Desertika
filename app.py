@@ -462,7 +462,7 @@ def profile():
             grouped_product[item.category] = []
         grouped_product[item.category].append(item)
 
-    return render_template('profile.html', grouped_product = grouped_product)
+    return render_template('profile.html', grouped_product = grouped_product, user = session)
 
 @app.route('/catalog')
 def catalog():

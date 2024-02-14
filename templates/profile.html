@@ -94,7 +94,7 @@
 						<a class="nav-link" href="{{ url_for('basket') }}"><i class="fa fa-shopping-basket" aria-hidden="true"></i> Корзина</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ url_for('profile') }}"><i class="fa fa-user"></i> uSER</a>
+						<a class="nav-link" href="{{ url_for('profile') }}"><i class="fa fa-user"></i> {{user.name}}</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Выйти</a>
@@ -129,15 +129,15 @@
                         <div class="inputs">
                             <div class="input">
                                 <i class="fa fa-user" aria-hidden="true"></i>
-                                <input name="name" placeholder="Имя" type="text" value="uSER">
+                                <input name="name" placeholder="Имя" type="text" value="{{user.name}}">
                             </div>
                             <div class="input">
                                 <i class="fas fa-phone"></i>
-                                <input name="tel" placeholder="Телефон" type="tel" value="tEL">
+                                <input name="tel" placeholder="Телефон" type="tel" value="{{user.phone_number}}">
                             </div>
                             <div class="input">
                                 <i class="fas fa-envelope"></i>
-                                <input name="email" placeholder="Email" type="email" value="eMAIL">
+                                <input name="email" placeholder="Email" type="email" value="{{user.email}}">
                             </div>
                         </div>
                         <input class="zation-button" type="submit" value="Сохранить">
