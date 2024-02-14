@@ -131,11 +131,11 @@ align-items: center;
     width: 200px;
     height: auto;
     display: block;
-    margin-bottom: -10px;
+    /* margin-bottom: -10px; */
 }
 
 .zation {
-    margin-top: -20px;
+    /* margin-top: -20px; */
     height: 100%;
     /* max-height: 446px; */
     width: 400px;
@@ -358,6 +358,11 @@ footer.bg-pink {
 
 @media screen and (max-width: 750px) {
 	.zation {
-		width: 375px;
+		width: 350px;
 	}
+
+    .zation-button{
+        width: 290px;
+        padding: 14px 5px;
+    }
 }

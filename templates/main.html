@@ -76,6 +76,12 @@
 		</div>
 	</nav>
 
+	<div class="main">
+		<a href="{{ url_for('main') }}"> 
+			<img src="static\images\logo.jpg" class="registration-image" oncontextmenu="return false;" onmouseover="this.title='';"> 
+		</a> 
+	</div>
+
 	<div class="search-container">
 		<form action="/search" method="post">
 			<div class="input-group">
@@ -88,6 +94,7 @@
 	</div>
 
 	<div class="main">
+
 		<h1>Новинки</h1>
 		<!-- Карусель новинок -->
 			<div class="envelopexas">
@@ -97,7 +104,7 @@
 					<li class="arson">
 						<div class="img"><img src="static\uploads\{{ item.path_to_photo }}\main.jpg" draggable="false"></div>
 						<div class="card-text">
-							<a href="#"><h5>{{item.name}}</h5>
+							<a href="{{ url_for('product_detail', pid=item.pid) }}"><h5>{{item.name}}</h5>
 							<p class="card-text">Вес: {{ item.weight }}</p>
 							<p class="card-text">Цена: {{ item.price }}{{item.price_text}}</p>
 							</a>

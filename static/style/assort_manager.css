@@ -139,7 +139,7 @@ align-items: center;
     width: 200px;
     height: auto;
     display: block;
-    margin-bottom: -10px;
+    /* margin-bottom: -10px; */
 }
 
 .zation {
@@ -154,7 +154,7 @@ align-items: center;
     transition: max-height 0.2s;
     /* margin-bottom: 20px; */
     margin-inline: 10px;
-    margin-block: 10px;
+    /* margin-block: 10px; */
 }
 
 .spacer {
@@ -477,7 +477,7 @@ footer.bg-pink {
     margin-block: 20px;
 }
 
-img {
+.zation img {
     /* width: 150px; */
     height: 200px;
 }
@@ -520,12 +520,17 @@ img {
     width: 213px;
 }
 
+
+.zat-margin{
+    margin-block: 10px;
+}
+
 @media screen and (max-width: 750px) {
 	.zation {
-		width: 370px;
+		width: 350px;
 	}
 
     .head .title{
-        font-size: 24px;
+        font-size: 21px;
     }
 }

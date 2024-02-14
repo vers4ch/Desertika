@@ -93,7 +93,7 @@
                             <p style="margin-top: 10px;"><i class="fas fa-balance-scale" aria-hidden="true"></i> Вес: {{ product.weight }}</p> 
                         </div> 
                         <div class="product-price"> 
-                            <h4>Цена: {{ product.price }}{{ product.price_text }}</h4> 
+                            <h4>Цена: {{ product.price }}<span style="font-size: 26px;">{{ product.price_text }}</span></h4> 
                             <div class="quantity"> 
                                 <button class="decrease-quantity" data-pid="{{ pid }}" data-price="{{ product.price }}">-</button> 
                                 <span class="count">{{ product.count }}</span> 
@@ -118,12 +118,12 @@
                     </div> -->
                     <div class="total"> 
                         <i class="fa fa-money" aria-hidden="true" style="color: black;"></i>
-                        <b>К оплате: <span id="total-amount"></span>₽</b> 
+                        <b>К оплате: <span id="total-amount"></span><span style="font-size: 18px;">₽</span></b> 
                     </div> 
                 </div>
                 <div class="shop-btn">
                     <!-- <a href="#">Купить</a> -->
-                    <a href="{{ url_for('order')}}" class="btn btn-primary">Купить</a>
+                    <a href="{{ url_for('order')}}" class="btn">Купить</a>
                 </div>
             </div>
             </div>
@@ -133,10 +133,10 @@
                 <div class="order-box"> 
                     <div class="total"> 
                         <i class="fa fa-money" aria-hidden="true" style="color: black;"></i>
-                        <b>К оплате: <span id="total-amount2"></span>₽</b> 
+                        <b>К оплате: <span id="total-amount2"></span><span style="font-size: 18px;">₽</span></b> 
                     </div> 
                     <div class="shop-btn"> 
-                        <a href="{{ url_for('order')}}" class="btn btn-primary">Купить</a> <!-- Используем классы Bootstrap для стилизации кнопки --> 
+                        <a href="{{ url_for('order')}}" class="btn">Купить</a> <!-- Используем классы Bootstrap для стилизации кнопки --> 
                     </div> 
                 </div> 
             </div> 

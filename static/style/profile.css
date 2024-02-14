@@ -26,7 +26,8 @@ align-items: center;
 }
     
 .registration-image {
-    width: 200px;
-    height: auto;
-    display: block;
-  }
+  width: 200px;
+  height: auto;
+  display: block;
+  /* margin-bottom: -10px; */
+}

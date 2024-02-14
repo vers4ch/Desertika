@@ -136,7 +136,7 @@ align-items: center;
 }
 
 .zation {
-    margin-top: -20px;
+    /* margin-top: -20px; */
     height: 100%;
     /* max-height: 446px; */
     width: 396px;
@@ -339,7 +339,7 @@ textarea[name="coment"] {
     width: 200px;
     height: auto;
     display: block;
-    margin-bottom: -10px;
+    /* margin-bottom: -10px; */
 }
 
 .header-link {

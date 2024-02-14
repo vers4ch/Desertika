@@ -109,6 +109,10 @@ a:hover {
     justify-content: center;
 }
 
+h1{
+    margin-bottom: 20px;
+}
+
 .mb-3 {
     width: 310px;
     height: 450px;
@@ -163,7 +167,7 @@ a:hover {
     width: 200px;
     height: auto;
     display: block;
-    margin-bottom: -10px;
+    /* margin-bottom: -10px; */
 }
 
 .header-link {
@@ -207,7 +211,7 @@ a:hover {
     border-radius: 5px;
     padding: 5px;
     padding-inline: 30px;
-    /* border: 2px solid #373737; */
+    border: 1px solid #373737;
     background-color: #c4788b;
 }
 
@@ -256,10 +260,31 @@ footer.bg-pink {
 }
 
 .else{
-    border: 2px solid #373737;
+    border: 1px solid #373737;
 }
 
 .else:hover{
     /* border: 2px solid #373737; */
     color: white;
+}
+
+
+.form-control{
+    border: 1px solid #373737;
+}
+
+.input-group-append button{
+    color: #373737;
+    border-color: #373737;
+}
+
+.input-group-append button:hover{
+    background-color: #c4788b;
+}
+
+
+@media screen and (max-width: 750px) {
+	.search-container{
+        max-width: 365px;
+    }
 }
