@@ -51,12 +51,20 @@ body {
 }
 
 .search-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
     margin-top: 20px; /* отступ сверху */
-    margin-bottom: 20px; /* отступ снизу */
-    margin-left: auto; /* отступ слева */
-    margin-right: auto; /* отступ справа */
-    max-width: 450px; /* максимальная ширина контейнера */
+    margin-bottom: 15px; /* отступ снизу */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    /* max-width: 450px; */
 }
+
+.searcher{
+    width: 500px;
+}
+
 
 .input-group {
     margin-bottom: 10px; /* отступ между элементами внутри группы */
@@ -284,7 +292,7 @@ footer.bg-pink {
 
 
 @media screen and (max-width: 750px) {
-	.search-container{
-        max-width: 365px;
+	.searcher{
+        width: 312px;
     }
 }

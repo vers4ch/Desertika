@@ -83,14 +83,16 @@
 	</div>
 
 	<div class="search-container">
-		<form action="/search" method="post">
-			<div class="input-group">
-				<input type="text" class="form-control" placeholder="Поиск..." name="search_query">
-				<div class="input-group-append">
-					<button class="btn btn-outline-secondary" type="submit"><i class="fa fa-search"></i></button>
+		<div class="searcher">
+			<form action="/search" method="post">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Поиск..." name="search_query">
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary" type="submit"><i class="fa fa-search"></i></button>
+					</div>
 				</div>
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
 
 	<div class="main">
@@ -106,7 +108,7 @@
 						<div class="card-text">
 							<a href="{{ url_for('product_detail', pid=item.pid) }}"><h5>{{item.name}}</h5>
 							<p class="card-text">Вес: {{ item.weight }}</p>
-							<p class="card-text">Цена: {{ item.price }}{{item.price_text}}</p>
+							<p class="card-text">Цена: {{ item.price }}{{ item.price_text }}</p>
 							</a>
 							{% if user.uid %}
 								<input type="hidden" class="hiddenValue" value="{{ item.pid }}">

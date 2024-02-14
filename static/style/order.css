@@ -134,7 +134,7 @@ align-items: center;
 }
 
 .zation {
-    margin-top: -20px;
+    /* margin-top: -20px; */
     height: 100%;
     /* max-height: 446px; */
     width: 396px;
@@ -347,4 +347,11 @@ footer.bg-pink {
 
 .row a:hover {
     color: rgb(69, 69, 69);
+}
+
+
+@media screen and (max-width: 750px) {
+	.zation {
+		width: 350px;
+	}
 }
