@@ -164,7 +164,7 @@ align-items: center;
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  /* background-color: white; */
+  background-color: #efdbe0;
   min-height: 200px;
   /* border: 1px solid #373737; */
   border-radius: 10px;
@@ -332,40 +332,6 @@ footer.bg-pink {
 }
 
 
-
-@media (max-width: 1050px) {
-  .product{
-    width: 60%;
-  }
-
-  .right-box {
-    width: 35%;
-  }
-}
-
-
-@media (max-width: 800px) {
-  .blocks {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .product{
-    width: 95%;
-    margin-inline: 0px;
-  }
-
-  .right-box {
-    /* width: 95%;
-    margin-inline: 0px; */
-    display: none;
-  }
-
-  .bottom-bar{
-    display: flex;
-  }
-}
-
 .zation h4{
 	margin: 0;
 	color: #ffffff;
@@ -386,7 +352,7 @@ footer.bg-pink {
 
 .zation {
   /* margin-top: -20px; */
-  height: 100%;
+  /* height: 100%; */
   /* max-height: 446px; */
   width: 100%;
   background: #cda1ac;
@@ -565,13 +531,13 @@ footer.bg-pink {
 
 textarea[name="coment"] {
 	border: 2px solid #373737;
-	width: 368px;
+	width: 100%;
 	height: 100px;
 	resize: none;
 	font-size: 17px;
-    background: #ffffff;
-    border-radius: 8px;
-    color: #373737;
+  background: #ffffff;
+  border-radius: 8px;
+  color: #373737;
 }
 
 
@@ -586,3 +552,46 @@ b, strong {
   font-size: 20px;
   color: white;
 }
+
+
+
+
+@media (max-width: 1050px) {
+  .product{
+    width: 60%;
+  }
+
+  .right-box {
+    width: 35%;
+  }
+}
+
+
+@media (max-width: 800px) {
+  .blocks {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .product{
+    width: 95%;
+    margin-inline: 0px;
+  }
+
+  .right-box {
+    /* width: 95%;
+    margin-inline: 0px; */
+    display: none;
+  }
+
+  .bottom-bar{
+    display: flex;
+  }
+}
+
+@media (max-width: 840px) {
+  .head .title{
+    font-size: 24px;
+  }
+}
+
