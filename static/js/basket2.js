@@ -5,7 +5,7 @@ $(document).ready(function() {
 
     
 
-    // Обработчик события для увеличения количества товара
+    // Обработчик события для увеличения количества товара в сессии
     $('.increase-quantity').on('click', function(e) {
         e.preventDefault();
         var pid = $(this).data('pid');
@@ -19,7 +19,7 @@ $(document).ready(function() {
         updateTotalAmount();
     });
 
-    // Обработчик события для уменьшения количества товара
+    // Обработчик события для уменьшения количества товара в сессии
     $('.decrease-quantity').on('click', function(e) {
         e.preventDefault();
         var pid = $(this).data('pid');
@@ -34,7 +34,7 @@ $(document).ready(function() {
         }
     });
 
-    // Функция для обновления общей суммы
+    // Функция для обновления общей суммы в сессии
     function updateTotalAmount() {
         totalAmount = 0;
         $('.product-box').each(function() {

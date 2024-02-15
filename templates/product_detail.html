@@ -86,53 +86,54 @@
 
 					<div style="text-align: left; width: 80%;"><h1><i class="fas fa-birthday-cake" style="margin-right: 10px;"aria-hidden="true"></i>{{product.name}}</h1></div> 
 					<hr color="#373737" size="1" width="90%"> 
-
-					<div class="img_box">
-						<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel"> 
-							<ol class="carousel-indicators"> 
-								{% for i in range(image_paths|length) %} 
-									<li data-target="#carouselExampleIndicators" data-slide-to="{{ i }}" {% if i == 0 %}class="active"{% endif %}></li> 
-								{% endfor %} 
-							</ol> 
-							<div class="carousel-inner"> 
-								{% for path in image_paths %} 
-									<div class="carousel-item {% if loop.first %}active{% endif %}"> 
-										<img class="d-block w-100" src="../{{ path }}" alt="Slide {{ loop.index }}"> 
-									</div> 
-								{% endfor %} 
-							</div> 
-							<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev"> 
-								<span class="carousel-control-prev-icon" aria-hidden="true"></span> 
-								<span class="sr-only">Previous</span> 
-							</a> 
-							<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next"> 
-								<span class="carousel-control-next-icon" aria-hidden="true"></span> 
-								<span class="sr-only">Next</span> 
-							</a> 
-						</div>
-					</div>
 					
-					<div class="desc_box">
-						<div style="display: block;">
-							<h4>Описание:</h4>
-							<p style="text-align: justify;">{{product.description}}</p>
-						</div>
-						<br>
-						<div style="display: grid; justify-items: start;">
-							<div>
-								<!-- <b>Вес:</b>
-								<p>{{product.weight}}</p> -->
-								<h6><b>Вес:</b>{{product.weight}}</h6> 
+					<div class="info-box">
+						<div class="img_box">
+							<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel"> 
+								<ol class="carousel-indicators"> 
+									{% for i in range(image_paths|length) %} 
+										<li data-target="#carouselExampleIndicators" data-slide-to="{{ i }}" {% if i == 0 %}class="active"{% endif %}></li> 
+									{% endfor %} 
+								</ol> 
+								<div class="carousel-inner"> 
+									{% for path in image_paths %} 
+										<div class="carousel-item {% if loop.first %}active{% endif %}"> 
+											<img class="d-block w-100" src="../{{ path }}" alt="Slide {{ loop.index }}"> 
+										</div> 
+									{% endfor %} 
+								</div> 
+								<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev"> 
+									<span class="carousel-control-prev-icon" aria-hidden="true"></span> 
+									<span class="sr-only">Previous</span> 
+								</a> 
+								<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next"> 
+									<span class="carousel-control-next-icon" aria-hidden="true"></span> 
+									<span class="sr-only">Next</span> 
+								</a> 
 							</div>
-			
-							<div>
-								<!-- <b>Цена:</b>
-								<p>{{product.price}}</p><p>{{product.price_text}}</p> -->
-								<h6><b>Цена:</b>{{ product.price }}{{ product.price_text }}</h6> 
+						</div>
+					
+						<div class="desc_box">
+							<div style="display: block;">
+								<h4>Описание:</h4>
+								<p style="text-align: justify;">{{product.description}}</p>
+							</div>
+							<br>
+							<div style="display: grid; justify-items: start;">
+								<div>
+									<!-- <b>Вес:</b>
+									<p>{{product.weight}}</p> -->
+									<h6><b>Вес:</b>{{product.weight}}</h6> 
+								</div>
+				
+								<div>
+									<!-- <b>Цена:</b>
+									<p>{{product.price}}</p><p>{{product.price_text}}</p> -->
+									<h6><b>Цена:</b>{{ product.price }}{{ product.price_text }}</h6> 
+								</div>
 							</div>
 						</div>
 					</div>
-
 					<div class="buy-box">
 						{% if user.uid %}
 							<input type="hidden" class="hiddenValue" value="{{ product.pid }}">
@@ -141,7 +142,7 @@
 						{% else %}
 							<div class="else-auth">
 								<p>Чтобы добавлять товар в корзину, требуется авторизация</p>
-								<a href="{{ url_for('login') }}">Авторизироваться</a>
+								<a class="else-sendButton" href="{{ url_for('login') }}">Авторизироваться</a>
 							</div>
 						{% endif %}
 					</div>
@@ -191,5 +192,26 @@
 			</div>
 		</div>
 	</footer>
+
+	<script>
+		$(document).ready(function() {
+			$('.sendButton').click(function() {
+				var valueToSend = $(this).prev('.hiddenValue').val();
+				console.log(valueToSend);
+				$.ajax({
+					type: 'POST',
+					url: '/add_to_basket',
+					contentType: 'application/json',
+					data: JSON.stringify({value: valueToSend}),
+					success: function(response) {
+						alert('Товар добавлен в корзину');
+					},
+					error: function(error) {
+						console.error('Произошла ошибка при отправке значения на сервер:', error);
+					}
+				});
+			});
+		});
+	</script>
 </body>
 </html>

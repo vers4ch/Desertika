@@ -280,6 +280,18 @@ def order_manager():
             abort(403)
     else:
         return redirect(url_for('login'))
+    
+
+@app.route('/update_status', methods=['GET', 'POST'])
+def update_status():
+    data = request.json
+    new_status = data['status']
+    oid = data['oid']
+    # print(new_status, oid)
+    order = Order.query.filter_by(oid=oid).first()
+    order.status = new_status
+    db.session.commit()
+    return jsonify({'message': 'Статус успешно обновлен'})
 
 
 
@@ -464,6 +476,27 @@ def profile():
 
     return render_template('profile.html', grouped_product = grouped_product, user = session)
 
+
+@app.route('/profile_save', methods=['GET', 'POST'])
+def profile_save():
+    uid = request.form['uid']
+    name = request.form['name']
+    tel = request.form['tel']
+    email = request.form['email']
+
+    user = Users.query.filter_by(uid=uid).first()
+
+    session['name'] = name
+    session['phone_number'] = tel
+    session['email'] = email
+
+    user.name = name
+    user.phone_number = tel
+    user.email = email
+    db.session.commit()
+
+    return redirect(url_for('profile'))
+
 @app.route('/catalog')
 def catalog():
     catalog = db.session.query(Products).all()
@@ -515,7 +548,7 @@ def order():
         current_datetime = datetime.now()
         current_datetime_string = current_datetime.strftime("%d.%m.%Y %H:%M:%S")
 
-        new_order = Order(uid=session['uid'], name = name, tel = tel, email = session['email'], date = date, coment = coment, order = user.basket, order_date = current_datetime_string, status = "Awaits", sum = session['sum'])
+        new_order = Order(uid=session['uid'], name = name, tel = tel, email = session['email'], date = date, coment = coment, order = user.basket, order_date = current_datetime_string, status = "Ожидание", sum = session['sum'])
         db.session.add(new_order)
         session['basket'] = []
         user.basket = '[]'

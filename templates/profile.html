@@ -124,8 +124,9 @@
                 <!-- Контейнер для содержимого вкладок -->
                 <div class="tabs">
                     <!-- Форма для профиля -->
-                    <form action="/profile" method="post" class="profile-form" id="profileForm">
+                    <form action="/profile_save" method="post" class="profile-form" id="profileForm">
                         <!-- Контейнер для полей ввода и чекбокса -->
+						<input type="hidden" name="uid" value="{{ user.uid }}"> 
                         <div class="inputs">
                             <div class="input">
                                 <i class="fa fa-user" aria-hidden="true"></i>

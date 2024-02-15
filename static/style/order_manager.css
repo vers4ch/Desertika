@@ -139,6 +139,7 @@ footer.bg-pink {
 	margin-inline: 10px;
 	border-radius: 10px;
 	border: 1px solid #373737;
+    margin-block: 10px;
 }
 
 .info-line{

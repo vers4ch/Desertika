@@ -72,16 +72,29 @@
 				{% endif %}
 
 				{% for order in orders %} 
-					<a href="#"><div class="order-box">
-						{% for product in order.products %}
-						<div class="info-line"><p>Номер: {{order.oid}}</p></div>
-						<div class="info-line"><p>Статус: {{order.status}}</p></div>
-						<div class="info-line"><p>Заказчик: {{order.name}}</p></div>
-						<div class="info-line"><p>Тел.: {{order.tel}}</p></div>
-						<div class="info-line"><p>{{order.order_date}}</p></div>
-						<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
-						{% endfor %}
-					</div></a>
+					<a href="#">
+						<div class="order-box">
+							{% for product in order.products %}
+								<div class="info-line"><p>Номер: {{order.oid}}</p></div>
+								<div class="info-line">
+									<p>Статус: </p>
+									<form id="statusForm_{{order.oid}}">
+										<input type="hidden" id="oid_{{order.oid}}" value="{{ order.oid }}"> 
+										<select id="statusSelect_{{order.oid}}" onchange="updateStatus('{{order.oid}}')">
+											<option value="{{order.status}}">{{order.status}}</option>
+											<option value="Оплачено">Оплачено</option>
+											<option value="Выполнено">Выполнено</option>
+											<option value="Выполнено">Отменено</option>
+										</select>
+									</form>
+								</div>
+								<div class="info-line"><p>Заказчик: {{order.name}}</p></div>
+								<div class="info-line"><p>Тел.: {{order.tel}}</p></div>
+								<div class="info-line"><p>{{order.order_date}}</p></div>
+								<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
+							{% endfor %}
+						</div>
+					</a>
 				{% endfor %}
 			</div>
 		</div>
@@ -129,5 +142,31 @@
 			</div>
 		</div>
 	</footer>
+
+
+	<script>
+		function updateStatus(orderId) {
+			var selectedStatus = document.getElementById("statusSelect_" + orderId).value;
+			var orderIdValue = document.getElementById("oid_" + orderId).value;
+			// Отправить информацию на сервер Flask
+			fetch('/update_status', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({status: selectedStatus, oid: orderIdValue}),
+			})
+			.then(response => {
+				if (response.ok) {
+					console.log('Статус успешно обновлен');
+				} else {
+					console.error('Ошибка обновления статуса');
+				}
+			})
+			.catch(error => {
+				console.error('Произошла ошибка:', error);
+			});
+		}
+	</script>
 </body>
 </html>

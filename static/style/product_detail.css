@@ -89,7 +89,7 @@ a {
 
 a:hover {
     text-decoration: none;
-    color: black;
+    /* color: black; */
 }
 
 
@@ -109,16 +109,6 @@ a:hover {
     border-radius: 10px;
 }
 
-.carousel-item img {
-    height: 250px;
-    object-fit: cover;
-    margin-top: 17px;
-    margin-bottom: 17px;
-}
-
-.carousel{
-    width: 200px;
-}
 .card-box{
     height: 450px;
     display: flex;
@@ -138,11 +128,6 @@ a:hover {
 }
 .text-card-box button{
     margin-inline: 81px;
-}
-.else-sendButton{
-    text-align: center;
-    width: 100%;
-    margin-inline: 0;
 }
 
 .main {
@@ -181,14 +166,6 @@ a:hover {
     margin: 0;
 }
 
-.else-auth a {
-    padding: 5px;
-    border-radius: 5px;
-    background-color: #c4788b;
-}
-.else-auth a:hover {
-    text-decoration: underline;
-}
 
 .buy-box {
     width: 100%;
@@ -225,7 +202,7 @@ a:hover {
   .product {
     margin-inline: 10px;
     margin-bottom: 10px;
-    width: 50%;
+    width: 800px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -235,7 +212,43 @@ a:hover {
     min-height: 540px;
     border: 1px solid #373737;
     justify-content: center;
+    align-content: flex-start;
 }
+
+.info-box{
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.carousel{
+    width: 100%;
+}
+
+.carousel-item img {
+    /* height: 250px; */
+    object-fit: cover;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.img_box {
+    margin-inline: 10px;
+    /* width: 150px; */
+    width: 35%;
+}
+  
+.image {
+    width: 100%;
+    border-radius: 10px;
+    height: auto;
+    display: block;
+}
+
+
+
   
   .right-box {
     margin-bottom: 10px;
@@ -263,18 +276,6 @@ a:hover {
     margin: 0;
   }
   
-  .img-box {
-    margin-inline: 10px;
-    /* width: 150px; */
-    width: 20%;
-  }
-  
-  .image {
-    width: 100%;
-    border-radius: 10px;
-    height: auto;
-    display: block;
-  }
   
   .des-box {
     /* width: 350px; */
@@ -287,18 +288,20 @@ a:hover {
     /* height: 50px; */
     color: white;
     display: inline-block;
-    margin: 81px;
+    /* margin: 81px; */
     margin-block: 10px;
     border-radius: 5px;
     padding: 5px;
     padding-inline: 30px;
-    /* border: 2px solid #373737; */
+    border: 1.5px solid #373737;
     background-color: #c4788b;
 }
 
 .sendButton:hover, .else-sendButton:hover {
     cursor: pointer;
+    color: white;
 }
+
 
 footer.bg-pink {
     background-color: #efdbe0;
@@ -351,34 +354,78 @@ footer.bg-pink {
 
 
 .desc_box{
-    margin-inline: 30px;
-       width: 350px;
-       display: flex;
-       flex-direction: column;
-       flex-wrap: nowrap;
-       align-items: flex-start;
-       /* justify-content: flex-start; */
+    /* margin-right: 30px; */
+    /* width: 350px; */
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
     justify-content: space-between;
-   }
+}
    
-   .desc_box div{
+.desc_box div{
     display: inline-flex;
-   }
-   
-   .desc_box b{
-    margin-right: 10px;
-   }
-   
-   
-   .buy-box{
-       margin-top: 20px;
-       text-align: center;
-       display: flex;
-       flex-direction: row;
-       justify-content: center;
-   }
+}
 
-   element.style {
+.desc_box b{
+    margin-right: 10px;
+}
+
+
+.buy-box{
+    margin-top: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+element.style {
     text-align: center;
     width: 80%;
-   }
+}
+
+
+@media screen and (max-width: 820px) {
+    .product{
+        width: 700px;
+    }
+    h1 {
+        font-size: 5vw; /* Пример единицы измерения, зависящей от ширины окна просмотра */
+        white-space: nowrap; /* Это предотвращает перенос текста на новую строку */
+        overflow: hidden; /* Это предотвращает обрезание текста за пределами контейнера */
+        text-overflow: ellipsis; /* Это добавляет многоточие в конец текста, если он не помещается в контейнер */
+    }
+}
+@media screen and (max-width: 720px) {
+    .product{
+        width: 600px;
+    }
+}
+@media screen and (max-width: 620px) {
+    h1 {
+        font-size: 7vw;
+    }
+    .product{
+        width: 95%;
+    }
+    .info-box {
+        width: 95%;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
+    hr{
+        width: 95%;
+    }
+    .img_box{
+        width: 60%;
+        margin-inline: 0;
+    }
+    .desc_box{
+        width: 100%;
+    }
+}
