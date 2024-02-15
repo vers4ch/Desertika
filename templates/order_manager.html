@@ -72,9 +72,8 @@
 				{% endif %}
 
 				{% for order in orders %} 
-					<a href="#">
+					<!-- <a href="#" onclick="openModal('{{order.oid}}')"> -->
 						<div class="order-box">
-							{% for product in order.products %}
 								<div class="info-line"><p>Номер: {{order.oid}}</p></div>
 								<div class="info-line">
 									<p>Статус: </p>
@@ -88,13 +87,47 @@
 										</select>
 									</form>
 								</div>
-								<div class="info-line"><p>Заказчик: {{order.name}}</p></div>
-								<div class="info-line"><p>Тел.: {{order.tel}}</p></div>
-								<div class="info-line"><p>{{order.order_date}}</p></div>
-								<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
-							{% endfor %}
+								<a href="#" onclick="openModal('{{order.oid}}')">
+									<div class="info-line"><p>Заказчик: {{order.name}}</p></div>
+									<div class="info-line"><p>Тел.: {{order.tel}}</p></div>
+									<div class="info-line"><p>{{order.order_date}}</p></div>
+									<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
+								</a>
+								<div id="myModal_{{ order.oid }}" class="modal">
+									<div class="modal-content">
+										<!-- <div class="close-a"> -->
+											<a class="close2" onclick="closeModal('{{order.oid}}')">&times;</a>
+										<!-- </div> -->
+										<h3 class="head-h3">Детали заказа</h3>
+										<hr color="#373737" size="1" width="90%"> 
+										<table id="data-table">
+											<thead>
+												<tr>
+													<th>id</th>
+													<th>Фото</th>
+													<th>Название</th>
+													<th>Вес</th>
+													<th>Кол-во</th>
+													<th>Цена</th>
+												</tr>
+											</thead>
+											<tbody>
+											{% for product in order.products %}
+												<tr>
+													<td contenteditable="false">{{ product.pid }}</td>
+													<td contenteditable="false"><img class="table-img" src="static/uploads/{{ product.path_to_photo }}/main.jpg"></td>
+													<td contenteditable="false">{{ product.name }}</td>
+													<td contenteditable="false">{{ product.weight }}</td>
+													<td contenteditable="false">{{ product.count }}</td>
+													<td contenteditable="false">{{ product.price }}{{ product.price_text }}</td>
+												</tr>
+											{% endfor %}
+											</tbody>
+										</table>
+									</div>
+								</div>
 						</div>
-					</a>
+					<!-- </a> -->
 				{% endfor %}
 			</div>
 		</div>
@@ -168,5 +201,6 @@
 			});
 		}
 	</script>
+	<script src="static/js/modal.js"></script>
 </body>
 </html>
