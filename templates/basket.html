@@ -70,7 +70,7 @@
         <div class="base"> 
             <div class="blocks">
             <div class="product"> 
-                <div style="text-align: left; width: 80%;"><h1><i class="fa fa-shopping-basket" aria-hidden="true"></i> Корзина</h1></div> 
+                <div style="text-align: left; width: 80%; height: 55px;"><h1><i class="fa fa-shopping-basket" aria-hidden="true"></i> Корзина</h1></div> 
 
                 {% if user.basket == [] %}
                     <hr color="#373737" size="1" width="90%"> 
@@ -111,32 +111,78 @@
                 <br>
             </div> 
 
-            <div class="right-box">
+            <!-- <div class="right-box">
                 <div class="order-box">
-                    <!-- <div class="total">
-                        <b>К оплате: <span id="total-amount"></span></b>
-                    </div> -->
                     <div class="total"> 
                         <i class="fa fa-money" aria-hidden="true" style="color: black;"></i>
                         <b>К оплате: <span id="total-amount"></span><span style="font-size: 18px;">₽</span></b> 
                     </div> 
                 </div>
                 <div class="shop-btn">
-                    <!-- <a href="#">Купить</a> -->
                     <a href="{{ url_for('order')}}" class="btn">Купить</a>
                 </div>
-            </div>
+            </div> -->
+
+			<div class="right-box">
+				<div class="zation">
+					<!-- Заголовок Оформление заказа -->
+					<div class="head">
+						<!-- Пустой блок для визуального выравнивания -->
+						<div></div>
+						<span class="title">Оформление заказа</span>
+						<!-- Пустой блок для визуального выравнивания -->
+						<div></div>
+					</div>
+					<!-- Контейнер для содержимого вкладок -->
+					<div class="tabs">
+						<!-- Форма для входа -->
+						<!-- <form class="forma" method="post" action="{{ url_for('reset_password') }}"> -->
+						<form action="/order" method="post" class="login-form" id="registrationForm" >
+							<!-- Контейнер для полей ввода и чекбокса -->
+							<div class="inputs">
+								<div class="input">
+									<i class="fa fa-user" aria-hidden="true"></i>
+									<input name="name" placeholder="Имя" type="text" value="{{user.name}}">
+								</div>
+								<div class="input">
+									<i class="fas fa-phone"></i>
+									<input name="tel" placeholder="Телефон" type="tel" value="{{user.phone_number}}">
+								</div>
+								<div class="input1">
+									<span>Укажите дату доставки</span>
+								</div>
+								<div class="input">
+									<i class="fa fa-calendar" aria-hidden="true"></i>
+									<input name="date" placeholder="Дата к которой приготовить" type="date">
+								</div>
+								<div class="input">
+									<textarea name="coment" placeholder="Комментарий к заказу" type="text"></textarea>
+								</div>
+							</div>
+							<div class="order-box right">
+								<div class="total"> 
+									<!-- <i class="fa fa-money money" aria-hidden="true"></i> -->
+									<b>К оформлению: <span id="total-amount"></span><span style="font-size: 21px;">₽</span></b> 
+								</div> 
+							</div>
+							<!-- Кнопка для отправки письма -->
+							<input class="zation-button vb" type="submit" value="Оформить">
+						</form>
+					</div> <!-- Закрытие контейнера для содержимого вкладок -->
+				</div>
+			</div>
+
             </div>
 
 
             <div class="bottom-bar fixed-bottom p-3" style="z-index: 9999;"> <!-- Добавляем классы Bootstrap и устанавливаем z-index --> 
                 <div class="order-box"> 
                     <div class="total"> 
-                        <i class="fa fa-money" aria-hidden="true" style="color: black;"></i>
-                        <b>К оплате: <span id="total-amount2"></span><span style="font-size: 18px;">₽</span></b> 
+                        <!-- <i class="fa fa-money" aria-hidden="true" style="color: black;"></i> -->
+                        <b style="color: black; font-size: 18px;">К оформлению: <span id="total-amount2"></span><span style="font-size: 18px;">₽</span></b> 
                     </div> 
                     <div class="shop-btn"> 
-                        <a href="{{ url_for('order')}}" class="btn">Купить</a> <!-- Используем классы Bootstrap для стилизации кнопки --> 
+                        <a href="{{ url_for('order')}}" class="btn">Перейти</a> <!-- Используем классы Bootstrap для стилизации кнопки --> 
                     </div> 
                 </div> 
             </div> 
