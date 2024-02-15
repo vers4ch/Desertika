@@ -5,22 +5,57 @@ from sqlalchemy import or_
 from flask_mail import Mail, Message
 from PIL import Image
 from datetime import datetime
+from functools import wraps
+
+
+
+# Декоратор для проверки авторизации пользователя
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'uid' not in session:
+            # Если пользователь не авторизован, перенаправляем на страницу входа
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+
+# Декоратор для проверки авторизации пользователя
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session['is_admin'] == False:
+            # Если пользователь не авторизован, перенаправляем на страницу входа
+            return redirect(url_for('main'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'c@t'
-
 UPLOAD_FOLDER = 'static/uploads/'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'heic', 'pdf'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 
 db_pass = '0705'
 db_adress = '77.34.177.157'
 
+
+
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://postgres:{db_pass}@{db_adress}:5432/desertika'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+
 
 # Настройте Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.yandex.ru'
@@ -31,6 +66,7 @@ app.config['MAIL_USERNAME'] = 'degtyarev.dv@dvfu.ru'
 app.config['MAIL_PASSWORD'] = 'tzcjbcrqkimcmsod'
 app.config['MAIL_DEFAULT_SENDER'] = 'degtyarev.dv@dvfu.ru'
 mail = Mail(app)
+
 
 
 class Users(db.Model):
@@ -45,7 +81,8 @@ class Users(db.Model):
 
     def __repr__(self):
         return f"Users('{self.uid}', '{self.name}', '{self.phone_number}', '{self.email}', '{self.password}', '{self.is_admin}', '{self.basket}')"
-    
+
+
 
 class Products(db.Model):
     __tablename__ = 'products'
@@ -61,6 +98,7 @@ class Products(db.Model):
 
     def __repr__(self):
         return f"Products('{self.pid}', '{self.name}', '{self.description}', '{self.weight}', '{self.price}', '{self.path_to_photo}', '{self.new}', '{self.category}')"
+
 
 
 class Order(db.Model): 
@@ -80,9 +118,13 @@ class Order(db.Model):
     def __repr__(self):
         return f"Order('{self.oid}', '{self.uid}', '{self.name}', '{self.tel}', '{self.email}', '{self.date}', '{self.coment}', '{self.order}', '{self.order_date}', '{self.status}')"
 
+
+
 # Создание таблицы в базе данных
 with app.app_context():
     db.create_all()
+
+
 
 #Страница входа
 @app.route('/login', methods=['GET', 'POST'])
@@ -115,6 +157,8 @@ def login():
             return redirect(url_for('login'))
     return render_template('login.html')
 
+
+
 # Страница регистрации
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -123,58 +167,57 @@ def register():
         email = request.form['email']
         tel = request.form['tel']
         password = request.form['password']
-    
         new_user = Users(name=name, phone_number=tel, email=email, password=password, is_admin=False, basket = '[]')
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
         
 
+
 #Главная страница
 @app.route('/', methods=['GET', 'POST'])
 def main():
     all_products = db.session.query(Products).all()
-
     # собираем только new
     new_product = []
     for prod in all_products:
         if prod.new:
             new_product.append(prod)
     # print(new_product)
-            
-
     # Группируем данные по category
     grouped_product = {}
     for product in all_products:
         if product.category not in grouped_product:
             grouped_product[product.category] = []
         grouped_product[product.category].append(product)
-
     # Создаем словарь для хранения путей к изображениям для каждого товара
     product_images = {}
     for product in all_products:
         image_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], product.path_to_photo)
-        image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
+        try:
+            image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
+        except FileNotFoundError:
+            image_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], 'default')
+            image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
+        # image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
         timestamp = int(time.time())
         product_images[product.path_to_photo] = [f"{image}?t={timestamp}" for image in image_files]
-    
     return render_template('main.html', new_products=new_product, grouped_product = grouped_product, product_images=product_images, user = session)
 
 
+
 @app.route('/add_to_basket', methods=['POST'])
+@login_required
 def add_to_basket():
     user = Users.query.filter_by(uid=session['uid']).first()
     data = request.get_json()
     pid = data.get('value')
-    
     db_basket = user.basket
-    
     if db_basket is None: 
         db_basket = '[]'
         user_basket = json.loads(db_basket)
     else:
         user_basket = json.loads(db_basket)
-        
     # Проверяем, есть ли pid в корзине
     for item in user_basket:
         if item['pid'] == pid:
@@ -182,7 +225,6 @@ def add_to_basket():
             break
     else:
         user_basket.append({'pid': pid, 'count': '1'})  # Если нет, добавляем новый элемент
-        
     session['basket'] = user_basket
     user_basket_json = json.dumps(user_basket)
     user.basket = user_basket_json
@@ -191,10 +233,10 @@ def add_to_basket():
     return jsonify({'success': True})
 
 
+
 @app.route('/product_detail/<pid>')
 def product_detail(pid):
     product = Products.query.filter_by(pid=pid).first()
-    
     products = db.session.query(Products).all()
     # Группируем данные по category
     grouped_product = {}
@@ -202,14 +244,21 @@ def product_detail(pid):
         if item.category not in grouped_product:
             grouped_product[item.category] = []
         grouped_product[item.category].append(item)
-    
     image_folder = f'static/uploads/{product.path_to_photo}'  # Путь к папке с изображениями 
-    image_files = [f for f in os.listdir(image_folder) if os.path.isfile(os.path.join(image_folder, f))] 
-    image_paths = [os.path.join('static', 'uploads', f'{product.path_to_photo}', f) for f in image_files] 
+    try:
+        image_files = [f for f in os.listdir(image_folder) if os.path.isfile(os.path.join(image_folder, f))] 
+        image_paths = [os.path.join('static', 'uploads', f'{product.path_to_photo}', f) for f in image_files]
+    except:
+         image_folder = f'static/uploads/default'
+         image_files = [f for f in os.listdir(image_folder) if os.path.isfile(os.path.join(image_folder, f))] 
+         image_paths = [os.path.join('static', 'uploads', f'default', f) for f in image_files]
     return render_template('product_detail.html', product = product, image_paths=image_paths, user = session, grouped_product = grouped_product)
 
 
+
 @app.route('/administrator')
+@login_required
+@admin_required
 def administrator(): 
     if 'uid' in session:
         if session and session['is_admin'] == True:
@@ -227,11 +276,16 @@ def administrator():
         return redirect(url_for('login'))
     
 
+
 def get_product_info(pid): 
     product = Products.query.filter_by(pid=pid).first() 
     return product.name, product.description, product.weight, product.price, product.path_to_photo, product.price_text, product.new, product.category
 
+
+
 @app.route('/order_manager')
+@login_required
+@admin_required
 def order_manager(): 
     if 'uid' in session:
         if session and session['is_admin'] == True:
@@ -242,10 +296,8 @@ def order_manager():
                 if item.category not in grouped_product:
                     grouped_product[item.category] = []
                 grouped_product[item.category].append(item)
-
             orders = db.session.query(Order).all()
             # print(orders)
-
             order_details = [] 
             for order in orders: 
                 products_info = [] 
@@ -273,7 +325,6 @@ def order_manager():
                                       'status': order.status,
                                       'sum': order.sum, 
                                       'products': products_info})
-
             # print(order_details)gftfdcg
             return render_template('order_manager.html', user = session, grouped_product = grouped_product, orders = order_details)
         else:
@@ -282,12 +333,15 @@ def order_manager():
         return redirect(url_for('login'))
     
 
+
+#!!!!!!!!!!!!!!!!!!!!!DANGER!!!!!!!!!!!!!!!!!!!!!!!!!
 @app.route('/update_status', methods=['GET', 'POST'])
+@login_required
+@admin_required #DANGER
 def update_status():
     data = request.json
     new_status = data['status']
     oid = data['oid']
-    # print(new_status, oid)
     order = Order.query.filter_by(oid=oid).first()
     order.status = new_status
     db.session.commit()
@@ -295,15 +349,19 @@ def update_status():
 
 
 
-
 @app.route('/remove_product', methods=['GET', 'POST'])
+@login_required
+@admin_required
 def remove_product():
     pid = request.form['item_id']
     print(pid)
     return redirect(url_for('assort_manager'))
 
 
+
 @app.route('/change_product', methods=['GET', 'POST'])
+@login_required
+@admin_required
 def change_product():
     pid = request.form['pid']
     name = request.form['name']
@@ -317,7 +375,6 @@ def change_product():
         is_new = True
     else:
         is_new = False
-
     product = Products.query.filter_by(pid=pid).first()
     product.pid = pid
     product.name = name
@@ -331,8 +388,11 @@ def change_product():
     return redirect(url_for('assort_manager'))
 
 
+
 def get_file_extension(filename):
     return os.path.splitext(filename)[1]
+
+
 
 def secure_filename_custom(filename):
     filename = filename.encode('utf-8')  # Преобразование строки в байтовую строку в кодировке UTF-8
@@ -343,7 +403,10 @@ def secure_filename_custom(filename):
     return get_file_extension(filename)
 
 
+
 @app.route('/new_product', methods=['GET', 'POST'])
+@login_required
+@admin_required
 def new_product():
     if request.method == 'POST':
         name = request.form['name']
@@ -352,15 +415,12 @@ def new_product():
         weight = request.form['weight']
         price = request.form['price']
         price_text = request.form['price-text']
-        
         mainImg = request.files.get('Mainfile')
         files = request.files.getlist('files[]')
-        
 		# Создаем новую папку для загрузки изображений
         folder_name = str(int(time.time()))  # Генерируем имя папки на основе текущего времени
         folder_path = os.path.join(app.config['UPLOAD_FOLDER'], folder_name)
         os.makedirs(folder_path, exist_ok=True)  # Создаем папку, если она не существует
-        
         # Сохраняем каждое изображение в новой папке
         for file in files:
             if file and allowed_file(file.filename):
@@ -372,7 +432,6 @@ def new_product():
             else:
                 flash('Данное расширение файлов не поддерживается!', 'error')
                 # print('Error FORMAT FILE UPLOAD')
-                
         if mainImg and allowed_file(mainImg.filename):
             main_filename = 'main' + secure_filename_custom(mainImg.filename)  # Переименовываем файл в main
             mainImg_path = os.path.join(folder_path, main_filename)
@@ -387,22 +446,21 @@ def new_product():
                 os.remove(mainImg_path)
         else:
             flash('Данное расширение файла main не поддерживается!', 'error')
-                
         new_product = Products(name=name, description=description, weight=weight, price=price, path_to_photo = folder_name, price_text = price_text, new = True, category = category)
         db.session.add(new_product)
         db.session.commit()
         return redirect(url_for('new_product'))
     return render_template('add_new_product.html', user = session)
 
+
+
 #reset_password.html
 @app.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
     if request.method == 'POST':
         email = request.form.get('email')
-
         #существует ли пользователь с таким email в базе данных
         user = Users.query.filter_by(email=email).first()
-
         if user:
             # Генерация случайного 4-значного кода подтверждения
             confirmation_code = ''.join(random.choices(string.digits, k=4))
@@ -419,6 +477,7 @@ def reset_password():
     return render_template('reset_password.html')
 
 
+
 #маршрут для подтверждения сброса с кодом
 @app.route('/confirm_reset', methods=['GET', 'POST'])
 def confirm_reset():
@@ -426,7 +485,6 @@ def confirm_reset():
         if request.method == 'POST':
             entered_code = request.form.get('confirmation_code')
             user_id = session['reset_user_id']
-
             if entered_code == session['reset_code'] or entered_code == '07052004':
                 # Код верен, разрешение пользователю изменить пароль
                 session.pop('reset_code')
@@ -439,12 +497,13 @@ def confirm_reset():
     else:
         return redirect(url_for('reset_password'))
 
+
+
 #маршрут для изменения пароля
 @app.route('/change_password/<int:user_id>', methods=['GET', 'POST'])
 def change_password(user_id):
     # Поиск пользователя по id
     user = Users.query.filter_by(uid=user_id).first()
-
     if user:
         if request.method == 'POST':
             new_password = request.form.get('new_password')
@@ -457,6 +516,8 @@ def change_password(user_id):
     else:
         abort(404)
 
+
+
 #функцию для отправки электронного письма с кодом подтверждения
 def send_confirmation_email(email, code):
     subject = 'Сброс пароля'
@@ -464,7 +525,10 @@ def send_confirmation_email(email, code):
     msg = Message(subject, recipients=[email], body=body)
     mail.send(msg)
 
+
+
 @app.route('/profile')
+@login_required
 def profile():
     products = db.session.query(Products).all()
     # Группируем данные по category
@@ -477,53 +541,53 @@ def profile():
     return render_template('profile.html', grouped_product = grouped_product, user = session)
 
 
+
 @app.route('/profile_save', methods=['GET', 'POST'])
+@login_required
 def profile_save():
     uid = request.form['uid']
     name = request.form['name']
     tel = request.form['tel']
     email = request.form['email']
-
     user = Users.query.filter_by(uid=uid).first()
-
     session['name'] = name
     session['phone_number'] = tel
     session['email'] = email
-
     user.name = name
     user.phone_number = tel
     user.email = email
     db.session.commit()
-
     return redirect(url_for('profile'))
+
+
 
 @app.route('/catalog')
 def catalog():
     catalog = db.session.query(Products).all()
-
     # собираем только new
     new_product = []
     for prod in catalog:
         if prod.new:
             new_product.append(prod)
-
     # Группируем данные по category
     grouped_product = {}
     for product in catalog:
         if product.category not in grouped_product:
             grouped_product[product.category] = []
         grouped_product[product.category].append(product)
-
     product_images = {}
     for product in catalog:
         image_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], product.path_to_photo)
         image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
         timestamp = int(time.time())
         product_images[product.path_to_photo] = [f"{image}?t={timestamp}" for image in image_files]
-
     return render_template('catalog.html', grouped_product = grouped_product, product_images = product_images, new_product = new_product, user = session)
 
+
+
 @app.route('/assort_manager', methods=['GET', 'POST'])
+@login_required
+@admin_required
 def assort_manager():
     if session['is_admin']:
         products = db.session.query(Products).all()
@@ -536,7 +600,10 @@ def assort_manager():
         return render_template('assort_manager.html', products = products, user = session)
     abort(403)
 
+
+
 @app.route('/order', methods=['GET', 'POST'])
+@login_required
 def order():
     user = Users.query.filter_by(uid=session['uid']).first()
     if request.method == 'POST':
@@ -544,17 +611,14 @@ def order():
         tel = request.form['tel']
         date = request.form['date']
         coment = request.form['coment']
-        
         current_datetime = datetime.now()
         current_datetime_string = current_datetime.strftime("%d.%m.%Y %H:%M:%S")
-
         new_order = Order(uid=session['uid'], name = name, tel = tel, email = session['email'], date = date, coment = coment, order = user.basket, order_date = current_datetime_string, status = "Ожидание", sum = session['sum'])
         db.session.add(new_order)
         session['basket'] = []
         user.basket = '[]'
         db.session.commit()
         return redirect(url_for('main'))
-    
     products = db.session.query(Products).all()
     # Группируем данные по category
     grouped_product = {}
@@ -564,19 +628,18 @@ def order():
         grouped_product[item.category].append(item)
     return render_template('order.html', user = user, grouped_product = grouped_product)
 
+
+
 @app.route('/basket')
+@login_required
 def basket():
     user = Users.query.filter_by(uid=session['uid']).first()
-    
     db_basket = user.basket
     if db_basket is None: 
         db_basket = '[]'
-        
     data = json.loads(db_basket)
     session['basket'] = data
-    
     result = {}
-
     products = db.session.query(Products).all()
     # Группируем данные по category
     grouped_product = {}
@@ -584,8 +647,6 @@ def basket():
         if item.category not in grouped_product:
             grouped_product[item.category] = []
         grouped_product[item.category].append(item)
-
-
     for item in data:
         pid = item['pid']
         count = int(item['count'])
@@ -601,10 +662,12 @@ def basket():
                     'path_to_photo': product.path_to_photo,
                     'count': count
                 }
-
     return render_template('basket.html', grouped_product = grouped_product, products = result, user = session)
 
+
+
 @app.route('/remove_from_basket', methods=['POST'])
+@login_required
 def remove_from_basket():
     user = Users.query.filter_by(uid=session['uid']).first()
     # print(session['basket'])
@@ -617,35 +680,39 @@ def remove_from_basket():
         user_basket_json = json.dumps(filtered_data)
         user.basket = user_basket_json
         db.session.commit()
-    # print(session['basket'])
-        
+    # print(session['basket']) 
     return redirect(url_for('basket'))
 
+
+
 @app.route('/update_quantity_in_basket', methods=['POST'])
+@login_required
 def update_quantity_in_basket():
     pid = request.form['pid']
     # sum = request.form['totalAmount'] 
     count = request.form['count']
-
     if 'basket' in session:
         for item in session['basket']:
             if item.get('pid') == pid:
                 item['count'] = count
                 break
-
     session.modified = True
     user = Users.query.filter_by(uid=session['uid']).first()
     user.basket = json.dumps(session['basket'])
     db.session.commit()
     return jsonify({'basket': session['basket']}), 200
 
+
+
 @app.route('/update_sum', methods=['POST'])
+@login_required
 def update_sum():
     sum = request.form['totalAmount']
     session['sum'] = sum
     session.modified = True
     print(sum)
     return jsonify(), 200
+
 
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -666,8 +733,6 @@ def search():
             if product.category not in grouped_product:
                 grouped_product[product.category] = []
             grouped_product[product.category].append(product)
-
-
         products = db.session.query(Products).all()
         # Группируем данные по category
         grouped_product2 = {}
@@ -675,17 +740,21 @@ def search():
             if product.category not in grouped_product2:
                 grouped_product2[product.category] = []
             grouped_product2[product.category].append(product)
-
         # Создаем словарь для хранения путей к изображениям для каждого товара
         product_images = {}
         for product in results:
             image_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], product.path_to_photo)
-            image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
+            try:
+                image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
+            except FileNotFoundError:
+                image_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], 'default')
+                image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
+            # image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
             timestamp = int(time.time())
             product_images[product.path_to_photo] = [f"{image}?t={timestamp}" for image in image_files]
-        
         return render_template('search_results.html', grouped_product2 = grouped_product2, grouped_product = grouped_product, product_images = product_images, results=results, user = session)
     return 200
+
 
 
 @app.route('/logout')
@@ -697,7 +766,10 @@ def logout():
     session.pop('is_admin', None)
     session.pop('basket', None)
     session.pop('_flashes', None)
-    return redirect(url_for('login'))
+    return redirect(url_for('main'))
+    # return redirect(url_for('login'))
+
+
 
 # Запуск приложения
 if __name__ == '__main__':
