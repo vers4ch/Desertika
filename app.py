@@ -78,9 +78,10 @@ class Users(db.Model):
     password = db.Column(db.Text(collation='pg_catalog."default"'))
     is_admin = db.Column(db.Boolean)
     basket = db.Column(db.Text(collation='pg_catalog."default"'))
+    summa = db.Column(db.Text(collation='pg_catalog."default"'))
 
     def __repr__(self):
-        return f"Users('{self.uid}', '{self.name}', '{self.phone_number}', '{self.email}', '{self.password}', '{self.is_admin}', '{self.basket}')"
+        return f"Users('{self.uid}', '{self.name}', '{self.phone_number}', '{self.email}', '{self.password}', '{self.is_admin}', '{self.basket}', '{self.summa}')"
 
 
 
@@ -602,7 +603,7 @@ def assort_manager():
 
 
 
-@app.route('/order', methods=['GET', 'POST'])
+@app.route('/order', methods=['POST'])
 @login_required
 def order():
     user = Users.query.filter_by(uid=session['uid']).first()
@@ -613,9 +614,10 @@ def order():
         coment = request.form['coment']
         current_datetime = datetime.now()
         current_datetime_string = current_datetime.strftime("%d.%m.%Y %H:%M:%S")
-        new_order = Order(uid=session['uid'], name = name, tel = tel, email = session['email'], date = date, coment = coment, order = user.basket, order_date = current_datetime_string, status = "Ожидание", sum = session['sum'])
+        new_order = Order(uid=session['uid'], name = name, tel = tel, email = session['email'], date = date, coment = coment, order = user.basket, order_date = current_datetime_string, status = "Ожидание", sum = user.summa)
         db.session.add(new_order)
         session['basket'] = []
+        session.pop(sum, None)
         user.basket = '[]'
         db.session.commit()
         return redirect(url_for('main'))
@@ -688,8 +690,7 @@ def remove_from_basket():
 @app.route('/update_quantity_in_basket', methods=['POST'])
 @login_required
 def update_quantity_in_basket():
-    pid = request.form['pid']
-    # sum = request.form['totalAmount'] 
+    pid = request.form['pid'] 
     count = request.form['count']
     if 'basket' in session:
         for item in session['basket']:
@@ -707,11 +708,11 @@ def update_quantity_in_basket():
 @app.route('/update_sum', methods=['POST'])
 @login_required
 def update_sum():
-    sum = request.form['totalAmount']
-    session['sum'] = sum
-    session.modified = True
-    print(sum)
-    return jsonify(), 200
+    vals = request.form['totalAmount']
+    user = Users.query.filter_by(uid=session['uid']).first()
+    user.summa = vals
+    db.session.commit()
+    return jsonify({'msg': 'ok'}), 200
 
 
 

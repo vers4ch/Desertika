@@ -62,14 +62,14 @@ $(document).ready(function() {
     }
 
     // Функция для удаления всех нецифровых символов из строки
-    function updateSummInSession(sum) {    
+    function updateSummInSession() {    
         $.ajax({
             type: 'POST',
             url: '/update_sum',
             data: {'totalAmount': totalAmount},
             success: function(response) {
-                // var basketData = response.basket;
-                // console.log(basketData);
+                var mseg = response.msg;
+                console.log(mseg);
             }
         });
     }
