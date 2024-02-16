@@ -200,7 +200,6 @@ def main():
         except FileNotFoundError:
             image_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], 'default')
             image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
-        # image_files = [os.path.join(image_folder_path, filename) for filename in os.listdir(image_folder_path)]
         timestamp = int(time.time())
         product_images[product.path_to_photo] = [f"{image}?t={timestamp}" for image in image_files]
     return render_template('main.html', new_products=new_product, grouped_product = grouped_product, product_images=product_images, user = session)
@@ -278,9 +277,22 @@ def administrator():
     
 
 
-def get_product_info(pid): 
-    product = Products.query.filter_by(pid=pid).first() 
-    return product.name, product.description, product.weight, product.price, product.path_to_photo, product.price_text, product.new, product.category
+def get_product_info(pid):
+    product = Products.query.filter_by(pid=pid).first()
+    
+    if product is None:
+        return None
+    
+    return (
+        product.name,
+        product.description,
+        product.weight,
+        product.price,
+        product.path_to_photo,
+        product.price_text,
+        product.new,
+        product.category
+    )
 
 
 
@@ -306,16 +318,19 @@ def order_manager():
                     pid = item['pid'] 
                     count = item['count'] 
                     product_info = get_product_info(pid)
-                    products_info.append({'pid': pid,
-                                          'name': product_info[0], 
-                                          'description': product_info[1], 
-                                          'weight': product_info[2], 
-                                          'price': product_info[3], 
-                                          'path_to_photo': product_info[4], 
-                                          'price_text': product_info[5], 
-                                          'new': product_info[6], 
-                                          'category': product_info[7], 
-                                          'count': count}) 
+                    if product_info is not None:
+                        products_info.append({
+                            'pid': pid,
+                            'name': product_info[0],
+                            'description': product_info[1],
+                            'weight': product_info[2],
+                            'price': product_info[3],
+                            'path_to_photo': product_info[4],
+                            'price_text': product_info[5],
+                            'new': product_info[6],
+                            'category': product_info[7],
+                            'count': count
+                        })
                 order_details.append({'oid': order.oid, 
                                       'name': order.name, 
                                       'tel': order.tel, 
@@ -355,7 +370,14 @@ def update_status():
 @admin_required
 def remove_product():
     pid = request.form['item_id']
-    print(pid)
+    product = Products.query.get(pid)  # Найти объект Product по его идентификатору
+    if product:  # Проверяем, найден ли объект
+        db.session.delete(product)  # Удаляем объект из сессии
+        db.session.commit()  # Фиксируем изменения в базе данных
+        print("Product removed successfully")
+        return redirect(url_for('assort_manager'))
+    else:
+        print("Product not found")
     return redirect(url_for('assort_manager'))
 
 
@@ -538,8 +560,6 @@ def profile():
         if item.category not in grouped_product:
             grouped_product[item.category] = []
         grouped_product[item.category].append(item)
-
-
     orders = Order.query.filter(Order.uid == str(session['uid'])).all()
     # print(orders)
     order_details = [] 
@@ -569,9 +589,7 @@ def profile():
                                 'status': order.status,
                                 'sum': order.sum, 
                                 'products': products_info})
-        
-        print(order_details)
-
+        # print(order_details)
     return render_template('profile.html', grouped_product = grouped_product, user = session, orders = order_details)
 
 
@@ -636,7 +654,7 @@ def assort_manager():
 
 
 
-@app.route('/order', methods=['POST'])
+@app.route('/order', methods=['GET', 'POST'])
 @login_required
 def order():
     user = Users.query.filter_by(uid=session['uid']).first()

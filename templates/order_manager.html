@@ -6,7 +6,6 @@
 	<title>DESERTIKA Управление заказами</title>
 	<link rel="icon" href="static/images/favicon.ico">
 
-
 	<script src="static/lib/jquery-3.5.1.slim.min.js"></script>
 	<script src="static/lib/bootstrap.min.js"></script>
 	<script src="static/lib/jquery.min.js"></script>
@@ -16,48 +15,7 @@
 	<link rel="stylesheet" href="static/lib/all.min.css">
 
 	<link rel="stylesheet" href="static/style/order_manager.css">
-
-	<!-- JavaScript код для переключения вкладок -->
-    <script>
-        $(document).ready(function(){
-            // Скрываем форму "Заказы" и "История" при загрузке страницы
-            $("#completedForm").hide();
-            $("#cancelledForm").hide();
-    
-            // Обработчик клика по ссылке "Мои данные"
-            $("#usines").click(function(){
-                $("#waitingForm").show();
-                $("#completedForm").hide();
-                $("#cancelledForm").hide();
-                $(this).addClass("selected");
-                $("#version").removeClass("selected");
-                $("#version2").removeClass("selected"); // Убираем класс "selected" с других ссылок
-                return false; // предотвращаем действие по умолчанию для ссылки
-            });
-    
-            // Обработчик клика по ссылке "Заказы"
-            $("#version").click(function(){
-                $("#waitingForm").hide();
-                $("#completedForm").show();
-                $("#cancelledForm").hide();
-                $(this).addClass("selected");
-                $("#usines").removeClass("selected");
-                $("#version2").removeClass("selected"); // Убираем класс "selected" с других ссылок
-                return false; // предотвращаем действие по умолчанию для ссылки
-            });
-    
-            // Обработчик клика по ссылке "История"
-            $("#version2").click(function(){
-                $("#waitingForm").hide();
-                $("#completedForm").hide();
-                $("#cancelledForm").show();
-                $(this).addClass("selected");
-                $("#usines").removeClass("selected");
-                $("#version").removeClass("selected"); // Убираем класс "selected" с других ссылок
-                return false; // предотвращаем действие по умолчанию для ссылки
-            });
-        });
-    </script>
+	<link rel="stylesheet" href="static/style/modal.css">
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg bg-pink sticky-top">
@@ -104,142 +62,65 @@
 	</nav>
 
 
-	<div class="base">
-		<div class="main-base">
-			<h1>Управление заказами</h1>
-			<div class="order-boxes">
-				{% if orders == [] %}
-						<h1 style="margin-top: 180px; color: grey;">Заказов нет</h1>
-				{% endif %}
-
-				{% for order in orders %} 
-					<!-- <a href="#" onclick="openModal('{{order.oid}}')"> -->
-						<div class="order-box">
-								<div class="info-line"><p>Номер: {{order.oid}}</p></div>
-								<div class="info-line">
-									<p>Статус: </p>
-									<form id="statusForm_{{order.oid}}">
-										<input type="hidden" id="oid_{{order.oid}}" value="{{ order.oid }}"> 
-										<select id="statusSelect_{{order.oid}}" onchange="updateStatus('{{order.oid}}')">
-											<option value="{{order.status}}">{{order.status}}</option>
-											{% if order.status != "Ожидание" %}
-												<option value="Ожидание">Ожидание</option>
-											{% endif %}
-											{% if order.status != "Выполнено" %}
-												<option value="Выполнено">Выполнено</option>
-											{% endif %}
-											{% if order.status != "Отменено" %}
-												<option value="Отменено">Отменено</option>
-											{% endif %}
-										</select>
-									</form>
-								</div>
-								<a href="#" onclick="openModal('{{order.oid}}')">
-									<div class="info-line"><p>Заказчик: {{order.name}}</p></div>
-									<div class="info-line"><p>Тел.: {{order.tel}}</p></div>
-									<div class="info-line"><p>{{order.order_date}}</p></div>
-									<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
-								</a>
-								<div id="myModal_{{ order.oid }}" class="modal">
-									<div class="modal-content">
-										<!-- <div class="close-a"> -->
-											<a class="close2" onclick="closeModal('{{order.oid}}')">&times;</a>
-										<!-- </div> -->
-										<h3 class="head-h3">Детали заказа</h3>
-										<hr color="#373737" size="1" width="90%"> 
-										<table id="data-table">
-											<thead>
-												<tr>
-													<th>id</th>
-													<th>Фото</th>
-													<th>Название</th>
-													<th>Вес</th>
-													<th>Кол-во</th>
-													<th>Цена</th>
-												</tr>
-											</thead>
-											<tbody>
-											{% for product in order.products %}
-												<tr>
-													<td contenteditable="false">{{ product.pid }}</td>
-													<td contenteditable="false"><img class="table-img" src="static/uploads/{{ product.path_to_photo }}/main.jpg"></td>
-													<td contenteditable="false">{{ product.name }}</td>
-													<td contenteditable="false">{{ product.weight }}</td>
-													<td contenteditable="false">{{ product.count }}</td>
-													<td contenteditable="false">{{ product.price }}{{ product.price_text }}</td>
-												</tr>
-											{% endfor %}
-											</tbody>
-										</table>
-									</div>
-								</div>
-						</div>
-					<!-- </a> -->
-				{% endfor %}
-			</div>
-		</div>
-	</div>
-
 	<div class="main">
         <img src="static\images\logo.jpg" alt="Image Description" class="registration-image">
-            <!-- Контейнер для всей формы -->
             <div class="zation">
-                <!-- Заголовок с вкладками Логин и Регистрация -->
                 <div class="head">
-                    <!-- Пустой блок для визуального выравнивания -->
                     <div></div>
-                    <!-- Ссылка на вкладку Логин -->
                     <a id="usines" class="selected" href="#">Ожидание</a>
-                    <!-- Ссылка на вкладку Регистрация -->
                     <a id="version" href="#">Выполнено</a>
-                    <!-- Пустой блок для визуального выравнивания -->
                     <a id="version2" href="#">Отменено</a>
-                    <!-- Пустой блок для визуального выравнивания -->
                     <div></div>
                 </div>
-                <!-- Контейнер для содержимого вкладок -->
                 <div class="tabs">
-                    <!-- Форма для профиля -->
-                    <form action="/waiting" method="post" class="waiting-form" id="waitingForm">
-                        <!-- Контейнер для полей ввода -->
-                        <div class="inputs">
-                            <div class="order-boxes">
-								{% if orders == [] %}
+						<!-- Ожидание -->
+                        <div class="order-boxes" id="waitingForm">
+							{% if orders == [] %}
 									<h1 style="margin-top: 180px; color: grey;">Заказов нет</h1>
-								{% endif %}
-							
-								{% for order in orders if order.status == "Ожидание" %}
-									<div class="order-box">
-										<div class="info-line"><p>Номер: {{order.oid}}</p></div>
-										<div class="info-line">
-											<p>Статус: </p>
-											<form id="statusForm_{{order.oid}}">
-												<input type="hidden" id="oid_{{order.oid}}" value="{{ order.oid }}"> 
-												<select class="sel" id="statusSelect_{{order.oid}}" onchange="updateStatus('{{order.oid}}')">
-													<option value="{{order.status}}">{{order.status}}</option>
-														{% if order.status != "Ожидание" %}
-															<option value="Ожидание">Ожидание</option>
-														{% endif %}
-														{% if order.status != "Выполнено" %}
-															<option value="Выполнено">Выполнено</option>
-														{% endif %}
-														{% if order.status != "Отменено" %}
-															<option value="Отменено">Отменено</option>
-														{% endif %}
-												</select>
-											</form>
-										</div>
-										<a href="#" onclick="openModal('{{order.oid}}')">
-											<div class="info-line"><p>Заказчик: {{order.name}}</p></div>
-											<div class="info-line"><p>Тел.: {{order.tel}}</p></div>
-											<div class="info-line"><p>{{order.order_date}}</p></div>
-											<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
-										</a>
-										<div id="myModal_{{ order.oid }}" class="modal">
-											<div class="modal-content">
-												<a class="close2" onclick="closeModal('{{order.oid}}')">&times;</a>
+							{% endif %}
+			
+							{% for order in orders  if order.status == "Ожидание" %} 
+								<div class="order-box">
+									<div class="info-line"><p>Номер: {{order.oid}}</p></div>
+									<div class="info-line">
+										<p>Статус: </p>
+										<form id="statusForm_{{order.oid}}">
+											<input type="hidden" id="oid_{{order.oid}}" value="{{ order.oid }}"> 
+											<select id="statusSelect_{{order.oid}}" onchange="updateStatus('{{order.oid}}')">
+												<option value="{{order.status}}">{{order.status}}</option>
+												{% if order.status != "Ожидание" %}
+													<option value="Ожидание">Ожидание</option>
+												{% endif %}
+												{% if order.status != "Выполнено" %}
+													<option value="Выполнено">Выполнено</option>
+												{% endif %}
+												{% if order.status != "Отменено" %}
+													<option value="Отменено">Отменено</option>
+												{% endif %}
+											</select>
+										</form>
+									</div>
+									<a href="#" onclick="openModal('{{order.oid}}')">
+										<div class="info-line"><p>Заказчик: {{order.name}}</p></div>
+										<div class="info-line"><p>Тел.: {{order.tel}}</p></div>
+										<div class="info-line"><p>{{order.order_date}}</p></div>
+										<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
+									</a>
+									<div id="myModal_{{ order.oid }}" class="modal">
+										<div class="main-modal">
+											<div class="up-box">
 												<h3 class="head-h3">Детали заказа</h3>
-												<hr color="#373737" size="1" width="90%"> 
+												<a class="close2" onclick="closeModal('{{order.oid}}')">&times;</a>
+											</div>
+											<!-- <hr color="#373737" size="1" width="90%"> -->
+											<div class="desc-box">
+												<p>Коментарий: {{order.coment}}</p>
+												<p>Имя: {{order.name}}</p>
+												<p>Тел.: {{order.tel}}</p>
+												<p>Сумма: {{order.sum}}₽</p>
+											</div>
+											
+											<div class="modal-content">
 												<table id="data-table">
 													<thead>
 														<tr>
@@ -252,52 +133,50 @@
 														</tr>
 													</thead>
 													<tbody>
-														{% for product in order.products %}
-															<tr>
-																<td contenteditable="false">{{ product.pid }}</td>
-																<td contenteditable="false"><img class="table-img" src="static/uploads/{{ product.path_to_photo }}/main.jpg"></td>
-																<td contenteditable="false">{{ product.name }}</td>
-																<td contenteditable="false">{{ product.weight }}</td>
-																<td contenteditable="false">{{ product.count }}</td>
-																<td contenteditable="false">{{ product.price }}{{ product.price_text }}</td>
-															</tr>
-														{% endfor %}
+													{% for product in order.products %}
+														<tr>
+															<td contenteditable="false">{{ product.pid }}</td>
+															<td contenteditable="false"><img class="table-img" src="static/uploads/{{ product.path_to_photo }}/main.jpg"></td>
+															<td contenteditable="false">{{ product.name }}</td>
+															<td contenteditable="false">{{ product.weight }}</td>
+															<td contenteditable="false">{{ product.count }}</td>
+															<td contenteditable="false">{{ product.price }}{{ product.price_text }}</td>
+														</tr>
+													{% endfor %}
 													</tbody>
 												</table>
 											</div>
 										</div>
 									</div>
-								{% endfor %}
-							</div>
-                        </div>
-                    </form>
-                    <!-- Форма для заказов -->
-                    <form action="/completed" method="post" class="waiting-form" id="completedForm" style="display:none;">
-                        <!-- Контейнер для полей ввода -->
-                        <div class="inputs">
-                            <div class="order-boxes">
-								{% if orders == [] %}
+								</div>
+							{% endfor %}
+						</div>
+
+						<!-- Выполнено -->
+                        <div class="order-boxes" id="completedForm" style="display:none;">
+							{% if orders == [] %}
 									<h1 style="margin-top: 180px; color: grey;">Заказов нет</h1>
-								{% endif %}
-							
-								{% for order in orders if order.status == "Выполнено" %}
+							{% endif %}
+			
+							{% for order in orders if order.status == "Выполнено" %} 
+								<!-- <a href="#" onclick="openModal('{{order.oid}}')"> -->
 									<div class="order-box">
 										<div class="info-line"><p>Номер: {{order.oid}}</p></div>
 										<div class="info-line">
 											<p>Статус: </p>
 											<form id="statusForm_{{order.oid}}">
 												<input type="hidden" id="oid_{{order.oid}}" value="{{ order.oid }}"> 
-												<select class="sel" id="statusSelect_{{order.oid}}" onchange="updateStatus('{{order.oid}}')">
+												<select id="statusSelect_{{order.oid}}" onchange="updateStatus('{{order.oid}}')">
 													<option value="{{order.status}}">{{order.status}}</option>
-														{% if order.status != "Ожидание" %}
-															<option value="Ожидание">Ожидание</option>
-														{% endif %}
-														{% if order.status != "Выполнено" %}
-															<option value="Выполнено">Выполнено</option>
-														{% endif %}
-														{% if order.status != "Отменено" %}
-															<option value="Отменено">Отменено</option>
-														{% endif %}
+													{% if order.status != "Ожидание" %}
+														<option value="Ожидание">Ожидание</option>
+													{% endif %}
+													{% if order.status != "Выполнено" %}
+														<option value="Выполнено">Выполнено</option>
+													{% endif %}
+													{% if order.status != "Отменено" %}
+														<option value="Отменено">Отменено</option>
+													{% endif %}
 												</select>
 											</form>
 										</div>
@@ -308,22 +187,32 @@
 											<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
 										</a>
 										<div id="myModal_{{ order.oid }}" class="modal">
-											<div class="modal-content">
-												<a class="close2" onclick="closeModal('{{order.oid}}')">&times;</a>
-												<h3 class="head-h3">Детали заказа</h3>
-												<hr color="#373737" size="1" width="90%"> 
-												<table id="data-table">
-													<thead>
-														<tr>
-															<th>id</th>
-															<th>Фото</th>
-															<th>Название</th>
-															<th>Вес</th>
-															<th>Кол-во</th>
-															<th>Цена</th>
-														</tr>
-													</thead>
-													<tbody>
+											<div class="main-modal">
+												<div class="up-box">
+													<h3 class="head-h3">Детали заказа</h3>
+													<a class="close2" onclick="closeModal('{{order.oid}}')">&times;</a>
+												</div>
+												<!-- <hr color="#373737" size="1" width="90%"> -->
+												<div class="desc-box">
+													<p>Коментарий: {{order.coment}}</p>
+													<p>Имя: {{order.name}}</p>
+													<p>Тел.: {{order.tel}}</p>
+													<p>Сумма: {{order.sum}}₽</p>
+												</div>
+												
+												<div class="modal-content">
+													<table id="data-table">
+														<thead>
+															<tr>
+																<th>id</th>
+																<th>Фото</th>
+																<th>Название</th>
+																<th>Вес</th>
+																<th>Кол-во</th>
+																<th>Цена</th>
+															</tr>
+														</thead>
+														<tbody>
 														{% for product in order.products %}
 															<tr>
 																<td contenteditable="false">{{ product.pid }}</td>
@@ -334,42 +223,38 @@
 																<td contenteditable="false">{{ product.price }}{{ product.price_text }}</td>
 															</tr>
 														{% endfor %}
-													</tbody>
-												</table>
+														</tbody>
+													</table>
+												</div>
 											</div>
 										</div>
 									</div>
-								{% endfor %}
-							</div>
-                        </div>
-                    </form>
-                    <!-- Форма для истории заказов -->
-                    <form action="/cancelled" method="post" class="waiting-form" id="cancelledForm" style="display:none;">
-                        <!-- Контейнер для полей ввода -->
-                        <div class="inputs">
-                            <div class="order-boxes">
-								{% if orders == [] %}
+							{% endfor %}
+						</div>
+
+						<!-- Отменено -->
+                        <div class="order-boxes" id="cancelledForm" style="display:none;">
+							{% if orders == [] %}
 									<h1 style="margin-top: 180px; color: grey;">Заказов нет</h1>
-								{% endif %}
-							
-								{% for order in orders if order.status == "Отменено" %}
+							{% endif %}
+							{% for order in orders if order.status == "Отменено" %}
 									<div class="order-box">
 										<div class="info-line"><p>Номер: {{order.oid}}</p></div>
 										<div class="info-line">
 											<p>Статус: </p>
 											<form id="statusForm_{{order.oid}}">
 												<input type="hidden" id="oid_{{order.oid}}" value="{{ order.oid }}"> 
-												<select class="sel" id="statusSelect_{{order.oid}}" onchange="updateStatus('{{order.oid}}')">
+												<select id="statusSelect_{{order.oid}}" onchange="updateStatus('{{order.oid}}')">
 													<option value="{{order.status}}">{{order.status}}</option>
-														{% if order.status != "Ожидание" %}
-															<option value="Ожидание">Ожидание</option>
-														{% endif %}
-														{% if order.status != "Выполнено" %}
-															<option value="Выполнено">Выполнено</option>
-														{% endif %}
-														{% if order.status != "Отменено" %}
-															<option value="Отменено">Отменено</option>
-														{% endif %}
+													{% if order.status != "Ожидание" %}
+														<option value="Ожидание">Ожидание</option>
+													{% endif %}
+													{% if order.status != "Выполнено" %}
+														<option value="Выполнено">Выполнено</option>
+													{% endif %}
+													{% if order.status != "Отменено" %}
+														<option value="Отменено">Отменено</option>
+													{% endif %}
 												</select>
 											</form>
 										</div>
@@ -380,22 +265,32 @@
 											<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
 										</a>
 										<div id="myModal_{{ order.oid }}" class="modal">
-											<div class="modal-content">
-												<a class="close2" onclick="closeModal('{{order.oid}}')">&times;</a>
-												<h3 class="head-h3">Детали заказа</h3>
-												<hr color="#373737" size="1" width="90%"> 
-												<table id="data-table">
-													<thead>
-														<tr>
-															<th>id</th>
-															<th>Фото</th>
-															<th>Название</th>
-															<th>Вес</th>
-															<th>Кол-во</th>
-															<th>Цена</th>
-														</tr>
-													</thead>
-													<tbody>
+											<div class="main-modal">
+												<div class="up-box">
+													<h3 class="head-h3">Детали заказа</h3>
+													<a class="close2" onclick="closeModal('{{order.oid}}')">&times;</a>
+												</div>
+												<!-- <hr color="#373737" size="1" width="90%"> -->
+												<div class="desc-box">
+													<p>Коментарий: {{order.coment}}</p>
+													<p>Имя: {{order.name}}</p>
+													<p>Тел.: {{order.tel}}</p>
+													<p>Сумма: {{order.sum}}₽</p>
+												</div>
+												
+												<div class="modal-content">
+													<table id="data-table">
+														<thead>
+															<tr>
+																<th>id</th>
+																<th>Фото</th>
+																<th>Название</th>
+																<th>Вес</th>
+																<th>Кол-во</th>
+																<th>Цена</th>
+															</tr>
+														</thead>
+														<tbody>
 														{% for product in order.products %}
 															<tr>
 																<td contenteditable="false">{{ product.pid }}</td>
@@ -406,19 +301,23 @@
 																<td contenteditable="false">{{ product.price }}{{ product.price_text }}</td>
 															</tr>
 														{% endfor %}
-													</tbody>
-												</table>
+														</tbody>
+													</table>
+												</div>
 											</div>
 										</div>
 									</div>
-								{% endfor %}
-							</div>
-                        </div>
-                    </form>
-                </div> <!-- Закрытие контейнера для содержимого вкладок -->
-            </div> <!-- Закрытие контейнера для всей формы -->
+							{% endfor %}
+						</div>
+                </div>
+            </div> 
     </div>
 	
+
+
+
+
+
 	<footer class="bg-pink">
 		<div class="container">
 			<div class="row">
@@ -486,5 +385,45 @@
 		}
 	</script>
 	<script src="static/js/modal.js"></script>
+	<script>
+        $(document).ready(function(){
+            // Скрываем форму "Заказы" и "История" при загрузке страницы
+            $("#completedForm").hide();
+            $("#cancelledForm").hide();
+    
+            // Обработчик клика по ссылке "Мои данные"
+            $("#usines").click(function(){
+                $("#waitingForm").show();
+                $("#completedForm").hide();
+                $("#cancelledForm").hide();
+                $(this).addClass("selected");
+                $("#version").removeClass("selected");
+                $("#version2").removeClass("selected"); // Убираем класс "selected" с других ссылок
+                return false; // предотвращаем действие по умолчанию для ссылки
+            });
+    
+            // Обработчик клика по ссылке "Заказы"
+            $("#version").click(function(){
+                $("#waitingForm").hide();
+                $("#completedForm").show();
+                $("#cancelledForm").hide();
+                $(this).addClass("selected");
+                $("#usines").removeClass("selected");
+                $("#version2").removeClass("selected"); // Убираем класс "selected" с других ссылок
+                return false; // предотвращаем действие по умолчанию для ссылки
+            });
+    
+            // Обработчик клика по ссылке "История"
+            $("#version2").click(function(){
+                $("#waitingForm").hide();
+                $("#completedForm").hide();
+                $("#cancelledForm").show();
+                $(this).addClass("selected");
+                $("#usines").removeClass("selected");
+                $("#version").removeClass("selected"); // Убираем класс "selected" с других ссылок
+                return false; // предотвращаем действие по умолчанию для ссылки
+            });
+        });
+    </script>
 </body>
 </html>

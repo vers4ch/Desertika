@@ -510,64 +510,7 @@ footer.bg-pink {
 }
 
 
-/* Стили для модального окна */
-.modal {
-    display: none;
-    position:fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 10000;
-    flex-direction: column;
-    align-items: center;
-}
 
-.modal-content {
-  background-color: #fefefe;
-  color: #222831;
-  margin-top: 60px;
-  padding: 20px;
-  border-radius: 10px;
-  width: 80%;
-
-  overflow-y: auto; /* Разрешить вертикальную прокрутку */
-  height: 85vh; /* Максимальная высота модального контента */
-  
-}
-
-.close2 {
-    /* text-align: right; */
-    color: #aaa;
-    /* float: right; */
-    font-size: 28px;
-    font-weight: bold;
-    width: 20px;
-    /* height: 20px; */ 
-}
-
-.close2:hover,
-.close2:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.close-a{
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-}
-
-
-table, th, td, tr{
-    border: 1px solid #373737;
-}
-
-.table-img{
-    width: 80px;
-}
 
 
 .order-box p{

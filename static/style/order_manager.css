@@ -4,7 +4,6 @@
     font-style: normal;
     font-weight: 400; /* Обычный вес шрифта */
     src: local('Lato Regular'), local('Lato-Regular'), url(fonts/Lato-Regular.woff2) format('woff2');
-    /* Если используете CDN, то можете заменить "url(path/to/lato.woff2)" на ссылку на шрифт с CDN */
   }
   
 @font-face {
@@ -12,7 +11,6 @@ font-family: 'Lato';
 font-style: normal;
 font-weight: 700; /* Полужирный вес шрифта */
 src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('woff2');
-/* Замените на ссылку на шрифт с CDN, если используете CDN */
 }
 
 body {
@@ -27,7 +25,6 @@ body {
 
 .navbar.bg-pink {
     background-color: #efdbe0; /* Замените на ваш выбранный цвет */
-    /* border-bottom: 1px solid #373737; только нижняя граница */
 }
 
 .navbar-nav .nav-link {
@@ -76,7 +73,6 @@ a:hover {
 
 footer.bg-pink {
     background-color: #efdbe0;
-    /* border-top: 1px solid #373737; только верхняя граница */
     padding: 20px; /* добавим внутренний отступ для лучшего визуального эффекта */
 }
 
@@ -88,7 +84,6 @@ footer.bg-pink {
 
 .navbar-toggler {
     color: rgb(115 77 77 / 67%);
-    /* border-color: rgba(0,0,0,.1); */
 }
 
 .collapse a:hover {
@@ -98,10 +93,6 @@ footer.bg-pink {
 .row a:hover {
     color: rgb(69, 69, 69);
 }
-
-
-
-
 
 .base{
 	display: flex;
@@ -117,17 +108,17 @@ footer.bg-pink {
     align-items: center;
 	text-align: center;
 	width: 90%;
-	/* background-color: white; */
 	border-radius: 10px;
 	min-height: 600px;
 }
 
 .order-boxes{
 	display: flex;
-    width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-block: 10px;
 }
 
 .order-box{
@@ -143,104 +134,10 @@ footer.bg-pink {
 }
 
 .info-line{
-	display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-
-
-/* Стили для модального окна */
-.modal {
-    display: none;
-    position:fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 10000; /* Устанавливаем высокий z-index */
-
-    flex-direction: column;
-    align-items: center;
-
-}
-
-.modal-content {
-    background-color: #fefefe;
-    /* overflow: auto; */
-    color: #222831;
-    margin-top: 60px;
-    /* height: 80%; */
-    padding: 20px;
-    /* border: 3px solid rgb(34, 34, 62); */
-    border-radius: 10px;
-    width: 80%;
-}
-
-.close2 {
-    /* text-align: right; */
-    color: #aaa;
-    /* float: right; */
-    font-size: 28px;
-    font-weight: bold;
-    width: 20px;
-    /* height: 20px; */ 
-}
-
-.close2:hover,
-.close2:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.close-a{
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-}
-
-
-table, th, td, tr{
-    border: 1px solid #373737;
-}
-
-.table-img{
-    width: 80px;
-}
-
-
-
-
-@media screen and (max-width: 750px) {
-	.zation {
-		width: 350px;
-	}
-
-    .zation-button{
-        width: 290px;
-        padding: 14px 5px;
-    }
-}
-
-
-@media screen and (max-width: 600px) {
-	.modal-content{
-        width: 95%;
-        padding: 5px;
-    }
-    td{
-        font-size: 3vw;
-    }
-    .table-img{
-        width: 50px;
-    }
-}
-
-@media screen and (max-width: 345px) {
-	.table-img{
-        width: 40px;
-    }
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 
@@ -268,6 +165,7 @@ table, th, td, tr{
   
   .zation {
     height: 100%;
+    min-height: 465px;
     width: 950px;
     background: #cda1ac;
     border: 1px solid #373737;
@@ -441,16 +339,12 @@ table, th, td, tr{
     margin-bottom: 30px;
   }
   
-  /* .fas {
-    color: #373737;
-  } */
-  
   .input1 {
     color: #ffffff;
   }
   
   .input1 span {
-    font-size: 18px; /* Увеличьте значение размера шрифта по вашему усмотрению */
+    font-size: 18px;
   }
   
   .input i {
@@ -521,4 +415,114 @@ table, th, td, tr{
   .sel {
     word-wrap: normal;
     height: 23px;
+}
+
+
+
+@media screen and (max-width: 1000px) {
+	.zation {
+		width: 700px;
+	}
+}
+@media screen and (max-width: 750px) {
+	.zation {
+		width: 600px;
+	}
+  .zation-button{
+      width: 290px;
+      padding: 14px 5px;
+  }
+
+  .order-box{
+    width: 165px;
+    /* margin-inline: 2px;
+    margin-block: 2px; */
+  }
+  .info-line select{
+    height: 25px;
+  }
+
+  .order-box p{
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+}
+@media screen and (max-width: 610px) {
+	.zation{
+      width: 500px;
+  }
+  .head a{
+    width: 160px;
+    text-align: center;
+    font-size: 20px;
+    padding: 0;
+  }
+
+}
+@media screen and (max-width: 600px) {
+	.modal-content{
+        width: 95%;
+        padding: 5px;
+    }
+    td{
+        font-size: 3vw;
+    }
+    .table-img{
+        width: 50px;
+    }
+}
+@media screen and (max-width: 550px) {
+	.zation{
+    width: 350px;
+  }
+  .order-box{
+    margin-inline: 2px;
+    margin-block: 2px;
+  }
+  .order-box p{
+    margin-bottom: 5px;
+  }
+  .head a{
+    width: 110px;
+    text-align: center;
+    font-size: 18px;
+    padding: 0;
+  }
+  .info-line select{
+    height: 21px;
+    font-size: 14px;
+  }
+}
+@media screen and (max-width: 355px) {
+	.zation{
+    width: 300px;
+  }
+  .head a{
+    width: 97px;
+    text-align: center;
+    font-size: 16px;
+    padding: 0;
+  }
+  .order-box{
+    text-align: center;
+    width: 135px;
+    margin-inline: 5px;
+  }
+  .order-box p{
+    margin-bottom: 5px;
+  }
+  .info-line select{
+    /* height: 17px; */
+    width: 73px;
+    font-size: 10px;
+    margin: 0;
+  }
+  .info-line p{
+    font-size: 13px;
+  }
+}
+@media screen and (max-width: 345px) {
+	.table-img{
+        width: 40px;
+  }
 }

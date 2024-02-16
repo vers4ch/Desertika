@@ -16,7 +16,7 @@
 	<link rel="stylesheet" href="static/lib/all.min.css">
 
 	<link rel="stylesheet" href="static/style/profile.css">
-	<!-- <link rel="stylesheet" href="static/style/order_manager.css"> -->
+	<link rel="stylesheet" href="static/style/modal.css">
 
     <!-- JavaScript код для переключения вкладок -->
     <script>
@@ -160,19 +160,29 @@
 							{% if order.status == "Ожидание" %}
 								<!-- <a href="#" onclick="openModal('{{order.oid}}')"> -->
 									<div class="order-box">
-											<div class="info-line"><p>Номер: {{order.oid}}</p></div>
-											<div class="info-line">
-												<p>Статус: {{ order.status }}</p>
-											</div>
-											<a href="#" onclick="openModal('{{order.oid}}')">
-												<div class="info-line"><p>{{order.order_date}}</p></div>
-												<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
-											</a>
-											<div id="myModal_{{ order.oid }}" class="modal">
-												<div class="modal-content">
-														<a class="close2" onclick="closeModal('{{order.oid}}')">&times;</a>
+										<div class="info-line"><p>Номер: {{order.oid}}</p></div>
+										<div class="info-line">
+											<p>Статус: {{ order.status }}</p>
+										</div>
+										<a href="#" onclick="openModal('{{order.oid}}')">
+											<div class="info-line"><p>{{order.order_date}}</p></div>
+											<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
+										</a>
+										<div id="myModal_{{ order.oid }}" class="modal">
+											<div class="main-modal">
+												<div class="up-box">
 													<h3 class="head-h3">Детали заказа</h3>
-													<hr color="#373737" size="1" width="90%"> 
+													<a class="close2" onclick="closeModal('{{order.oid}}')">&times;</a>
+												</div>
+												<!-- <hr color="#373737" size="1" width="90%"> -->
+												<div class="desc-box">
+													<p>Коментарий: {{order.coment}}</p>
+													<p>Имя: {{order.name}}</p>
+													<p>Тел.: {{order.tel}}</p>
+													<p>Сумма: {{order.sum}}₽</p>
+												</div>
+												
+												<div class="modal-content">
 													<table id="data-table">
 														<thead>
 															<tr>
@@ -199,17 +209,13 @@
 													</table>
 												</div>
 											</div>
+										</div>
 									</div>
 								<!-- </a> -->
 							{% endif %}
 							{% endfor %}
 						</div>
                     </div>
-
-
-
-
-
 
                     <!-- Форма для истории заказов -->
 					<div class="orders-form" id="historyForm" style="display:none;">
@@ -231,34 +237,45 @@
 												<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
 											</a>
 											<div id="myModal_{{ order.oid }}" class="modal">
-												<div class="modal-content">
+												<div class="main-modal">
+													<div class="up-box">
+														<h3 class="head-h3">Детали заказа</h3>
 														<a class="close2" onclick="closeModal('{{order.oid}}')">&times;</a>
-													<h3 class="head-h3">Детали заказа</h3>
-													<hr color="#373737" size="1" width="90%"> 
-													<table id="data-table">
-														<thead>
-															<tr>
-																<th>id</th>
-																<th>Фото</th>
-																<th>Название</th>
-																<th>Вес</th>
-																<th>Кол-во</th>
-																<th>Цена</th>
-															</tr>
-														</thead>
-														<tbody>
-														{% for product in order.products %}
-															<tr>
-																<td contenteditable="false">{{ product.pid }}</td>
-																<td contenteditable="false"><img class="table-img" src="static/uploads/{{ product.path_to_photo }}/main.jpg"></td>
-																<td contenteditable="false">{{ product.name }}</td>
-																<td contenteditable="false">{{ product.weight }}</td>
-																<td contenteditable="false">{{ product.count }}</td>
-																<td contenteditable="false">{{ product.price }}{{ product.price_text }}</td>
-															</tr>
-														{% endfor %}
-														</tbody>
-													</table>
+													</div>
+													<!-- <hr color="#373737" size="1" width="90%"> -->
+													<div class="desc-box">
+														<p>Коментарий: {{order.coment}}</p>
+														<p>Имя: {{order.name}}</p>
+														<p>Тел.: {{order.tel}}</p>
+														<p>Сумма: {{order.sum}}₽</p>
+													</div>
+													
+													<div class="modal-content">
+														<table id="data-table">
+															<thead>
+																<tr>
+																	<th>id</th>
+																	<th>Фото</th>
+																	<th>Название</th>
+																	<th>Вес</th>
+																	<th>Кол-во</th>
+																	<th>Цена</th>
+																</tr>
+															</thead>
+															<tbody>
+															{% for product in order.products %}
+																<tr>
+																	<td contenteditable="false">{{ product.pid }}</td>
+																	<td contenteditable="false"><img class="table-img" src="static/uploads/{{ product.path_to_photo }}/main.jpg"></td>
+																	<td contenteditable="false">{{ product.name }}</td>
+																	<td contenteditable="false">{{ product.weight }}</td>
+																	<td contenteditable="false">{{ product.count }}</td>
+																	<td contenteditable="false">{{ product.price }}{{ product.price_text }}</td>
+																</tr>
+															{% endfor %}
+															</tbody>
+														</table>
+													</div>
 												</div>
 											</div>
 									</div>
