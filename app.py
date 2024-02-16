@@ -326,7 +326,7 @@ def order_manager():
                                       'status': order.status,
                                       'sum': order.sum, 
                                       'products': products_info})
-            # print(order_details)gftfdcg
+            # print(order_details)
             return render_template('order_manager.html', user = session, grouped_product = grouped_product, orders = order_details)
         else:
             abort(403)
@@ -539,7 +539,40 @@ def profile():
             grouped_product[item.category] = []
         grouped_product[item.category].append(item)
 
-    return render_template('profile.html', grouped_product = grouped_product, user = session)
+
+    orders = Order.query.filter(Order.uid == str(session['uid'])).all()
+    # print(orders)
+    order_details = [] 
+    for order in orders: 
+        products_info = [] 
+        for item in eval(order.order): 
+            pid = item['pid'] 
+            count = item['count'] 
+            product_info = get_product_info(pid)
+            products_info.append({'pid': pid,
+                                    'name': product_info[0], 
+                                    'description': product_info[1], 
+                                    'weight': product_info[2], 
+                                    'price': product_info[3], 
+                                    'path_to_photo': product_info[4], 
+                                    'price_text': product_info[5], 
+                                    'new': product_info[6], 
+                                    'category': product_info[7], 
+                                    'count': count}) 
+        order_details.append({'oid': order.oid, 
+                                'name': order.name, 
+                                'tel': order.tel, 
+                                'email': order.email, 
+                                'date': order.date,
+                                'coment': order.coment,
+                                'order_date': order.order_date,
+                                'status': order.status,
+                                'sum': order.sum, 
+                                'products': products_info})
+        
+        print(order_details)
+
+    return render_template('profile.html', grouped_product = grouped_product, user = session, orders = order_details)
 
 
 

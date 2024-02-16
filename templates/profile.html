@@ -16,6 +16,7 @@
 	<link rel="stylesheet" href="static/lib/all.min.css">
 
 	<link rel="stylesheet" href="static/style/profile.css">
+	<!-- <link rel="stylesheet" href="static/style/order_manager.css"> -->
 
     <!-- JavaScript код для переключения вкладок -->
     <script>
@@ -142,22 +143,132 @@
                         </div>
                         <input class="zation-button" type="submit" value="Сохранить">
                     </form>
-                    <!-- Форма для заказов -->
-                    <form action="/orders" method="post" class="orders-form" id="ordersForm" style="display:none;">
-                        <!-- Контейнер для полей ввода -->
-                        <div class="inputs">
-                            
-                        </div>
-                    </form>
+
+
+
+
+
+
+                    <!-- для заказов -->
+                    <div class="orders-form" id="ordersForm" style="display:none;">
+						<div class="order-boxes">
+							{% if orders == [] %}
+									<h1 style="margin-top: 155px; color: grey;">Заказов нет</h1>
+							{% endif %}
+			
+							{%for order in orders %} 
+							{% if order.status == "Ожидание" %}
+								<!-- <a href="#" onclick="openModal('{{order.oid}}')"> -->
+									<div class="order-box">
+											<div class="info-line"><p>Номер: {{order.oid}}</p></div>
+											<div class="info-line">
+												<p>Статус: {{ order.status }}</p>
+											</div>
+											<a href="#" onclick="openModal('{{order.oid}}')">
+												<div class="info-line"><p>{{order.order_date}}</p></div>
+												<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
+											</a>
+											<div id="myModal_{{ order.oid }}" class="modal">
+												<div class="modal-content">
+														<a class="close2" onclick="closeModal('{{order.oid}}')">&times;</a>
+													<h3 class="head-h3">Детали заказа</h3>
+													<hr color="#373737" size="1" width="90%"> 
+													<table id="data-table">
+														<thead>
+															<tr>
+																<th>id</th>
+																<th>Фото</th>
+																<th>Название</th>
+																<th>Вес</th>
+																<th>Кол-во</th>
+																<th>Цена</th>
+															</tr>
+														</thead>
+														<tbody>
+														{% for product in order.products %}
+															<tr>
+																<td contenteditable="false">{{ product.pid }}</td>
+																<td contenteditable="false"><img class="table-img" src="static/uploads/{{ product.path_to_photo }}/main.jpg"></td>
+																<td contenteditable="false">{{ product.name }}</td>
+																<td contenteditable="false">{{ product.weight }}</td>
+																<td contenteditable="false">{{ product.count }}</td>
+																<td contenteditable="false">{{ product.price }}{{ product.price_text }}</td>
+															</tr>
+														{% endfor %}
+														</tbody>
+													</table>
+												</div>
+											</div>
+									</div>
+								<!-- </a> -->
+							{% endif %}
+							{% endfor %}
+						</div>
+                    </div>
+
+
+
+
+
+
                     <!-- Форма для истории заказов -->
-                    <form action="/history" method="post" class="history-form" id="historyForm" style="display:none;">
-                        <!-- Контейнер для полей ввода -->
-                        <div class="inputs">
-                            
-                        </div>
-                    </form>
-                </div> <!-- Закрытие контейнера для содержимого вкладок -->
-            </div> <!-- Закрытие контейнера для всей формы -->
+					<div class="orders-form" id="historyForm" style="display:none;">
+						<div class="order-boxes">
+							{% if orders == [] %}
+									<h1 style="margin-top: 155px; color: grey;">Заказов нет</h1>
+							{% endif %}
+			
+							{%for order in orders %} 
+							{% if order.status == "Выполнено" or order.status == "Отменено" %}
+								<!-- <a href="#" onclick="openModal('{{order.oid}}')"> -->
+									<div class="order-box">
+											<div class="info-line"><p>Номер: {{order.oid}}</p></div>
+											<div class="info-line">
+												<p>Статус: {{ order.status }}</p>
+											</div>
+											<a href="#" onclick="openModal('{{order.oid}}')">
+												<div class="info-line"><p>{{order.order_date}}</p></div>
+												<div class="info-line"><p>Сумма: {{order.sum}}₽</p></div>
+											</a>
+											<div id="myModal_{{ order.oid }}" class="modal">
+												<div class="modal-content">
+														<a class="close2" onclick="closeModal('{{order.oid}}')">&times;</a>
+													<h3 class="head-h3">Детали заказа</h3>
+													<hr color="#373737" size="1" width="90%"> 
+													<table id="data-table">
+														<thead>
+															<tr>
+																<th>id</th>
+																<th>Фото</th>
+																<th>Название</th>
+																<th>Вес</th>
+																<th>Кол-во</th>
+																<th>Цена</th>
+															</tr>
+														</thead>
+														<tbody>
+														{% for product in order.products %}
+															<tr>
+																<td contenteditable="false">{{ product.pid }}</td>
+																<td contenteditable="false"><img class="table-img" src="static/uploads/{{ product.path_to_photo }}/main.jpg"></td>
+																<td contenteditable="false">{{ product.name }}</td>
+																<td contenteditable="false">{{ product.weight }}</td>
+																<td contenteditable="false">{{ product.count }}</td>
+																<td contenteditable="false">{{ product.price }}{{ product.price_text }}</td>
+															</tr>
+														{% endfor %}
+														</tbody>
+													</table>
+												</div>
+											</div>
+									</div>
+								<!-- </a> -->
+							{% endif %}
+							{% endfor %}
+						</div>
+                    </div>
+                </div>
+            </div>
     </div>
 
 	<footer class="bg-pink">
@@ -201,5 +312,6 @@
 			</div>
 		</div>
 	</footer>
+	<script src="static/js/modal.js"></script>
 </body>
 </html>

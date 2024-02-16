@@ -156,14 +156,6 @@ a:hover {
   flex-direction: column;
   align-items: center;
 }
-  
-/* .registration-image {
-  width: 200px;
-  height: auto;
-  display: block;
-  margin-bottom: -10px;
-} */
-
 
 .align {
   height: 100%;
@@ -177,13 +169,12 @@ a:hover {
 .zation h4{
 margin: 0;
 color: #ffffff;
-  /* font-size: 20px;
-  font-weight: 500; */
 }
 
 .zation {
   height: 100%;
-  width: 600px;
+  min-height: 465px;
+  width: 750px;
   background: #cda1ac;
   border: 1px solid #373737;
   border-radius: 10px;
@@ -216,7 +207,6 @@ color: #ffffff;
   color: #ffffff;
   font-size: 20px;
   font-weight: 800;
-  /* width: 195px; */
 }
 
 .head .selected {
@@ -254,7 +244,7 @@ color: #ffffff;
   display: flex;
 }
 
-form {
+.profile-form {
   width: 100%;
   height: 100%;
   flex-shrink: 0;
@@ -266,24 +256,15 @@ form {
   position: relative;
   right: 0;
 }
-/* 
-.login-form {
-  padding-bottom: 12px;
-} */
 
 .extend form {
   right: 100%;
 }
 
-/* .inputs {
-  width: 80%;
-  padding-top: 6px;
-} */
 
 .inputs {
   width: auto;
   padding-top: 6px;
-  /* padding-bottom: 12px; */
   display: flex;
   flex-direction: column;
 }
@@ -363,12 +344,8 @@ form {
   width: 200px;
   height: auto;
   display: block;
-  /* margin-bottom: -10px; */
 }
 
-/* .fas {
-  color: #373737;
-} */
 
 .input1 {
   color: #ffffff;
@@ -437,7 +414,6 @@ font-size: 17px;
 }
 
 .sendButton, .else-sendButton {
-  /* height: 50px; */
   color: white;
   display: inline-block;
   margin: 81px;
@@ -445,7 +421,6 @@ font-size: 17px;
   border-radius: 5px;
   padding: 5px;
   padding-inline: 30px;
-  /* border: 2px solid #373737; */
   background-color: #c4788b;
 }
 
@@ -455,7 +430,6 @@ font-size: 17px;
 
 footer.bg-pink {
   background-color: #efdbe0;
-  /* border-top: 1px solid #373737; только верхняя граница */
   padding: 20px; /* добавим внутренний отступ для лучшего визуального эффекта */
 }
 
@@ -503,6 +477,130 @@ footer.bg-pink {
 }
 
 
+.orders-form{
+  display: flex;
+  width: 100%;
+  margin-block: 10px;
+}
+
+.order-boxes{
+	display: flex;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.order-box{
+	display: flex;
+  width: 170px;
+  background-color: white;
+  flex-direction: column;
+  align-items: center;
+	margin-inline: 10px;
+	border-radius: 10px;
+	border: 1px solid #373737;
+  margin-block: 10px;
+}
+
+.info-line{
+	display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+/* Стили для модального окна */
+.modal {
+    display: none;
+    position:fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  color: #222831;
+  margin-top: 60px;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+
+  overflow-y: auto; /* Разрешить вертикальную прокрутку */
+  height: 85vh; /* Максимальная высота модального контента */
+  
+}
+
+.close2 {
+    /* text-align: right; */
+    color: #aaa;
+    /* float: right; */
+    font-size: 28px;
+    font-weight: bold;
+    width: 20px;
+    /* height: 20px; */ 
+}
+
+.close2:hover,
+.close2:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.close-a{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+table, th, td, tr{
+    border: 1px solid #373737;
+}
+
+.table-img{
+    width: 80px;
+}
+
+
+.order-box p{
+  margin-bottom: 7px;
+}
+
+
+
+
+@media screen and (max-width: 750px) {
+	.zation {
+		width: 600px;
+	}
+  .zation-button{
+      width: 290px;
+      padding: 14px 5px;
+  }
+
+  .order-box{
+    text-align: center;
+    width: 160px;
+    flex-direction: column;
+    align-items: center;
+    margin-inline: 5px;
+    border-radius: 10px;
+    border: 1px solid #373737;
+    margin-block: 5px;
+  }
+
+  .order-box p{
+    margin-bottom: 10px;
+  }
+}
 @media screen and (max-width: 610px) {
 	.zation{
       width: 500px;
@@ -515,7 +613,18 @@ footer.bg-pink {
   }
 
 }
-
+@media screen and (max-width: 600px) {
+	.modal-content{
+        width: 95%;
+        padding: 5px;
+    }
+    td{
+        font-size: 3vw;
+    }
+    .table-img{
+        width: 50px;
+    }
+}
 @media screen and (max-width: 550px) {
 	.zation{
     width: 350px;
@@ -527,7 +636,6 @@ footer.bg-pink {
     padding: 0;
   }
 }
-
 @media screen and (max-width: 355px) {
 	.zation{
     width: 300px;
@@ -537,5 +645,18 @@ footer.bg-pink {
     text-align: center;
     font-size: 20px;
     padding: 0;
+  }
+  .order-box{
+    text-align: center;
+    width: 135px;
+    margin-inline: 5px;
+  }
+  .order-box p{
+    margin-bottom: 5px;
+  }
+}
+@media screen and (max-width: 345px) {
+	.table-img{
+        width: 40px;
   }
 }
