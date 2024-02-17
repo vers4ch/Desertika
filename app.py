@@ -569,16 +569,19 @@ def profile():
             pid = item['pid'] 
             count = item['count'] 
             product_info = get_product_info(pid)
-            products_info.append({'pid': pid,
-                                    'name': product_info[0], 
-                                    'description': product_info[1], 
-                                    'weight': product_info[2], 
-                                    'price': product_info[3], 
-                                    'path_to_photo': product_info[4], 
-                                    'price_text': product_info[5], 
-                                    'new': product_info[6], 
-                                    'category': product_info[7], 
-                                    'count': count}) 
+            if product_info is not None:
+                products_info.append({
+                    'pid': pid,
+                    'name': product_info[0],
+                    'description': product_info[1],
+                    'weight': product_info[2],
+                    'price': product_info[3],
+                    'path_to_photo': product_info[4],
+                    'price_text': product_info[5],
+                    'new': product_info[6],
+                    'category': product_info[7],
+                    'count': count
+                })
         order_details.append({'oid': order.oid, 
                                 'name': order.name, 
                                 'tel': order.tel, 
