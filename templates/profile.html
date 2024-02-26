@@ -85,11 +85,11 @@
 			</div>
 			<div class="collapse navbar-collapse justify-content-end " id="navbarNav">
 				<ul class="navbar-nav">
-					
+					{% if user.is_admin == True %}
 						<li class="nav-item">
 							<a class="nav-link" href="{{ url_for('administrator') }}"><i class="fas fa-lock" aria-hidden="true"></i> Admin</a>
 						</li>
-					
+					{% endif %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('basket') }}"><i class="fa fa-shopping-basket" aria-hidden="true"></i> Корзина</a>
 					</li>

@@ -1,4 +1,4 @@
-import time, random, string, uuid, unicodedata, os, json
+import time, random, string, uuid, os, json, shutil
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash, send_file, make_response, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
@@ -372,9 +372,16 @@ def remove_product():
     pid = request.form['item_id']
     product = Products.query.get(pid)  # Найти объект Product по его идентификатору
     if product:  # Проверяем, найден ли объект
+        # Получаем путь к папке с файлами товара
+        folder_path = os.path.join(app.config['UPLOAD_FOLDER'], product.path_to_photo)
+        
+        # Удаляем папку с файлами товара
+        if os.path.exists(folder_path):
+            shutil.rmtree(folder_path)
+        
         db.session.delete(product)  # Удаляем объект из сессии
         db.session.commit()  # Фиксируем изменения в базе данных
-        print("Product removed successfully")
+        print("Product and associated folder removed successfully")
         return redirect(url_for('assort_manager'))
     else:
         print("Product not found")
