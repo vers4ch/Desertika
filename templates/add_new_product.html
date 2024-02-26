@@ -136,9 +136,10 @@
 				<div class="col-md-3">
 					<h5>Каталог</h5>
 					<ul class="list-unstyled">
-						<li><a href="#">Торты</a></li>
-						<li><a href="#">Пирожные</a></li>
-						<li><a href="#">Букеты</a></li>
+
+						{% for category, products in grouped_product.items() %}
+							<li><a href="#">{{category}}</a></li>
+						{% endfor %}
 					</ul>
 				</div>
 				<div class="col-md-3">
@@ -152,16 +153,21 @@
 				<div class="col-md-3">
 					<h5>Контакты</h5>
 					<address>
-						Адрес:<br>
-						Владивосток, ул. Елецкая, 1а<br>
+						Адрес: <a href="https://yandex.ru/maps/-/CDFAZPnX">Усадьба &laquo;Вавилово&raquo;,<br>
+						ул. Елецкая 1а</a><br>
 						Телефон: <a href="tel:+79143336761">+7 (914) 333-67-61</a><br>
-						Email: <a href="mailto:desertika@mail.ru">desertika@mail.ru</a>
+						Email: <a href="mailto:desertika.ov@mail.ru">desertika.ov@mail.ru</a>
 					</address>
+					<div style="font-size: 20px; margin-top: 10px;">
+						<a href="https://t.me/desertika_by_olga_vlasenko" style="margin-right: 10px;"><i class="fab fa-telegram"></i></a>
+						<a href="https://www.instagram.com/desertika_by_olga_vlasenko?igsh=MTljOHdoaHo2dGhreQ==" style="margin-right: 10px;"><i class="fab fa-instagram"></i></a>
+						<a href="https://wa.me/79143336761"><i class="fab fa-whatsapp"></i></a>
+					</div>
 				</div>
 			</div>
 			<div class="row mt-3">
 				<div class="col">
-					<p>2024 © Powered by Turbokotiki</p>
+					<p><a href="https://t.me/+mSloWI_efgFmZTIy">2024 © Powered by Turbokotiki</a></p>
 				</div>
 			</div>
 		</div>

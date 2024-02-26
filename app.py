@@ -47,7 +47,7 @@ def allowed_file(filename):
 
 
 db_pass = '0705'
-db_adress = '77.34.177.157'
+db_adress = '77.34.131.36'
 
 
 
